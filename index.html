@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#7B9E87">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Facturen">
+<title>Wilma Smilde — Facturen</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧾</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --kleur-primair:#7B9E87;
+  --kleur-primair-donker:#5F806C;
+  --kleur-accent:#C8A96E;
+  --kleur-tekst:#2C2C2C;
+  --kleur-licht:#F7F4EF;
+  --kleur-rand:#E0D9CE;
+  --kleur-gevaar:#B0553F;
+  --font-display:"Cormorant Garamond",Georgia,serif;
+  --font-body:"Inter",-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  font-family:var(--font-body);color:var(--kleur-tekst);background:var(--kleur-licht);
+  min-height:100vh;font-size:16px;line-height:1.5;
+}
+.app-header{
+  padding:calc(14px + env(safe-area-inset-top)) 16px 12px;
+  background:var(--kleur-licht);border-bottom:1px solid var(--kleur-rand);
+  position:sticky;top:0;z-index:10;
+}
+.app-header h1{font-family:var(--font-display);font-weight:600;font-size:24px;color:var(--kleur-primair-donker);line-height:1.2}
+.app-header .sub{font-size:13px;color:#7a7568}
+main{padding:16px 16px calc(84px + env(safe-area-inset-bottom));max-width:680px;margin:0 auto}
+.tab{display:none}
+.tab.actief{display:block}
+h2{font-family:var(--font-display);font-weight:600;font-size:22px;margin-bottom:12px}
+h3{font-size:14px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:#7a7568;margin-bottom:10px}
+.card{background:#fff;border:1px solid var(--kleur-rand);border-radius:12px;padding:16px;margin-bottom:12px}
+label{display:block;font-size:13px;font-weight:600;margin:10px 0 4px;color:#4a463d}
+label:first-child{margin-top:0}
+input,select,textarea{
+  width:100%;font:inherit;font-size:16px;color:var(--kleur-tekst);
+  padding:11px 12px;border:1px solid var(--kleur-rand);border-radius:8px;background:#fff;
+  min-height:44px;
+}
+textarea{min-height:72px;resize:vertical}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--kleur-primair);outline-offset:0;border-color:var(--kleur-primair)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  font:inherit;font-size:15px;font-weight:600;cursor:pointer;
+  min-height:46px;padding:10px 16px;border-radius:10px;border:1px solid transparent;
+  -webkit-tap-highlight-color:transparent;
+}
+.btn.primair{background:var(--kleur-primair);color:#fff}
+.btn.primair:active{background:var(--kleur-primair-donker)}
+.btn.ghost{background:#fff;border-color:var(--kleur-rand);color:var(--kleur-tekst)}
+.btn.gevaar{background:#fff;border-color:var(--kleur-rand);color:var(--kleur-gevaar)}
+.btn.klein{min-height:38px;padding:6px 12px;font-size:14px;border-radius:8px}
+.btn.vol{width:100%}
+.acties{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0}
+.acties .btn{flex:1 1 30%}
+.banner{
+  background:#FBF3E4;border:1px solid var(--kleur-accent);border-radius:10px;
+  padding:12px 14px;font-size:14px;margin-bottom:12px;display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;
+}
+.verborgen{display:none !important}
+.zoek{margin-bottom:12px}
+.lijstItem{background:#fff;border:1px solid var(--kleur-rand);border-radius:12px;padding:14px 16px;margin-bottom:10px}
+.lijstKop{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.lijstKop strong{font-size:16px}
+.lijstSub{font-size:14px;color:#7a7568;margin-top:2px}
+.lijstActies{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+.lijstActies .btn{flex:1}
+.badge{
+  font-size:12px;font-weight:600;padding:6px 12px;border-radius:999px;border:none;cursor:pointer;
+  font-family:var(--font-body);min-height:32px;
+}
+.status-concept{background:#EFECE5;color:#6b665a}
+.status-verzonden{background:#E7EEE9;color:var(--kleur-primair-donker)}
+.status-betaald{background:var(--kleur-primair);color:#fff}
+.leeg{color:#8b8577;font-size:14px;text-align:center;padding:24px 8px}
+.regel{border-bottom:1px solid var(--kleur-rand);padding:10px 0}
+.regel:first-child{padding-top:0}
+.regelOnder{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:8px;margin-top:6px;align-items:center}
+.regelOnder .rTotaal{font-weight:600;font-size:14px;text-align:right;white-space:nowrap}
+.regel .weg{background:none;border:none;color:var(--kleur-gevaar);font-size:20px;cursor:pointer;padding:8px;min-height:44px;min-width:44px}
+.kolomLabel{font-size:11px;color:#8b8577;margin-bottom:2px;display:block}
+.totalen{margin-top:14px;border-top:2px solid var(--kleur-rand);padding-top:10px;font-size:15px}
+.totRij{display:flex;justify-content:space-between;padding:3px 0}
+.totRij.eind{font-weight:700;font-size:17px;border-top:1px solid var(--kleur-rand);margin-top:6px;padding-top:8px}
+.hint{font-size:13px;color:#8b8577;margin-top:6px}
+#logoWrap img{max-height:70px;max-width:200px;display:block;margin:8px 0;border:1px solid var(--kleur-rand);border-radius:6px;padding:4px;background:#fff}
+.tabbar{
+  position:fixed;bottom:0;left:0;right:0;z-index:20;
+  display:flex;background:#fff;border-top:1px solid var(--kleur-rand);
+  padding-bottom:env(safe-area-inset-bottom);
+}
+.tabbtn{
+  flex:1;background:none;border:none;font:inherit;cursor:pointer;
+  padding:8px 2px 10px;min-height:60px;color:#8b8577;font-size:11px;font-weight:600;
+  display:flex;flex-direction:column;align-items:center;gap:2px;
+  -webkit-tap-highlight-color:transparent;
+}
+.tabbtn .ico{font-size:22px;line-height:1}
+.tabbtn.actief{color:var(--kleur-primair-donker)}
+#toast{
+  position:fixed;left:50%;bottom:calc(92px + env(safe-area-inset-bottom));transform:translateX(-50%);
+  background:var(--kleur-tekst);color:#fff;padding:10px 18px;border-radius:999px;font-size:14px;
+  opacity:0;pointer-events:none;transition:opacity .25s;z-index:50;max-width:90vw;text-align:center;
+}
+#toast.zichtbaar{opacity:1}
+/* ---- voorbeeld-overlay ---- */
+#voorbeeldOverlay{
+  position:fixed;inset:0;background:rgba(44,44,44,.55);z-index:40;
+  display:flex;flex-direction:column;
+}
+#voorbeeldOverlay .balk{
+  background:#fff;padding:10px 12px calc(10px + env(safe-area-inset-bottom));display:flex;gap:8px;order:2;
+  border-top:1px solid var(--kleur-rand);
+}
+#voorbeeldOverlay .balk .btn{flex:1}
+#voorbeeldSheetWrap{flex:1;overflow:auto;padding:16px;-webkit-overflow-scrolling:touch}
+#voorbeeldSheet{background:#fff;box-shadow:0 4px 24px rgba(0,0,0,.25);transform-origin:top left}
+/* ---- factuur (A4-weergave) ---- */
+.factuur{
+  width:794px;min-height:1050px;padding:56px;background:#fff;color:var(--kleur-tekst);
+  font-family:var(--font-body);font-size:13px;line-height:1.5;display:flex;flex-direction:column;
+}
+.factuur .kop{display:flex;justify-content:space-between;gap:24px;align-items:flex-start}
+.factuur .kop img.logo{max-height:96px;max-width:220px}
+.factuur .merk{font-family:var(--font-display);font-size:30px;font-weight:600;color:var(--kleur-primair-donker);line-height:1.1}
+.factuur .bedrijf{text-align:right;font-size:12px;color:#5d594e}
+.factuur .bedrijf strong{color:var(--kleur-tekst);font-size:13px}
+.factuur .titelRij{display:flex;justify-content:space-between;align-items:flex-end;margin-top:44px;gap:24px}
+.factuur .titel{font-family:var(--font-display);font-size:34px;font-weight:600;color:var(--kleur-primair-donker);letter-spacing:.04em}
+.factuur .meta{text-align:right;font-size:12.5px}
+.factuur .meta .mRij{display:flex;justify-content:flex-end;gap:14px}
+.factuur .meta .mLabel{color:#8b8577}
+.factuur .klantBlok{margin-top:20px;font-size:13px}
+.factuur .klantBlok .kLabel{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--kleur-accent);font-weight:600;margin-bottom:3px}
+.factuur table{width:100%;border-collapse:collapse;margin-top:28px}
+.factuur th{
+  text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#8b8577;
+  border-bottom:2px solid var(--kleur-primair);padding:8px 6px;
+}
+.factuur td{padding:9px 6px;border-bottom:1px solid var(--kleur-rand);vertical-align:top}
+.factuur .num{text-align:right;white-space:nowrap}
+.factuur .totvak{width:280px;margin-left:auto;margin-top:18px}
+.factuur .totvak .tr{display:flex;justify-content:space-between;padding:4px 6px}
+.factuur .totvak .tr.eind{font-weight:700;font-size:15px;border-top:2px solid var(--kleur-accent);margin-top:6px;padding-top:9px}
+.factuur .vrijstelling{font-size:11.5px;color:#7a7568;text-align:right;margin-top:8px}
+.factuur .notitie{margin-top:26px;font-size:12.5px;background:var(--kleur-licht);border:1px solid var(--kleur-rand);border-radius:8px;padding:12px}
+.factuur .voet{
+  margin-top:auto;padding-top:18px;border-top:1px solid var(--kleur-rand);
+  font-size:11.5px;color:#5d594e;
+}
+.factuur .voet .betaal{font-size:12.5px;color:var(--kleur-tekst);margin-bottom:8px}
+#pdf-stage{position:fixed;left:-10000px;top:0;width:794px}
+@media print{
+  @page{size:A4;margin:0}
+  body.printModus > *:not(#pdf-stage){display:none !important}
+  body.printModus{background:#fff}
+  body.printModus #pdf-stage{position:static;left:0;width:auto}
+  body.printModus .factuur{width:auto;min-height:auto;padding:14mm}
+}
+@media (min-width:680px){
+  .tabbar{max-width:680px;left:50%;transform:translateX(-50%);border:1px solid var(--kleur-rand);border-bottom:none;border-radius:14px 14px 0 0}
+}
+</style>
+</head>
+<body>
+
+<header class="app-header">
+  <h1>Wilma Smilde</h1>
+  <div class="sub" id="kopSub">Facturen</div>
+</header>
+
+<main>
+
+<!-- ========== TAB 1 · NIEUWE FACTUUR ========== -->
+<section class="tab actief" id="tab-nieuw">
+  <div class="banner verborgen" id="setupHint">
+    <span>Vul eerst je bedrijfsgegevens in bij Instellingen — die komen op de factuur.</span>
+    <button class="btn klein ghost" id="btnNaarInstellingen">Naar instellingen</button>
+  </div>
+  <h2 id="nieuwTitel">Nieuwe factuur</h2>
+
+  <div class="card">
+    <label for="fKlant">Klant</label>
+    <select id="fKlant"></select>
+    <div id="snelKlant" class="verborgen">
+      <label for="sNaam">Naam *</label>
+      <input id="sNaam" autocomplete="off">
+      <label for="sAdres">Adres</label>
+      <input id="sAdres" autocomplete="off">
+      <div class="grid2">
+        <div><label for="sPostcode">Postcode</label><input id="sPostcode" autocomplete="off"></div>
+        <div><label for="sPlaats">Plaats</label><input id="sPlaats" autocomplete="off"></div>
+      </div>
+      <label for="sEmail">E-mail</label>
+      <input id="sEmail" type="email" autocomplete="off">
+      <label style="display:flex;align-items:center;gap:8px;margin-top:12px;font-weight:400">
+        <input type="checkbox" id="sBewaar" checked style="width:20px;height:20px;min-height:0"> Opslaan in klantenlijst
+      </label>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="grid2">
+      <div><label for="fNummer">Factuurnummer</label><input id="fNummer" autocomplete="off"></div>
+      <div><label for="fDatum">Factuurdatum</label><input id="fDatum" type="date"></div>
+    </div>
+    <label for="fVervaldatum">Vervaldatum</label>
+    <input id="fVervaldatum" type="date">
+  </div>
+
+  <div class="card">
+    <h3>Regels</h3>
+    <div id="regelsBox"></div>
+    <button class="btn ghost vol" id="btnRegel" type="button">+ Regel toevoegen</button>
+    <label for="fBtw">BTW</label>
+    <select id="fBtw">
+      <option value="vrijgesteld">Vrijgesteld van BTW</option>
+      <option value="21">21% BTW</option>
+    </select>
+    <div class="totalen">
+      <div class="totRij"><span>Subtotaal</span><span id="totSub">€ 0,00</span></div>
+      <div class="totRij verborgen" id="rijBtw"><span>BTW 21%</span><span id="totBtw">€ 0,00</span></div>
+      <div class="totRij eind"><span>Totaal</span><span id="totTotaal">€ 0,00</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <label for="fNotitie">Notitie op factuur (optioneel)</label>
+    <textarea id="fNotitie"></textarea>
+    <label for="fReferentie">Betalingsreferentie (optioneel)</label>
+    <input id="fReferentie" autocomplete="off" placeholder="Standaard: factuurnummer">
+  </div>
+
+  <div class="acties">
+    <button class="btn ghost" id="btnVoorbeeld" type="button">Voorbeeld</button>
+    <button class="btn ghost" id="btnPdf" type="button">Download PDF</button>
+    <button class="btn primair" id="btnOpslaan" type="button">Opslaan</button>
+  </div>
+  <button class="btn ghost vol verborgen" id="btnAnnuleerEdit" type="button">Bewerken annuleren</button>
+</section>
+
+<!-- ========== TAB 2 · FACTUREN ========== -->
+<section class="tab" id="tab-facturen">
+  <h2>Facturen</h2>
+  <div class="banner verborgen" id="backupBanner">
+    <span>Al even geen backup gemaakt. Je facturen staan alleen op dit apparaat.</span>
+    <button class="btn klein ghost" id="btnBannerBackup">Backup maken</button>
+  </div>
+  <input class="zoek" id="zoekFacturen" type="search" placeholder="Zoek op nummer of klant…" autocomplete="off">
+  <div id="facturenLijst"></div>
+</section>
+
+<!-- ========== TAB 3 · KLANTEN ========== -->
+<section class="tab" id="tab-klanten">
+  <h2>Klanten</h2>
+  <input class="zoek" id="zoekKlanten" type="search" placeholder="Zoek klant…" autocomplete="off">
+  <button class="btn primair vol" id="btnNieuweKlant" type="button" style="margin-bottom:12px">+ Nieuwe klant</button>
+
+  <div class="card verborgen" id="klantFormBox">
+    <h3 id="klantFormTitel">Nieuwe klant</h3>
+    <label for="kNaam">Naam *</label>
+    <input id="kNaam" autocomplete="off">
+    <label for="kAdres">Adres</label>
+    <input id="kAdres" autocomplete="off">
+    <div class="grid2">
+      <div><label for="kPostcode">Postcode</label><input id="kPostcode" autocomplete="off"></div>
+      <div><label for="kPlaats">Plaats</label><input id="kPlaats" autocomplete="off"></div>
+    </div>
+    <label for="kEmail">E-mail</label>
+    <input id="kEmail" type="email" autocomplete="off">
+    <label for="kTelefoon">Telefoon</label>
+    <input id="kTelefoon" type="tel" autocomplete="off">
+    <label for="kBtw">BTW-nummer (optioneel)</label>
+    <input id="kBtw" autocomplete="off">
+    <label for="kNotities">Notities</label>
+    <textarea id="kNotities"></textarea>
+    <div class="acties">
+      <button class="btn ghost" id="btnKlantAnnuleer" type="button">Annuleren</button>
+      <button class="btn gevaar verborgen" id="btnKlantVerwijder" type="button">Verwijderen</button>
+      <button class="btn primair" id="btnKlantOpslaan" type="button">Opslaan</button>
+    </div>
+  </div>
+
+  <div id="klantenLijst"></div>
+</section>
+
+<!-- ========== TAB 4 · INSTELLINGEN ========== -->
+<section class="tab" id="tab-instellingen">
+  <h2>Instellingen</h2>
+
+  <div class="card">
+    <h3>Bedrijfsgegevens</h3>
+    <label for="iNaam">Naam / handelsnaam</label>
+    <input id="iNaam" autocomplete="off">
+    <label for="iAdres">Adres</label>
+    <input id="iAdres" autocomplete="off">
+    <div class="grid2">
+      <div><label for="iPostcode">Postcode</label><input id="iPostcode" autocomplete="off"></div>
+      <div><label for="iPlaats">Woonplaats</label><input id="iPlaats" autocomplete="off"></div>
+    </div>
+    <label for="iTelefoon">Telefoonnummer</label>
+    <input id="iTelefoon" type="tel" autocomplete="off">
+    <label for="iEmail">E-mailadres</label>
+    <input id="iEmail" type="email" autocomplete="off">
+    <label for="iWebsite">Website</label>
+    <input id="iWebsite" autocomplete="off" placeholder="wilmasmilde.nl">
+    <label for="iKvk">KVK-nummer</label>
+    <input id="iKvk" autocomplete="off">
+    <label for="iBtwNummer">BTW-nummer (leeg laten indien vrijgesteld)</label>
+    <input id="iBtwNummer" autocomplete="off">
+    <label for="iIban">IBAN</label>
+    <input id="iIban" autocomplete="off">
+    <label for="iLogo">Logo</label>
+    <input id="iLogo" type="file" accept="image/*">
+    <div id="logoWrap" class="verborgen">
+      <img id="logoPreview" alt="Logo">
+      <button class="btn klein gevaar" id="btnLogoWeg" type="button">Logo verwijderen</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Factuurinstellingen</h3>
+    <div class="grid2">
+      <div><label for="iTermijn">Betalingstermijn (dagen)</label><input id="iTermijn" type="number" inputmode="numeric" min="0"></div>
+      <div><label for="iVolgend">Volgend factuurnummer</label><input id="iVolgend" autocomplete="off"></div>
+    </div>
+    <label for="iStandaardBtw">Standaard BTW</label>
+    <select id="iStandaardBtw">
+      <option value="vrijgesteld">Vrijgesteld van BTW</option>
+      <option value="21">21% BTW</option>
+    </select>
+    <label for="iVrijstelling">Vrijstellingstekst op factuur</label>
+    <input id="iVrijstelling" autocomplete="off">
+    <label for="iVoettekst">Eigen voettekst / betaalinstructie</label>
+    <textarea id="iVoettekst" placeholder="Bijv.: Hartelijk dank voor je vertrouwen."></textarea>
+  </div>
+
+  <button class="btn primair vol" id="btnInstellingen" type="button">Instellingen opslaan</button>
+
+  <div class="card" style="margin-top:16px">
+    <h3>Data &amp; backup</h3>
+    <p class="hint" style="margin:0 0 10px">Alle gegevens staan alleen op dit apparaat. Maak regelmatig een backup en bewaar het bestand veilig — het bevat klantgegevens.</p>
+    <div class="acties" style="margin:0">
+      <button class="btn ghost" id="btnExport" type="button">Backup exporteren</button>
+      <button class="btn ghost" id="btnImport" type="button">Backup importeren</button>
+    </div>
+    <input type="file" id="importFile" accept="application/json,.json" class="verborgen">
+  </div>
+  <p class="hint" style="text-align:center">Wilma Factuur App · v1.0</p>
+</section>
+
+</main>
+
+<!-- ========== TABBAR ========== -->
+<nav class="tabbar" aria-label="Hoofdnavigatie">
+  <button class="tabbtn actief" data-tab="tab-nieuw"><span class="ico">🧾</span>Nieuwe factuur</button>
+  <button class="tabbtn" data-tab="tab-facturen"><span class="ico">📄</span>Facturen</button>
+  <button class="tabbtn" data-tab="tab-klanten"><span class="ico">👥</span>Klanten</button>
+  <button class="tabbtn" data-tab="tab-instellingen"><span class="ico">⚙️</span>Instellingen</button>
+</nav>
+
+<!-- ========== VOORBEELD-OVERLAY ========== -->
+<div id="voorbeeldOverlay" class="verborgen">
+  <div id="voorbeeldSheetWrap"><div id="voorbeeldSheet"></div></div>
+  <div class="balk">
+    <button class="btn ghost" id="btnSluitVoorbeeld" type="button">Sluiten</button>
+    <button class="btn ghost" id="btnOverlayPrint" type="button">Afdrukken</button>
+    <button class="btn primair" id="btnOverlayPdf" type="button">Download PDF</button>
+  </div>
+</div>
+
+<div id="pdf-stage" aria-hidden="true"></div>
+<div id="toast" role="status"></div>
+
+<script>
+"use strict";
+/* ================= opslag ================= */
+const K = { settings:"wf_settings", klanten:"wf_klanten", facturen:"wf_facturen", draft:"wf_draft", backup:"wf_lastBackup" };
+const store = {
+  get(k, fb){ try{ const v = JSON.parse(localStorage.getItem(k)); return v ?? fb; }catch{ return fb; } },
+  set(k, v){ localStorage.setItem(k, JSON.stringify(v)); },
+  del(k){ localStorage.removeItem(k); }
+};
+function defaultSettings(){
+  const jaar = new Date().getFullYear();
+  return {
+    schemaVersion:1,
+    naam:"", adres:"", postcode:"", plaats:"", telefoon:"", email:"", website:"",
+    kvk:"", btwNummer:"", iban:"", logo:"",
+    betalingstermijn:30, standaardBtw:"vrijgesteld",
+    volgendNummer:`${jaar}-001`,
+    vrijstellingstekst:"Vrijgesteld van BTW o.g.v. art. 11 lid 1 onderdeel i Wet OB",
+    voettekst:""
+  };
+}
+let settings = Object.assign(defaultSettings(), store.get(K.settings, {}));
+let klanten  = store.get(K.klanten, []);
+let facturen = store.get(K.facturen, []);
+let regels   = [];        // regels van het formulier
+let editId   = null;      // id van factuur in bewerking
+let klantEditId = null;
+
+/* ================= helpers ================= */
+const $  = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+function esc(s){ return String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+function uuid(){ return (crypto.randomUUID ? crypto.randomUUID() : Date.now()+"-"+Math.random().toString(16).slice(2)); }
+function rond2(n){ return Math.round((n + Number.EPSILON) * 100) / 100; }
+function fmtEUR(n){ return "€ " + (Number(n)||0).toLocaleString("nl-NL",{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function fmtAantal(n){ return (Number(n)||0).toLocaleString("nl-NL",{maximumFractionDigits:2}); }
+function parseBedrag(s){
+  s = String(s ?? "").trim();
+  if(!s) return 0;
+  if(s.includes(",")) s = s.replace(/\./g,"").replace(",",".");
+  const n = parseFloat(s);
+  return isNaN(n) ? 0 : n;
+}
+function vandaagISO(){ const d = new Date(); return d.toISOString().slice(0,10); }
+function plusDagenISO(iso, dagen){
+  const d = new Date(iso + "T12:00:00");
+  d.setDate(d.getDate() + (Number(dagen)||0));
+  return d.toISOString().slice(0,10);
+}
+function fmtDatum(iso){
+  if(!iso) return "";
+  const [j,m,d] = iso.split("-");
+  return `${d}-${m}-${j}`;
+}
+function verhoogNummer(nr){
+  const m = String(nr).match(/(\d+)(?!.*\d)/);
+  if(!m) return nr + "-2";
+  const inc = String(parseInt(m[1],10)+1).padStart(m[1].length,"0");
+  return nr.slice(0, m.index) + inc + nr.slice(m.index + m[1].length);
+}
+let toastTimer = null;
+function toast(msg){
+  const t = $("#toast");
+  t.textContent = msg;
+  t.classList.add("zichtbaar");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>t.classList.remove("zichtbaar"), 2600);
+}
+function bereken(f){
+  const subtotaal = rond2(f.regels.reduce((s,r)=> s + (Number(r.aantal)||0)*(Number(r.prijs)||0), 0));
+  const btw = f.btw === "21" ? rond2(subtotaal * 0.21) : 0;
+  return { subtotaal, btw, totaal: rond2(subtotaal + btw) };
+}
+const STATUS = { concept:"Concept", verzonden:"Verzonden", betaald:"Betaald" };
+const STATUS_VOLGORDE = ["concept","verzonden","betaald"];
+
+/* ================= tabs ================= */
+const TABTITELS = { "tab-nieuw":"Nieuwe factuur", "tab-facturen":"Facturen", "tab-klanten":"Klanten", "tab-instellingen":"Instellingen" };
+function gaNaarTab(id){
+  $$(".tab").forEach(s => s.classList.toggle("actief", s.id === id));
+  $$(".tabbtn").forEach(b => b.classList.toggle("actief", b.dataset.tab === id));
+  $("#kopSub").textContent = TABTITELS[id] || "";
+  if(id === "tab-facturen") renderFacturen();
+  if(id === "tab-klanten")  renderKlanten();
+  if(id === "tab-nieuw")    renderKlantDropdown();
+  window.scrollTo(0,0);
+}
+$$(".tabbtn").forEach(b => b.addEventListener("click", ()=> gaNaarTab(b.dataset.tab)));
+
+/* ================= factuurformulier ================= */
+function nieuweRegel(){ return { omschrijving:"", aantal:1, prijs:0 }; }
+
+function renderRegels(){
+  const box = $("#regelsBox");
+  box.innerHTML = regels.map((r,i)=>`
+    <div class="regel" data-i="${i}">
+      <span class="kolomLabel">Beschrijving</span>
+      <input class="rOms" value="${esc(r.omschrijving)}" autocomplete="off">
+      <div class="regelOnder">
+        <div><span class="kolomLabel">Aantal</span><input class="rAantal" inputmode="decimal" value="${esc(fmtAantal(r.aantal))}"></div>
+        <div><span class="kolomLabel">Prijs p/st</span><input class="rPrijs" inputmode="decimal" value="${esc(String(r.prijs).replace(".",","))}"></div>
+        <div style="align-self:end"><span class="kolomLabel">Totaal</span><div class="rTotaal">${fmtEUR((Number(r.aantal)||0)*(Number(r.prijs)||0))}</div></div>
+        <button class="weg" type="button" aria-label="Regel verwijderen">✕</button>
+      </div>
+    </div>`).join("");
+  updateTotalen();
+}
+function updateTotalen(){
+  const t = bereken({ regels, btw: $("#fBtw").value });
+  $("#totSub").textContent = fmtEUR(t.subtotaal);
+  $("#totBtw").textContent = fmtEUR(t.btw);
+  $("#totTotaal").textContent = fmtEUR(t.totaal);
+  $("#rijBtw").classList.toggle("verborgen", $("#fBtw").value !== "21");
+}
+$("#regelsBox").addEventListener("input", e=>{
+  const rij = e.target.closest(".regel"); if(!rij) return;
+  const i = Number(rij.dataset.i), r = regels[i];
+  if(e.target.classList.contains("rOms"))    r.omschrijving = e.target.value;
+  if(e.target.classList.contains("rAantal")) r.aantal = parseBedrag(e.target.value);
+  if(e.target.classList.contains("rPrijs"))  r.prijs  = parseBedrag(e.target.value);
+  rij.querySelector(".rTotaal").textContent = fmtEUR((Number(r.aantal)||0)*(Number(r.prijs)||0));
+  updateTotalen();
+  bewaarDraft();
+});
+$("#regelsBox").addEventListener("click", e=>{
+  if(!e.target.classList.contains("weg")) return;
+  const i = Number(e.target.closest(".regel").dataset.i);
+  regels.splice(i,1);
+  if(!regels.length) regels.push(nieuweRegel());
+  renderRegels(); bewaarDraft();
+});
+$("#btnRegel").addEventListener("click", ()=>{ regels.push(nieuweRegel()); renderRegels(); bewaarDraft(); });
+$("#fBtw").addEventListener("change", ()=>{ updateTotalen(); bewaarDraft(); });
+$("#fDatum").addEventListener("change", ()=>{
+  $("#fVervaldatum").value = plusDagenISO($("#fDatum").value || vandaagISO(), settings.betalingstermijn);
+  bewaarDraft();
+});
+["fNummer","fVervaldatum","fNotitie","fReferentie","sNaam","sAdres","sPostcode","sPlaats","sEmail"]
+  .forEach(id => $("#"+id).addEventListener("input", bewaarDraft));
+
+function renderKlantDropdown(){
+  const sel = $("#fKlant"), huidig = sel.value;
+  sel.innerHTML = `<option value="">— Snel invullen (zonder klant) —</option>` +
+    klanten.slice().sort((a,b)=>a.naam.localeCompare(b.naam,"nl"))
+      .map(k=>`<option value="${esc(k.id)}">${esc(k.naam)}</option>`).join("");
+  if([...sel.options].some(o=>o.value===huidig)) sel.value = huidig;
+  $("#snelKlant").classList.toggle("verborgen", sel.value !== "");
+}
+$("#fKlant").addEventListener("change", ()=>{
+  $("#snelKlant").classList.toggle("verborgen", $("#fKlant").value !== "");
+  bewaarDraft();
+});
+
+function resetFormulier(){
+  editId = null;
+  regels = [nieuweRegel()];
+  $("#nieuwTitel").textContent = "Nieuwe factuur";
+  $("#btnAnnuleerEdit").classList.add("verborgen");
+  $("#fKlant").value = "";
+  $("#snelKlant").classList.remove("verborgen");
+  ["sNaam","sAdres","sPostcode","sPlaats","sEmail"].forEach(id=>$("#"+id).value="");
+  $("#sBewaar").checked = true;
+  $("#fNummer").value = settings.volgendNummer;
+  $("#fDatum").value = vandaagISO();
+  $("#fVervaldatum").value = plusDagenISO(vandaagISO(), settings.betalingstermijn);
+  $("#fBtw").value = settings.standaardBtw;
+  $("#fNotitie").value = "";
+  $("#fReferentie").value = "";
+  renderKlantDropdown();
+  renderRegels();
+  store.del(K.draft);
+}
+$("#btnAnnuleerEdit").addEventListener("click", ()=>{ resetFormulier(); toast("Bewerken geannuleerd"); });
+
+/* draft-autosave: niets kwijtraken bij per ongeluk sluiten */
+let draftTimer = null;
+function bewaarDraft(){
+  if(editId) return; // alleen voor nieuwe facturen
+  clearTimeout(draftTimer);
+  draftTimer = setTimeout(()=>{
+    store.set(K.draft, {
+      klantId: $("#fKlant").value,
+      snel: { naam:$("#sNaam").value, adres:$("#sAdres").value, postcode:$("#sPostcode").value, plaats:$("#sPlaats").value, email:$("#sEmail").value, bewaar:$("#sBewaar").checked },
+      nummer:$("#fNummer").value, datum:$("#fDatum").value, vervaldatum:$("#fVervaldatum").value,
+      btw:$("#fBtw").value, notitie:$("#fNotitie").value, referentie:$("#fReferentie").value, regels
+    });
+  }, 300);
+}
+function herstelDraft(){
+  const d = store.get(K.draft, null);
+  if(!d) return;
+  $("#fKlant").value = d.klantId || "";
+  $("#snelKlant").classList.toggle("verborgen", $("#fKlant").value !== "");
+  $("#sNaam").value = d.snel?.naam || "";
+  $("#sAdres").value = d.snel?.adres || "";
+  $("#sPostcode").value = d.snel?.postcode || "";
+  $("#sPlaats").value = d.snel?.plaats || "";
+  $("#sEmail").value = d.snel?.email || "";
+  $("#sBewaar").checked = d.snel?.bewaar !== false;
+  if(d.nummer) $("#fNummer").value = d.nummer;
+  if(d.datum) $("#fDatum").value = d.datum;
+  if(d.vervaldatum) $("#fVervaldatum").value = d.vervaldatum;
+  $("#fBtw").value = d.btw || settings.standaardBtw;
+  $("#fNotitie").value = d.notitie || "";
+  $("#fReferentie").value = d.referentie || "";
+  if(Array.isArray(d.regels) && d.regels.length){ regels = d.regels; renderRegels(); }
+}
+
+function leesFormulier(){
+  const fouten = [];
+  let klantId = $("#fKlant").value || null;
+  let klant;
+  if(klantId){
+    const k = klanten.find(x=>x.id===klantId);
+    if(!k){ klantId = null; }
+    else klant = { naam:k.naam, adres:k.adres, postcode:k.postcode, plaats:k.plaats, email:k.email, btwNummer:k.btwNummer };
+  }
+  if(!klantId){
+    klant = { naam:$("#sNaam").value.trim(), adres:$("#sAdres").value.trim(), postcode:$("#sPostcode").value.trim(), plaats:$("#sPlaats").value.trim(), email:$("#sEmail").value.trim(), btwNummer:"" };
+  }
+  if(!klant.naam) fouten.push("Vul een klantnaam in.");
+  const nummer = $("#fNummer").value.trim();
+  if(!nummer) fouten.push("Vul een factuurnummer in.");
+  const geldigeRegels = regels.filter(r => r.omschrijving.trim());
+  if(!geldigeRegels.length) fouten.push("Voeg minimaal één regel met een beschrijving toe.");
+  const factuur = {
+    id: editId || uuid(),
+    nummer,
+    klantId,
+    klant,
+    datum: $("#fDatum").value || vandaagISO(),
+    vervaldatum: $("#fVervaldatum").value || plusDagenISO(vandaagISO(), settings.betalingstermijn),
+    regels: geldigeRegels.map(r=>({ omschrijving:r.omschrijving.trim(), aantal:Number(r.aantal)||0, prijs:Number(r.prijs)||0 })),
+    btw: $("#fBtw").value,
+    notitie: $("#fNotitie").value.trim(),
+    referentie: $("#fReferentie").value.trim(),
+    status: editId ? (facturen.find(f=>f.id===editId)?.status || "concept") : "concept",
+    aangemaakt: editId ? (facturen.find(f=>f.id===editId)?.aangemaakt || Date.now()) : Date.now()
+  };
+  return { fouten, factuur };
+}
+
+$("#btnOpslaan").addEventListener("click", ()=>{
+  const { fouten, factuur } = leesFormulier();
+  if(fouten.length){ alert(fouten.join("\n")); return; }
+  const duplicaat = facturen.find(f => f.nummer === factuur.nummer && f.id !== factuur.id);
+  if(duplicaat && !confirm(`Let op: factuurnummer ${factuur.nummer} bestaat al. Toch opslaan?`)) return;
+
+  // snel ingevulde klant eventueel bewaren
+  if(!factuur.klantId && $("#sBewaar").checked && factuur.klant.naam){
+    const bestaat = klanten.find(k => k.naam.toLowerCase() === factuur.klant.naam.toLowerCase());
+    if(!bestaat){
+      const nk = { id:uuid(), naam:factuur.klant.naam, adres:factuur.klant.adres, postcode:factuur.klant.postcode, plaats:factuur.klant.plaats, email:factuur.klant.email, telefoon:"", btwNummer:"", notities:"" };
+      klanten.push(nk); store.set(K.klanten, klanten);
+      factuur.klantId = nk.id;
+    } else factuur.klantId = bestaat.id;
+  }
+
+  if(editId){
+    const i = facturen.findIndex(f=>f.id===editId);
+    if(i>=0) facturen[i] = factuur;
+    toast(`Factuur ${factuur.nummer} bijgewerkt`);
+  }else{
+    facturen.push(factuur);
+    settings.volgendNummer = verhoogNummer(factuur.nummer);
+    store.set(K.settings, settings);
+    toast(`Factuur ${factuur.nummer} opgeslagen`);
+  }
+  store.set(K.facturen, facturen);
+  resetFormulier();
+  vulInstellingenForm();
+  gaNaarTab("tab-facturen");
+});
+
+function bewerkFactuur(id){
+  const f = facturen.find(x=>x.id===id); if(!f) return;
+  editId = id;
+  $("#nieuwTitel").textContent = `Factuur ${f.nummer} bewerken`;
+  $("#btnAnnuleerEdit").classList.remove("verborgen");
+  renderKlantDropdown();
+  if(f.klantId && klanten.some(k=>k.id===f.klantId)){
+    $("#fKlant").value = f.klantId;
+    $("#snelKlant").classList.add("verborgen");
+  }else{
+    $("#fKlant").value = "";
+    $("#snelKlant").classList.remove("verborgen");
+    $("#sNaam").value = f.klant?.naam || "";
+    $("#sAdres").value = f.klant?.adres || "";
+    $("#sPostcode").value = f.klant?.postcode || "";
+    $("#sPlaats").value = f.klant?.plaats || "";
+    $("#sEmail").value = f.klant?.email || "";
+    $("#sBewaar").checked = false;
+  }
+  $("#fNummer").value = f.nummer;
+  $("#fDatum").value = f.datum;
+  $("#fVervaldatum").value = f.vervaldatum;
+  $("#fBtw").value = f.btw;
+  $("#fNotitie").value = f.notitie || "";
+  $("#fReferentie").value = f.referentie || "";
+  regels = f.regels.map(r=>({...r}));
+  renderRegels();
+  gaNaarTab("tab-nieuw");
+}
+
+/* ================= facturenlijst ================= */
+function renderFacturen(){
+  const zoek = $("#zoekFacturen").value.trim().toLowerCase();
+  const lijst = facturen.slice().sort((a,b)=> (b.datum||"").localeCompare(a.datum||"") || (b.aangemaakt||0)-(a.aangemaakt||0))
+    .filter(f => !zoek || f.nummer.toLowerCase().includes(zoek) || (f.klant?.naam||"").toLowerCase().includes(zoek));
+  const box = $("#facturenLijst");
+  if(!lijst.length){
+    box.innerHTML = `<p class="leeg">${facturen.length ? "Geen facturen gevonden." : "Nog geen facturen. Maak je eerste factuur via de tab ‘Nieuwe factuur’."}</p>`;
+  }else{
+    box.innerHTML = lijst.map(f=>{
+      const t = bereken(f);
+      return `<div class="lijstItem" data-id="${esc(f.id)}">
+        <div class="lijstKop">
+          <strong>${esc(f.nummer)}</strong>
+          <button class="badge status-${esc(f.status)}" data-a="status" title="Klik om status te wijzigen">${STATUS[f.status]||f.status}</button>
+        </div>
+        <div class="lijstSub">${esc(f.klant?.naam||"—")} · ${fmtDatum(f.datum)} · ${fmtEUR(t.totaal)}</div>
+        <div class="lijstActies">
+          <button class="btn klein ghost" data-a="open">Openen</button>
+          <button class="btn klein ghost" data-a="pdf">PDF</button>
+          <button class="btn klein gevaar" data-a="del">Verwijder</button>
+        </div>
+      </div>`;
+    }).join("");
+  }
+  // backup-herinnering
+  const laatste = store.get(K.backup, 0);
+  const oud = !laatste || (Date.now() - laatste) > 30*24*3600*1000;
+  $("#backupBanner").classList.toggle("verborgen", !(facturen.length >= 3 && oud));
+}
+$("#zoekFacturen").addEventListener("input", renderFacturen);
+$("#facturenLijst").addEventListener("click", e=>{
+  const item = e.target.closest(".lijstItem"); if(!item) return;
+  const id = item.dataset.id, a = e.target.dataset.a;
+  const f = facturen.find(x=>x.id===id); if(!f || !a) return;
+  if(a==="open") bewerkFactuur(id);
+  if(a==="pdf") downloadPdf(f);
+  if(a==="status"){
+    f.status = STATUS_VOLGORDE[(STATUS_VOLGORDE.indexOf(f.status)+1) % STATUS_VOLGORDE.length];
+    store.set(K.facturen, facturen);
+    renderFacturen();
+  }
+  if(a==="del"){
+    if(confirm(`Factuur ${f.nummer} verwijderen?\n\nLet op: voor de boekhouding horen factuurnummers opeenvolgend te blijven. Verwijder alleen concepten die nooit verstuurd zijn.`)){
+      facturen = facturen.filter(x=>x.id!==id);
+      store.set(K.facturen, facturen);
+      renderFacturen();
+      toast("Factuur verwijderd");
+    }
+  }
+});
+$("#btnBannerBackup").addEventListener("click", exporteerBackup);
+
+/* ================= klanten ================= */
+function renderKlanten(){
+  const zoek = $("#zoekKlanten").value.trim().toLowerCase();
+  const lijst = klanten.slice().sort((a,b)=>a.naam.localeCompare(b.naam,"nl"))
+    .filter(k => !zoek || k.naam.toLowerCase().includes(zoek) || (k.plaats||"").toLowerCase().includes(zoek));
+  const box = $("#klantenLijst");
+  if(!lijst.length){
+    box.innerHTML = `<p class="leeg">${klanten.length ? "Geen klanten gevonden." : "Nog geen klanten."}</p>`;
+    return;
+  }
+  box.innerHTML = lijst.map(k=>`
+    <div class="lijstItem" data-id="${esc(k.id)}">
+      <div class="lijstKop"><strong>${esc(k.naam)}</strong></div>
+      <div class="lijstSub">${esc([k.plaats, k.email].filter(Boolean).join(" · ") || "—")}</div>
+      <div class="lijstActies"><button class="btn klein ghost" data-a="edit">Bewerken</button></div>
+    </div>`).join("");
+}
+$("#zoekKlanten").addEventListener("input", renderKlanten);
+function toonKlantForm(k){
+  klantEditId = k ? k.id : null;
+  $("#klantFormTitel").textContent = k ? "Klant bewerken" : "Nieuwe klant";
+  $("#btnKlantVerwijder").classList.toggle("verborgen", !k);
+  $("#kNaam").value = k?.naam || "";
+  $("#kAdres").value = k?.adres || "";
+  $("#kPostcode").value = k?.postcode || "";
+  $("#kPlaats").value = k?.plaats || "";
+  $("#kEmail").value = k?.email || "";
+  $("#kTelefoon").value = k?.telefoon || "";
+  $("#kBtw").value = k?.btwNummer || "";
+  $("#kNotities").value = k?.notities || "";
+  $("#klantFormBox").classList.remove("verborgen");
+  $("#kNaam").focus();
+}
+$("#btnNieuweKlant").addEventListener("click", ()=>toonKlantForm(null));
+$("#btnKlantAnnuleer").addEventListener("click", ()=>$("#klantFormBox").classList.add("verborgen"));
+$("#klantenLijst").addEventListener("click", e=>{
+  const item = e.target.closest(".lijstItem"); if(!item) return;
+  if(e.target.dataset.a === "edit" || e.target.closest("[data-a=edit]")){
+    toonKlantForm(klanten.find(k=>k.id===item.dataset.id));
+  }
+});
+$("#btnKlantOpslaan").addEventListener("click", ()=>{
+  const naam = $("#kNaam").value.trim();
+  if(!naam){ alert("Vul een naam in."); return; }
+  const data = {
+    naam, adres:$("#kAdres").value.trim(), postcode:$("#kPostcode").value.trim(), plaats:$("#kPlaats").value.trim(),
+    email:$("#kEmail").value.trim(), telefoon:$("#kTelefoon").value.trim(), btwNummer:$("#kBtw").value.trim(), notities:$("#kNotities").value.trim()
+  };
+  if(klantEditId){
+    const i = klanten.findIndex(k=>k.id===klantEditId);
+    if(i>=0) klanten[i] = { ...klanten[i], ...data };
+  }else{
+    klanten.push({ id:uuid(), ...data });
+  }
+  store.set(K.klanten, klanten);
+  $("#klantFormBox").classList.add("verborgen");
+  renderKlanten(); renderKlantDropdown();
+  toast("Klant opgeslagen");
+});
+$("#btnKlantVerwijder").addEventListener("click", ()=>{
+  if(!klantEditId) return;
+  const k = klanten.find(x=>x.id===klantEditId);
+  if(!confirm(`Klant ‘${k?.naam}’ verwijderen? Bestaande facturen behouden hun klantgegevens.`)) return;
+  klanten = klanten.filter(x=>x.id!==klantEditId);
+  store.set(K.klanten, klanten);
+  $("#klantFormBox").classList.add("verborgen");
+  renderKlanten(); renderKlantDropdown();
+  toast("Klant verwijderd");
+});
+
+/* ================= instellingen ================= */
+function vulInstellingenForm(){
+  $("#iNaam").value = settings.naam; $("#iAdres").value = settings.adres;
+  $("#iPostcode").value = settings.postcode; $("#iPlaats").value = settings.plaats;
+  $("#iTelefoon").value = settings.telefoon; $("#iEmail").value = settings.email;
+  $("#iWebsite").value = settings.website; $("#iKvk").value = settings.kvk;
+  $("#iBtwNummer").value = settings.btwNummer; $("#iIban").value = settings.iban;
+  $("#iTermijn").value = settings.betalingstermijn; $("#iVolgend").value = settings.volgendNummer;
+  $("#iStandaardBtw").value = settings.standaardBtw;
+  $("#iVrijstelling").value = settings.vrijstellingstekst;
+  $("#iVoettekst").value = settings.voettekst;
+  $("#logoWrap").classList.toggle("verborgen", !settings.logo);
+  if(settings.logo) $("#logoPreview").src = settings.logo;
+}
+$("#btnInstellingen").addEventListener("click", ()=>{
+  settings = { ...settings,
+    naam:$("#iNaam").value.trim(), adres:$("#iAdres").value.trim(),
+    postcode:$("#iPostcode").value.trim(), plaats:$("#iPlaats").value.trim(),
+    telefoon:$("#iTelefoon").value.trim(), email:$("#iEmail").value.trim(),
+    website:$("#iWebsite").value.trim(), kvk:$("#iKvk").value.trim(),
+    btwNummer:$("#iBtwNummer").value.trim(), iban:$("#iIban").value.trim(),
+    betalingstermijn: Math.max(0, parseInt($("#iTermijn").value,10) || 0),
+    volgendNummer: $("#iVolgend").value.trim() || settings.volgendNummer,
+    standaardBtw: $("#iStandaardBtw").value,
+    vrijstellingstekst: $("#iVrijstelling").value.trim(),
+    voettekst: $("#iVoettekst").value.trim()
+  };
+  store.set(K.settings, settings);
+  if(!editId && !store.get(K.draft,null)){
+    $("#fNummer").value = settings.volgendNummer;
+    $("#fBtw").value = settings.standaardBtw;
+    $("#fVervaldatum").value = plusDagenISO($("#fDatum").value || vandaagISO(), settings.betalingstermijn);
+  }
+  toonSetupHint();
+  toast("Instellingen opgeslagen");
+});
+$("#iLogo").addEventListener("change", e=>{
+  const file = e.target.files[0]; if(!file) return;
+  const img = new Image();
+  const url = URL.createObjectURL(file);
+  img.onload = ()=>{
+    const max = 600;
+    const sc = Math.min(1, max / Math.max(img.width, img.height));
+    const c = document.createElement("canvas");
+    c.width = Math.round(img.width*sc); c.height = Math.round(img.height*sc);
+    c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+    URL.revokeObjectURL(url);
+    try{
+      settings.logo = c.toDataURL("image/png");
+      store.set(K.settings, settings);
+      vulInstellingenForm();
+      toast("Logo opgeslagen");
+    }catch(err){
+      alert("Logo kon niet worden opgeslagen (mogelijk te groot). Probeer een kleinere afbeelding.");
+    }
+  };
+  img.onerror = ()=>{ URL.revokeObjectURL(url); alert("Dit bestand kon niet als afbeelding worden gelezen."); };
+  img.src = url;
+  e.target.value = "";
+});
+$("#btnLogoWeg").addEventListener("click", ()=>{
+  settings.logo = ""; store.set(K.settings, settings); vulInstellingenForm(); toast("Logo verwijderd");
+});
+function toonSetupHint(){
+  $("#setupHint").classList.toggle("verborgen", !!settings.naam);
+}
+$("#btnNaarInstellingen").addEventListener("click", ()=>gaNaarTab("tab-instellingen"));
+
+/* ================= backup ================= */
+function exporteerBackup(){
+  const data = { app:"wilma-factuur", schemaVersion:1, geexporteerd:new Date().toISOString(), settings, klanten, facturen };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type:"application/json" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = `wilma-factuur-backup-${vandaagISO()}.json`;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(a.href), 5000);
+  store.set(K.backup, Date.now());
+  renderFacturen();
+  toast("Backup gedownload");
+}
+$("#btnExport").addEventListener("click", exporteerBackup);
+$("#btnImport").addEventListener("click", ()=>$("#importFile").click());
+$("#importFile").addEventListener("change", e=>{
+  const file = e.target.files[0]; if(!file) return;
+  const lezer = new FileReader();
+  lezer.onload = ()=>{
+    try{
+      const d = JSON.parse(lezer.result);
+      if(!d || typeof d !== "object" || !d.settings || !Array.isArray(d.klanten) || !Array.isArray(d.facturen)){
+        alert("Dit is geen geldige backup van de Wilma Factuur App."); return;
+      }
+      if(!confirm(`Backup van ${d.geexporteerd ? fmtDatum(d.geexporteerd.slice(0,10)) : "onbekende datum"} terugzetten?\n\nDit VERVANGT alle huidige gegevens (${facturen.length} facturen, ${klanten.length} klanten).`)) return;
+      store.set(K.settings, Object.assign(defaultSettings(), d.settings));
+      store.set(K.klanten, d.klanten);
+      store.set(K.facturen, d.facturen);
+      store.del(K.draft);
+      location.reload();
+    }catch{ alert("Het bestand kon niet worden gelezen als backup (geen geldige JSON)."); }
+  };
+  lezer.readAsText(file);
+  e.target.value = "";
+});
+
+/* ================= factuur-render (voorbeeld / PDF / print) ================= */
+function factuurHTML(f){
+  const s = settings, t = bereken(f), k = f.klant || {};
+  const regelRijen = f.regels.map(r=>`
+    <tr>
+      <td>${esc(r.omschrijving)}</td>
+      <td class="num">${fmtAantal(r.aantal)}</td>
+      <td class="num">${fmtEUR(r.prijs)}</td>
+      <td class="num">${fmtEUR(rond2((Number(r.aantal)||0)*(Number(r.prijs)||0)))}</td>
+    </tr>`).join("");
+  const btwRij = f.btw === "21"
+    ? `<div class="tr"><span>BTW 21%</span><span>${fmtEUR(t.btw)}</span></div>` : "";
+  const vrijstelling = f.btw !== "21" && s.vrijstellingstekst
+    ? `<div class="vrijstelling">${esc(s.vrijstellingstekst)}</div>` : "";
+  const betaalRef = f.referentie || f.nummer;
+  const betaalRegel = s.iban
+    ? `Gelieve het bedrag van <strong>${fmtEUR(t.totaal)}</strong> vóór <strong>${fmtDatum(f.vervaldatum)}</strong> over te maken op <strong>${esc(s.iban)}</strong> t.n.v. ${esc(s.naam)}, o.v.v. <strong>${esc(betaalRef)}</strong>.`
+    : `Gelieve het bedrag van <strong>${fmtEUR(t.totaal)}</strong> vóór <strong>${fmtDatum(f.vervaldatum)}</strong> te voldoen o.v.v. <strong>${esc(betaalRef)}</strong>.`;
+  const voetRegels = [
+    s.kvk ? `KVK ${esc(s.kvk)}` : "",
+    s.btwNummer ? `BTW ${esc(s.btwNummer)}` : "",
+    s.email ? esc(s.email) : "",
+    s.telefoon ? esc(s.telefoon) : "",
+    s.website ? esc(s.website) : ""
+  ].filter(Boolean).join(" &nbsp;·&nbsp; ");
+  return `
+  <div class="factuur">
+    <div class="kop">
+      <div>${s.logo ? `<img class="logo" src="${s.logo}" alt="">` : `<div class="merk">${esc(s.naam || "—")}</div>`}</div>
+      <div class="bedrijf">
+        <strong>${esc(s.naam)}</strong><br>
+        ${esc(s.adres)}<br>
+        ${esc([s.postcode, s.plaats].filter(Boolean).join(" "))}<br>
+        ${s.telefoon ? esc(s.telefoon)+"<br>" : ""}
+        ${s.email ? esc(s.email)+"<br>" : ""}
+        ${s.website ? esc(s.website) : ""}
+      </div>
+    </div>
+    <div class="titelRij">
+      <div class="titel">Factuur</div>
+      <div class="meta">
+        <div class="mRij"><span class="mLabel">Factuurnummer</span><span><strong>${esc(f.nummer)}</strong></span></div>
+        <div class="mRij"><span class="mLabel">Factuurdatum</span><span>${fmtDatum(f.datum)}</span></div>
+        <div class="mRij"><span class="mLabel">Vervaldatum</span><span>${fmtDatum(f.vervaldatum)}</span></div>
+      </div>
+    </div>
+    <div class="klantBlok">
+      <div class="kLabel">Factuur aan</div>
+      <strong>${esc(k.naam || "")}</strong><br>
+      ${k.adres ? esc(k.adres)+"<br>" : ""}
+      ${[k.postcode, k.plaats].filter(Boolean).length ? esc([k.postcode,k.plaats].filter(Boolean).join(" "))+"<br>" : ""}
+      ${k.btwNummer ? "BTW " + esc(k.btwNummer) : ""}
+    </div>
+    <table>
+      <thead><tr><th>Beschrijving</th><th class="num">Aantal</th><th class="num">Prijs p/st</th><th class="num">Totaal</th></tr></thead>
+      <tbody>${regelRijen}</tbody>
+    </table>
+    <div class="totvak">
+      <div class="tr"><span>Subtotaal</span><span>${fmtEUR(t.subtotaal)}</span></div>
+      ${btwRij}
+      <div class="tr eind"><span>Totaal</span><span>${fmtEUR(t.totaal)}</span></div>
+    </div>
+    ${vrijstelling}
+    ${f.notitie ? `<div class="notitie">${esc(f.notitie).replace(/\n/g,"<br>")}</div>` : ""}
+    <div class="voet">
+      <div class="betaal">${betaalRegel}</div>
+      ${s.voettekst ? `<div style="margin-bottom:8px">${esc(s.voettekst).replace(/\n/g,"<br>")}</div>` : ""}
+      ${voetRegels ? `<div>${voetRegels}</div>` : ""}
+    </div>
+  </div>`;
+}
+
+function huidigeFactuurUitForm(){
+  const { fouten, factuur } = leesFormulier();
+  if(fouten.length){ alert(fouten.join("\n")); return null; }
+  return factuur;
+}
+
+/* voorbeeld */
+let overlayFactuur = null;
+function toonVoorbeeld(f){
+  overlayFactuur = f;
+  const sheet = $("#voorbeeldSheet");
+  sheet.innerHTML = factuurHTML(f);
+  $("#voorbeeldOverlay").classList.remove("verborgen");
+  const beschikbaar = $("#voorbeeldSheetWrap").clientWidth - 32;
+  const schaal = Math.min(1, beschikbaar / 794);
+  sheet.style.transform = `scale(${schaal})`;
+  sheet.style.width = "794px";
+  sheet.style.height = (sheet.firstElementChild.offsetHeight * schaal) + "px";
+}
+$("#btnVoorbeeld").addEventListener("click", ()=>{
+  const f = huidigeFactuurUitForm(); if(f) toonVoorbeeld(f);
+});
+$("#btnSluitVoorbeeld").addEventListener("click", ()=>$("#voorbeeldOverlay").classList.add("verborgen"));
+$("#btnOverlayPdf").addEventListener("click", ()=>{ if(overlayFactuur) downloadPdf(overlayFactuur); });
+$("#btnOverlayPrint").addEventListener("click", ()=>{ if(overlayFactuur) printFactuur(overlayFactuur); });
+
+/* pdf via html2pdf.js (CDN, lazy geladen) + print-fallback */
+let html2pdfPromise = null;
+function laadHtml2pdf(){
+  if(window.html2pdf) return Promise.resolve();
+  if(!html2pdfPromise){
+    html2pdfPromise = new Promise((res, rej)=>{
+      const s = document.createElement("script");
+      s.src = "https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js";
+      s.onload = res;
+      s.onerror = ()=>{ html2pdfPromise = null; rej(new Error("html2pdf niet beschikbaar")); };
+      document.head.appendChild(s);
+    });
+  }
+  return html2pdfPromise;
+}
+function printFactuur(f){
+  $("#pdf-stage").innerHTML = factuurHTML(f);
+  document.body.classList.add("printModus");
+  const klaar = ()=>{ document.body.classList.remove("printModus"); window.removeEventListener("afterprint", klaar); };
+  window.addEventListener("afterprint", klaar);
+  window.print();
+  setTimeout(klaar, 2000); // vangnet voor browsers zonder afterprint
+}
+async function downloadPdf(f){
+  const stage = $("#pdf-stage");
+  stage.innerHTML = factuurHTML(f);
+  try{
+    await laadHtml2pdf();
+    await html2pdf().set({
+      margin: 0,
+      filename: `Factuur-${f.nummer}.pdf`,
+      image: { type:"jpeg", quality:0.96 },
+      html2canvas: { scale:2, useCORS:true, backgroundColor:"#ffffff" },
+      jsPDF: { unit:"px", format:[794,1123], hotfixes:["px_scaling"] }
+    }).from(stage.firstElementChild).save();
+    toast("PDF gedownload");
+  }catch(err){
+    if(confirm("PDF-download lukt niet (geen verbinding of niet ondersteund op dit apparaat).\n\nOpen de afdrukweergave? Kies daar ‘Opslaan als PDF’.")){
+      printFactuur(f);
+    }
+  }
+}
+$("#btnPdf").addEventListener("click", ()=>{
+  const f = huidigeFactuurUitForm(); if(f) downloadPdf(f);
+});
+
+/* ================= init ================= */
+function init(){
+  vulInstellingenForm();
+  toonSetupHint();
+  resetFormulier();
+  herstelDraft();
+  renderFacturen();
+  renderKlanten();
+}
+init();
+</script>
+</body>
+</html>
