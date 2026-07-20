@@ -164,6 +164,20 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--kleur-primair);o
 }
 .factuur .voet .betaal{font-size:12.5px;color:var(--kleur-tekst);margin-bottom:8px}
 #pdf-stage{position:fixed;left:-10000px;top:0;width:794px}
+/* ---- toegangscode / slotscherm ---- */
+#slotScherm{
+  position:fixed;inset:0;z-index:100;background:var(--kleur-licht);
+  display:flex;align-items:center;justify-content:center;padding:24px;
+}
+.slotKaart{
+  background:#fff;border:1px solid var(--kleur-rand);border-radius:16px;
+  padding:28px 24px;max-width:380px;width:100%;
+}
+.slotKaart h1{font-family:var(--font-display);font-weight:600;font-size:30px;color:var(--kleur-primair-donker);text-align:center;margin-bottom:4px}
+.slotKaart .slotSub{text-align:center;font-size:13px;color:#7a7568;margin-bottom:18px}
+.slotKaart .uitleg{font-size:13.5px;color:#5d594e;margin-bottom:14px}
+.slotFout{color:var(--kleur-gevaar);font-size:14px;font-weight:600;margin-top:10px;min-height:20px;text-align:center}
+.linkKnop{background:none;border:none;font:inherit;font-size:14px;color:#7a7568;text-decoration:underline;cursor:pointer;padding:10px;display:block;margin:6px auto 0;min-height:44px}
 @media print{
   @page{size:A4;margin:0}
   body.printModus > *:not(#pdf-stage){display:none !important}
@@ -352,6 +366,12 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--kleur-primair);o
   <button class="btn primair vol" id="btnInstellingen" type="button">Instellingen opslaan</button>
 
   <div class="card" style="margin-top:16px">
+    <h3>Beveiliging</h3>
+    <p class="hint" style="margin:0 0 10px">De toegangscode houdt meekijkers buiten de app. Je gegevens zelf staan alleen op dit apparaat, nooit online.</p>
+    <button class="btn ghost vol" id="btnCodeWijzig" type="button">Toegangscode wijzigen</button>
+  </div>
+
+  <div class="card" style="margin-top:16px">
     <h3>Data &amp; backup</h3>
     <p class="hint" style="margin:0 0 10px">Alle gegevens staan alleen op dit apparaat. Maak regelmatig een backup en bewaar het bestand veilig — het bevat klantgegevens.</p>
     <div class="acties" style="margin:0">
@@ -360,7 +380,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--kleur-primair);o
     </div>
     <input type="file" id="importFile" accept="application/json,.json" class="verborgen">
   </div>
-  <p class="hint" style="text-align:center">Wilma Factuur App · v1.0</p>
+  <p class="hint" style="text-align:center">Wilma Factuur App · v1.1</p>
 </section>
 
 </main>
@@ -380,6 +400,30 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--kleur-primair);o
     <button class="btn ghost" id="btnSluitVoorbeeld" type="button">Sluiten</button>
     <button class="btn ghost" id="btnOverlayPrint" type="button">Afdrukken</button>
     <button class="btn primair" id="btnOverlayPdf" type="button">Download PDF</button>
+  </div>
+</div>
+
+<!-- ========== SLOTSCHERM (toegangscode) ========== -->
+<div id="slotScherm">
+  <div class="slotKaart">
+    <h1>Wilma Smilde</h1>
+    <div class="slotSub">Facturen</div>
+    <div id="slotSetup" class="verborgen">
+      <p class="uitleg" id="setupUitleg">Welkom! Kies een toegangscode (minimaal 4 tekens). Die vraagt de app voortaan bij het openen, zodat niet iedereen erbij kan.</p>
+      <label for="codeNieuw">Toegangscode</label>
+      <input id="codeNieuw" type="password" autocomplete="new-password">
+      <label for="codeHerhaal">Herhaal de code</label>
+      <input id="codeHerhaal" type="password" autocomplete="new-password">
+      <button class="btn primair vol" id="btnCodeInstellen" type="button" style="margin-top:14px">Code instellen</button>
+    </div>
+    <div id="slotLogin" class="verborgen">
+      <p class="uitleg" id="loginUitleg">Voer je toegangscode in om verder te gaan.</p>
+      <label for="codeInvoer">Toegangscode</label>
+      <input id="codeInvoer" type="password" autocomplete="current-password">
+      <button class="btn primair vol" id="btnOntgrendel" type="button" style="margin-top:14px">Ontgrendelen</button>
+      <button class="linkKnop" id="btnCodeVergeten" type="button">Code vergeten?</button>
+    </div>
+    <div class="slotFout" id="slotFout"></div>
   </div>
 </div>
 
@@ -1061,8 +1105,85 @@ $("#btnPdf").addEventListener("click", ()=>{
   const f = huidigeFactuurUitForm(); if(f) downloadPdf(f);
 });
 
+/* ================= toegangscode / slotscherm ================= */
+const KCODE = "wf_codeHash";
+let slotWijzig = false; // true als de gebruiker via Instellingen de code wijzigt
+async function codeHash(code){
+  const data = new TextEncoder().encode("wf|" + code);
+  if(crypto.subtle){
+    const buf = await crypto.subtle.digest("SHA-256", data);
+    return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,"0")).join("");
+  }
+  let h = 5381; for(const b of data) h = ((h * 33) ^ b) >>> 0;
+  return "f" + h.toString(16);
+}
+function toonSlot(view){
+  $("#slotScherm").classList.remove("verborgen");
+  $("#slotSetup").classList.toggle("verborgen", view !== "setup");
+  $("#slotLogin").classList.toggle("verborgen", view !== "login");
+  $("#slotFout").textContent = "";
+  $("#codeNieuw").value = ""; $("#codeHerhaal").value = ""; $("#codeInvoer").value = "";
+  const veld = view === "setup" ? $("#codeNieuw") : $("#codeInvoer");
+  setTimeout(()=>veld.focus(), 50);
+}
+function ontgrendel(){
+  $("#slotScherm").classList.add("verborgen");
+  sessionStorage.setItem("wf_unlocked", localStorage.getItem(KCODE) || "");
+}
+$("#btnCodeInstellen").addEventListener("click", async ()=>{
+  const c1 = $("#codeNieuw").value, c2 = $("#codeHerhaal").value;
+  if(c1.length < 4){ $("#slotFout").textContent = "Kies een code van minimaal 4 tekens."; return; }
+  if(c1 !== c2){ $("#slotFout").textContent = "De codes komen niet overeen."; return; }
+  localStorage.setItem(KCODE, await codeHash(c1));
+  ontgrendel();
+  toast(slotWijzig ? "Toegangscode gewijzigd" : "Toegangscode ingesteld");
+  slotWijzig = false;
+});
+$("#btnOntgrendel").addEventListener("click", async ()=>{
+  const hash = await codeHash($("#codeInvoer").value);
+  if(hash !== localStorage.getItem(KCODE)){
+    $("#slotFout").textContent = "Onjuiste code, probeer het opnieuw.";
+    $("#codeInvoer").value = ""; $("#codeInvoer").focus();
+    return;
+  }
+  if(slotWijzig){
+    $("#setupUitleg").textContent = "Kies een nieuwe toegangscode (minimaal 4 tekens).";
+    toonSlot("setup");
+  }else{
+    ontgrendel();
+  }
+});
+$("#btnCodeVergeten").addEventListener("click", ()=>{
+  if(!confirm("Toegangscode resetten?\n\nJe facturen, klanten en instellingen blijven gewoon bewaard — je kiest alleen een nieuwe code.")) return;
+  localStorage.removeItem(KCODE);
+  sessionStorage.removeItem("wf_unlocked");
+  slotWijzig = false;
+  $("#setupUitleg").textContent = "Kies een nieuwe toegangscode (minimaal 4 tekens).";
+  toonSlot("setup");
+});
+$("#btnCodeWijzig").addEventListener("click", ()=>{
+  slotWijzig = true;
+  $("#loginUitleg").textContent = "Voer eerst je huidige toegangscode in.";
+  toonSlot("login");
+});
+[["codeNieuw","btnCodeInstellen"],["codeHerhaal","btnCodeInstellen"],["codeInvoer","btnOntgrendel"]].forEach(([veld,knop])=>{
+  $("#"+veld).addEventListener("keydown", e=>{ if(e.key === "Enter") $("#"+knop).click(); });
+});
+function initSlot(){
+  const hash = localStorage.getItem(KCODE);
+  if(!hash){
+    toonSlot("setup");
+  }else if(sessionStorage.getItem("wf_unlocked") === hash){
+    $("#slotScherm").classList.add("verborgen");
+  }else{
+    $("#loginUitleg").textContent = "Voer je toegangscode in om verder te gaan.";
+    toonSlot("login");
+  }
+}
+
 /* ================= init ================= */
 function init(){
+  initSlot();
   vulInstellingenForm();
   toonSetupHint();
   resetFormulier();
