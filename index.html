@@ -163,7 +163,8 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--kleur-primair);o
   font-size:11.5px;color:#5d594e;
 }
 .factuur .voet .betaal{font-size:12.5px;color:var(--kleur-tekst);margin-bottom:8px}
-#pdf-stage{position:fixed;left:-10000px;top:0;width:794px}
+/* absolute (niet fixed): een fixed element verschuift in html2canvas met de paginascroll mee */
+#pdf-stage{position:absolute;left:-10000px;top:0;width:794px}
 /* ---- toegangscode / slotscherm ---- */
 #slotScherm{
   position:fixed;inset:0;z-index:100;background:var(--kleur-licht);
@@ -1085,13 +1086,17 @@ function printFactuur(f){
 async function downloadPdf(f){
   const stage = $("#pdf-stage");
   stage.innerHTML = factuurHTML(f);
+  // html2canvas rendert met de scrollpositie van de pagina mee; zonder
+  // correctie schuift de factuur in de PDF omlaag als er gescrold is.
+  const sx = window.scrollX, sy = window.scrollY;
+  window.scrollTo(0, 0);
   try{
     await laadHtml2pdf();
     await html2pdf().set({
       margin: 0,
       filename: `Factuur-${f.nummer}.pdf`,
       image: { type:"jpeg", quality:0.96 },
-      html2canvas: { scale:2, useCORS:true, backgroundColor:"#ffffff" },
+      html2canvas: { scale:2, useCORS:true, backgroundColor:"#ffffff", scrollX:0, scrollY:0 },
       jsPDF: { unit:"px", format:[794,1123], hotfixes:["px_scaling"] }
     }).from(stage.firstElementChild).save();
     toast("PDF gedownload");
@@ -1099,6 +1104,8 @@ async function downloadPdf(f){
     if(confirm("PDF-download lukt niet (geen verbinding of niet ondersteund op dit apparaat).\n\nOpen de afdrukweergave? Kies daar ‘Opslaan als PDF’.")){
       printFactuur(f);
     }
+  }finally{
+    window.scrollTo(sx, sy);
   }
 }
 $("#btnPdf").addEventListener("click", ()=>{
