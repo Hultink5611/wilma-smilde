@@ -7,7 +7,7 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💳</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
   --primair:#7B9E87; --primair-donker:#5F806C; --accent:#C8A96E;
@@ -27,6 +27,8 @@ body{font-family:var(--body);background:#E9E4DB;color:var(--tekst);min-height:10
   border-radius:9px;border:1px solid var(--rand);background:#fff;color:var(--tekst);
 }
 .btn.primair{background:var(--primair);border-color:var(--primair);color:#fff}
+.stijlen{display:flex;align-items:center;gap:6px;font-size:13.5px;color:#4a463d;margin-right:8px}
+.stijlKnop.actief{background:var(--primair-donker);border-color:var(--primair-donker);color:#fff}
 .schakel{display:flex;align-items:center;gap:6px;font-size:13.5px;color:#4a463d}
 .omgeving{padding:24px 16px;display:flex;flex-direction:column;align-items:center;gap:20px}
 .uitleg{
@@ -41,7 +43,7 @@ body{font-family:var(--body);background:#E9E4DB;color:var(--tekst);min-height:10
   display:flex;flex-direction:column;align-items:center;justify-content:center;
 }
 .schermKaart .kaart{box-shadow:0 4px 20px rgba(44,44,44,.18);border-radius:2mm}
-.kaart .zon{width:9mm;height:9mm}
+.kaart .zon{width:9mm;height:9mm;stroke:#C8A96E}
 .kaart .naam{font-weight:500;font-size:12.5pt;letter-spacing:.3em;color:#4a463d;margin-top:3mm;text-indent:.3em}
 .kaart .sub{font-size:6.5pt;letter-spacing:.55em;color:var(--accent);font-weight:600;text-transform:uppercase;margin-top:1.6mm;text-indent:.55em}
 .kaart.achter{background:var(--licht)}
@@ -52,6 +54,39 @@ body{font-family:var(--body);background:#E9E4DB;color:var(--tekst);min-height:10
 .kaart.achter .site{font-weight:600;color:var(--primair-donker)}
 [contenteditable]:hover{outline:1.5px dashed var(--accent);outline-offset:2px;cursor:text}
 [contenteditable]:focus{outline:2px solid var(--primair);outline-offset:2px}
+
+/* ============ STIJL: RUSTIEK — aards perkament met bladmotief ============ */
+body[data-thema="rustiek"] .kaart{background:#F2E8D5}
+body[data-thema="rustiek"] .kaart .zon{stroke:#A18F70}
+body[data-thema="rustiek"] .kaart .naam{color:#4E4E4A}
+body[data-thema="rustiek"] .kaart .sub{color:#A18F70}
+body[data-thema="rustiek"] .kaart:not(.achter)::after{
+  content:"";position:absolute;right:4mm;bottom:3mm;width:8mm;height:11mm;opacity:.5;pointer-events:none;
+  background:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 160' fill='none' stroke='%23A18F70' stroke-width='3' stroke-linecap='round'><path d='M60 150 C58 110 62 60 60 15'/><path d='M60 120 C45 118 34 108 32 92 C48 95 58 105 60 120'/><path d='M60 96 C75 94 86 84 88 68 C72 71 62 81 60 96'/><path d='M60 72 C45 70 36 60 34 46 C48 49 58 58 60 72'/><path d='M60 48 C73 46 82 37 84 24 C71 27 62 35 60 48'/></svg>") center/contain no-repeat;
+}
+body[data-thema="rustiek"] .kaart.achter{background:#FAF4E8}
+body[data-thema="rustiek"] .kaart.achter .persoon{color:#6d5f43}
+body[data-thema="rustiek"] .kaart.achter .rol{color:#A18F70}
+body[data-thema="rustiek"] .kaart.achter .lijn{background:#B5C6B2;width:16mm}
+body[data-thema="rustiek"] .kaart.achter .gegeven{color:#55534b}
+body[data-thema="rustiek"] .kaart.achter .site{color:#8E7A57}
+
+/* ============ STIJL: HORIZON — open en licht, met horizonlijn ============ */
+body[data-thema="horizon"] .kaart{background:#EDE7E0}
+body[data-thema="horizon"] .kaart .zon{display:none}
+body[data-thema="horizon"] .kaart:not(.achter)::before{
+  content:"";width:30mm;height:8mm;margin-bottom:2.5mm;pointer-events:none;
+  background:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 70' fill='none' stroke-linecap='round'><path d='M90 58 a30 30 0 0 1 60 0' stroke='%239DB39E' stroke-width='3'/><line x1='6' y1='58' x2='234' y2='58' stroke='%23B2A589' stroke-width='2.5'/><line x1='120' y1='16' x2='120' y2='26' stroke='%239DB39E' stroke-width='2.5'/><line x1='97' y1='24' x2='102' y2='32' stroke='%239DB39E' stroke-width='2.5'/><line x1='143' y1='24' x2='138' y2='32' stroke='%239DB39E' stroke-width='2.5'/></svg>") center/contain no-repeat;
+}
+body[data-thema="horizon"] .kaart .naam{color:#3C3C39;font-weight:600;font-size:11.5pt}
+body[data-thema="horizon"] .kaart .sub{color:#9DB39E}
+body[data-thema="horizon"] .kaart.achter{background:#F5F1EB}
+body[data-thema="horizon"] .kaart.achter .persoon{font-family:var(--body);font-weight:700;font-size:10.5pt;letter-spacing:.12em;text-transform:uppercase;color:#3C3C39}
+body[data-thema="horizon"] .kaart.achter .rol{color:#9DB39E}
+body[data-thema="horizon"] .kaart.achter .lijn{background:#B2A589;width:18mm}
+body[data-thema="horizon"] .kaart.achter .gegeven{font-family:var(--display);font-size:9pt;color:#55544d;line-height:1.75}
+body[data-thema="horizon"] .kaart.achter .site{font-family:var(--body);font-weight:700;font-size:7.5pt;letter-spacing:.08em;color:#3C3C39}
+
 /* ---- printvel A4: 2 x 4 = 8 kaartjes per zijde ---- */
 .printvel{display:none}
 @media print{
@@ -73,6 +108,11 @@ body{font-family:var(--body);background:#E9E4DB;color:var(--tekst);min-height:10
 
 <div class="werkbalk">
   <h1>Visitekaartjes — 85 × 55 mm</h1>
+  <div class="stijlen">Stijl:
+    <button class="btn stijlKnop" data-thema="salie" type="button">Salie</button>
+    <button class="btn stijlKnop" data-thema="rustiek" type="button">Rustiek</button>
+    <button class="btn stijlKnop" data-thema="horizon" type="button">Horizon</button>
+  </div>
   <label class="schakel"><input type="checkbox" id="chkLijnen" checked> snijlijnen</label>
   <button class="btn" id="btnReset" type="button">Teksten herstellen</button>
   <button class="btn primair" id="btnPrint" type="button">Afdrukken / Opslaan als PDF</button>
@@ -80,17 +120,19 @@ body{font-family:var(--body);background:#E9E4DB;color:var(--tekst);min-height:10
 
 <div class="omgeving">
   <div class="uitleg">
-    Klik op een tekst in de kaartjes om die aan te passen (wordt automatisch bewaard).
+    Klik op een tekst in de kaartjes om die aan te passen (wordt automatisch bewaard) en kies bovenaan een
+    <strong>stijl</strong> — dezelfde stijlkeuze geldt ook voor de flyer.
     Afdrukken levert een <strong>A4-vel met 8 voorkanten</strong> en een <strong>tweede vel met 8 achterkanten</strong> —
     dubbelzijdig printen met omslaan over de lange zijde legt ze precies op elkaar.
-    Zet in het printvenster de marges op "Geen" en schakel eventuele kop-/voetteksten uit.
+    Zet in het printvenster de marges op "Geen", schakel kop-/voetteksten uit en zet
+    <strong>achtergrondafbeeldingen aan</strong> (nodig voor Rustiek en Horizon).
     Voor professioneel drukwerk (bijv. 350 grams): sla op als PDF en lever die aan.
   </div>
 
   <div class="voorbeeldRij schermKaart">
     <div><div class="lbl">Voorkant</div>
       <div class="kaart" id="kVoor">
-        <svg class="zon" viewBox="0 0 48 48" fill="none" stroke="#C8A96E" stroke-width="1.6" stroke-linecap="round">
+        <svg class="zon" viewBox="0 0 48 48" fill="none" stroke-width="1.6" stroke-linecap="round">
           <circle cx="24" cy="24" r="8.5"/>
           <line x1="24" y1="4" x2="24" y2="10"/><line x1="24" y1="38" x2="24" y2="44"/>
           <line x1="4" y1="24" x2="10" y2="24"/><line x1="38" y1="24" x2="44" y2="24"/>
@@ -119,6 +161,7 @@ body{font-family:var(--body);background:#E9E4DB;color:var(--tekst);min-height:10
 <script>
 "use strict";
 const OPSLAG = "wf_kaart_html";
+const THEMAS = ["salie","rustiek","horizon"];
 const kVoor = document.getElementById("kVoor");
 const kAchter = document.getElementById("kAchter");
 function bewaar(){
@@ -130,6 +173,15 @@ try{
   const d = JSON.parse(localStorage.getItem(OPSLAG));
   if(d && d.voor && d.achter){ kVoor.innerHTML = d.voor; kAchter.innerHTML = d.achter; }
 }catch{}
+
+function zetThema(naam){
+  if(!THEMAS.includes(naam)) naam = "salie";
+  document.body.dataset.thema = naam;
+  localStorage.setItem("wf_thema", naam);
+  document.querySelectorAll(".stijlKnop").forEach(b => b.classList.toggle("actief", b.dataset.thema === naam));
+}
+document.querySelectorAll(".stijlKnop").forEach(b => b.addEventListener("click", () => zetThema(b.dataset.thema)));
+zetThema(localStorage.getItem("wf_thema") || "salie");
 
 function vulVellen(){
   const velVoor = document.getElementById("velVoor");
