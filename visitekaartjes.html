@@ -14,6 +14,9 @@
   --tekst:#46403A; --licht:#F5EEE5; --rand:#E7DBCC;
   --display:"Nunito Sans","Segoe UI",sans-serif;
   --body:"Open Sans",-apple-system,"Segoe UI",Roboto,sans-serif;
+  /* palet (bewerkbaar via de kleur-editor, standaard = Roze van de site) */
+  --pal-paper:#FAF7F2; --pal-blok:#F2EAE1; --pal-accentblok:#C4857A; --pal-op:#FBF3EF;
+  --pal-primair:#A9685C; --pal-accent:#C4AA8A; --pal-tekst:#55504a;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:var(--body);background:#EAE3D8;color:var(--tekst);min-height:100vh}
@@ -29,6 +32,11 @@ body{font-family:var(--body);background:#EAE3D8;color:var(--tekst);min-height:10
 .btn.primair{background:var(--primair);border-color:var(--primair);color:#fff}
 .stijlen{display:flex;align-items:center;gap:6px;font-size:13.5px;color:#4a463d;margin-right:8px}
 .stijlKnop.actief{background:var(--primair-donker);border-color:var(--primair-donker);color:#fff}
+.palet{display:flex;align-items:center;gap:6px;font-size:13.5px;color:#4a463d;margin-right:8px;flex-wrap:wrap}
+.paletKnop{width:22px;height:22px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px var(--rand);cursor:pointer;padding:0}
+.paletKnop.actief{box-shadow:0 0 0 2px var(--primair-donker);transform:scale(1.12)}
+.paletKleur{display:inline-flex;align-items:center;gap:3px;font-size:11px;color:#6a655c}
+.paletKleur input[type=color]{width:26px;height:24px;border:1px solid var(--rand);border-radius:5px;padding:0;background:none;cursor:pointer}
 .schakel{display:flex;align-items:center;gap:6px;font-size:13.5px;color:#4a463d}
 .omgeving{padding:24px 16px;display:flex;flex-direction:column;align-items:center;gap:20px}
 .uitleg{
@@ -122,6 +130,22 @@ body[data-thema="zand"] .kaart.achter .lijn{background:#B7A489}
 body[data-thema="zand"] .kaart.achter .gegeven{color:#6a6152}
 body[data-thema="zand"] .kaart.achter .site{color:#6E5D4B}
 
+/* ============ PALETTEN van de site (voor de stijl Blokken + kleur-editor) ============ */
+body[data-palet="roze"]{--pal-paper:#FAF7F2;--pal-blok:#F2EAE1;--pal-accentblok:#C4857A;--pal-op:#FBF3EF;--pal-primair:#A9685C;--pal-accent:#C4AA8A;--pal-tekst:#55504a}
+body[data-palet="terracotta"]{--pal-paper:#FAF6F1;--pal-blok:#EFE1DA;--pal-accentblok:#A9685C;--pal-op:#FBF3EF;--pal-primair:#8F4F44;--pal-accent:#C4AA8A;--pal-tekst:#55504a}
+body[data-palet="olijf"]{--pal-paper:#F7F6EF;--pal-blok:#ECEBDD;--pal-accentblok:#97A06E;--pal-op:#FBFBF3;--pal-primair:#6F7A50;--pal-accent:#C4857A;--pal-tekst:#55524a}
+body[data-palet="zand"]{--pal-paper:#EFE7DB;--pal-blok:#E4DBC9;--pal-accentblok:#6E5D4B;--pal-op:#F5EFE6;--pal-primair:#6E5D4B;--pal-accent:#B7A489;--pal-tekst:#6a6152}
+body[data-palet="bloesem"]{--pal-paper:#FBF1EC;--pal-blok:#F7E7E1;--pal-accentblok:#CE9A90;--pal-op:#FFF6F2;--pal-primair:#B0685C;--pal-accent:#C99A8F;--pal-tekst:#6b5a54}
+
+/* ============ STIJL: BLOKKEN — rechte kleurblokken zoals op de site ============ */
+body[data-thema="blokken"] .kaart{background:var(--pal-paper);border-top:5mm solid var(--pal-accentblok)}
+body[data-thema="blokken"] .kaart.achter{background:var(--pal-blok);border-top:5mm solid var(--pal-accentblok)}
+body[data-thema="blokken"] .kaart.achter .persoon{color:var(--pal-primair)}
+body[data-thema="blokken"] .kaart.achter .rol{color:var(--pal-accent);font-style:normal}
+body[data-thema="blokken"] .kaart.achter .lijn{background:var(--pal-accent)}
+body[data-thema="blokken"] .kaart.achter .gegeven{color:var(--pal-tekst)}
+body[data-thema="blokken"] .kaart.achter .site{color:var(--pal-primair)}
+
 /* ---- printvel A4: 2 x 4 = 8 kaartjes per zijde ---- */
 .printvel{display:none}
 @media print{
@@ -150,6 +174,17 @@ body[data-thema="zand"] .kaart.achter .site{color:#6E5D4B}
     <button class="btn stijlKnop" data-thema="bloesem" type="button">Bloesem</button>
     <button class="btn stijlKnop" data-thema="terracotta" type="button">Terracotta</button>
     <button class="btn stijlKnop" data-thema="zand" type="button">Zand</button>
+    <button class="btn stijlKnop" data-thema="blokken" type="button">Blokken</button>
+  </div>
+  <div class="palet" title="Kleurpalet (voor de stijl Blokken)">Palet:
+    <button class="paletKnop" data-palet="roze" style="background:#C4857A" title="Roze" type="button"></button>
+    <button class="paletKnop" data-palet="terracotta" style="background:#A9685C" title="Terracotta" type="button"></button>
+    <button class="paletKnop" data-palet="olijf" style="background:#97A06E" title="Olijf" type="button"></button>
+    <button class="paletKnop" data-palet="zand" style="background:#6E5D4B" title="Zand" type="button"></button>
+    <button class="paletKnop" data-palet="bloesem" style="background:#CE9A90" title="Bloesem" type="button"></button>
+    <label class="paletKleur">Papier<input type="color" id="cPaper" value="#FAF7F2"></label>
+    <label class="paletKleur">Blok<input type="color" id="cBlok" value="#C4857A"></label>
+    <label class="paletKleur">Koppen<input type="color" id="cPrimair" value="#A9685C"></label>
   </div>
   <label class="schakel"><input type="checkbox" id="chkLijnen" checked> snijlijnen</label>
   <button class="btn" id="btnReset" type="button">Teksten herstellen</button>
@@ -159,7 +194,7 @@ body[data-thema="zand"] .kaart.achter .site{color:#6E5D4B}
 <div class="omgeving">
   <div class="uitleg">
     Klik op een tekst in de kaartjes om die aan te passen (wordt automatisch bewaard) en kies bovenaan een
-    <strong>stijl</strong>; dezelfde stijlkeuze geldt ook voor de flyer.
+    <strong>stijl</strong>; dezelfde stijlkeuze geldt ook voor de flyer. Met de stijl <strong>Blokken</strong> kun je via <strong>Palet</strong> spelen met de kleuren van de site of zelf een kleur kiezen.
     Afdrukken levert een <strong>A4-vel met 8 voorkanten</strong> en een <strong>tweede vel met 8 achterkanten</strong>.
     Dubbelzijdig printen met omslaan over de lange zijde legt ze precies op elkaar.
     Zet in het printvenster de marges op "Geen", schakel kop-/voetteksten uit en zet
@@ -191,7 +226,7 @@ body[data-thema="zand"] .kaart.achter .site{color:#6E5D4B}
 <script>
 "use strict";
 const OPSLAG = "wf_kaart_html";
-const THEMAS = ["salie","rustiek","horizon","bloesem","terracotta","zand"];
+const THEMAS = ["salie","rustiek","horizon","bloesem","terracotta","zand","blokken"];
 const kVoor = document.getElementById("kVoor");
 const kAchter = document.getElementById("kAchter");
 function bewaar(){
@@ -211,6 +246,49 @@ function zetThema(naam){
   document.querySelectorAll(".stijlKnop").forEach(b => b.classList.toggle("actief", b.dataset.thema === naam));
 }
 document.querySelectorAll(".stijlKnop").forEach(b => b.addEventListener("click", () => zetThema(b.dataset.thema)));
+
+/* ---- kleur-editor: paletten van de site + eigen kleuren, werkt met de stijl Blokken ---- */
+const cPaper = document.getElementById("cPaper");
+const cBlok = document.getElementById("cBlok");
+const cPrimair = document.getElementById("cPrimair");
+function lichter(hex, amt){
+  const c = hex.replace("#",""); let r=parseInt(c.substr(0,2),16),g=parseInt(c.substr(2,2),16),b=parseInt(c.substr(4,2),16);
+  r=Math.round(r+(255-r)*amt); g=Math.round(g+(255-g)*amt); b=Math.round(b+(255-b)*amt);
+  return "#"+[r,g,b].map(x=>x.toString(16).padStart(2,"0")).join("");
+}
+function opKleur(hex){
+  const c = hex.replace("#",""); const r=parseInt(c.substr(0,2),16),g=parseInt(c.substr(2,2),16),b=parseInt(c.substr(4,2),16);
+  return (0.299*r+0.587*g+0.114*b)/255 > 0.62 ? "#4a403a" : "#FBF3EF";
+}
+const PAL_VARS = ["--pal-paper","--pal-blok","--pal-accentblok","--pal-op","--pal-primair","--pal-accent","--pal-tekst"];
+function zetPalet(naam, opslaan=true){
+  PAL_VARS.forEach(v => document.body.style.removeProperty(v));
+  document.body.dataset.palet = naam;
+  if(opslaan){ localStorage.setItem("wf_palet", naam); localStorage.removeItem("wf_palet_custom"); }
+  document.querySelectorAll(".paletKnop").forEach(b => b.classList.toggle("actief", b.dataset.palet === naam));
+  const s = getComputedStyle(document.body);
+  cPaper.value = s.getPropertyValue("--pal-paper").trim() || "#FAF7F2";
+  cBlok.value = s.getPropertyValue("--pal-accentblok").trim() || "#C4857A";
+  cPrimair.value = s.getPropertyValue("--pal-primair").trim() || "#A9685C";
+}
+function eigenKleur(varNaam, val){
+  const st = document.body.style;
+  st.setProperty(varNaam, val);
+  if(varNaam === "--pal-accentblok"){ st.setProperty("--pal-blok", lichter(val, 0.8)); st.setProperty("--pal-op", opKleur(val)); }
+  document.querySelectorAll(".paletKnop").forEach(b => b.classList.remove("actief"));
+  const custom = JSON.parse(localStorage.getItem("wf_palet_custom") || "{}");
+  custom[varNaam] = val;
+  if(varNaam === "--pal-accentblok"){ custom["--pal-blok"] = lichter(val, 0.8); custom["--pal-op"] = opKleur(val); }
+  localStorage.setItem("wf_palet_custom", JSON.stringify(custom));
+}
+document.querySelectorAll(".paletKnop").forEach(b => b.addEventListener("click", () => { zetPalet(b.dataset.palet); zetThema("blokken"); }));
+cPaper.addEventListener("input", () => { eigenKleur("--pal-paper", cPaper.value); zetThema("blokken"); });
+cBlok.addEventListener("input", () => { eigenKleur("--pal-accentblok", cBlok.value); zetThema("blokken"); });
+cPrimair.addEventListener("input", () => { eigenKleur("--pal-primair", cPrimair.value); zetThema("blokken"); });
+
+zetPalet(localStorage.getItem("wf_palet") || "roze", false);
+const paletCustom = JSON.parse(localStorage.getItem("wf_palet_custom") || "null");
+if(paletCustom){ Object.entries(paletCustom).forEach(([k,v]) => document.body.style.setProperty(k, v)); document.querySelectorAll(".paletKnop").forEach(b => b.classList.remove("actief")); const s = getComputedStyle(document.body); cPaper.value = s.getPropertyValue("--pal-paper").trim(); cBlok.value = s.getPropertyValue("--pal-accentblok").trim(); cPrimair.value = s.getPropertyValue("--pal-primair").trim(); }
 zetThema(localStorage.getItem("wf_thema") || "salie");
 
 function vulVellen(){
