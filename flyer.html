@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wilma Smilde — Flyer</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --primair:#7B9E87; --primair-donker:#5F806C; --accent:#C8A96E;
+  --tekst:#2C2C2C; --licht:#F7F4EF; --rand:#E0D9CE;
+  --display:"Cormorant Garamond",Georgia,serif;
+  --body:"Inter",-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--body);background:#E9E4DB;color:var(--tekst);min-height:100vh}
+/* ---- schermweergave ---- */
+.werkbalk{
+  position:sticky;top:0;z-index:10;background:#fff;border-bottom:1px solid var(--rand);
+  padding:10px 16px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;
+}
+.werkbalk h1{font-family:var(--display);font-size:20px;color:var(--primair-donker);margin-right:auto}
+.btn{
+  font:inherit;font-size:14px;font-weight:600;cursor:pointer;min-height:42px;padding:8px 16px;
+  border-radius:9px;border:1px solid var(--rand);background:#fff;color:var(--tekst);
+}
+.btn.primair{background:var(--primair);border-color:var(--primair);color:#fff}
+.omgeving{display:flex;gap:24px;justify-content:center;align-items:flex-start;padding:24px 16px;flex-wrap:wrap}
+.paneel{
+  background:#fff;border:1px solid var(--rand);border-radius:12px;padding:16px;width:340px;max-width:100%;
+}
+.paneel h2{font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:#7a7568;margin-bottom:8px}
+.paneel label{display:block;font-size:12.5px;font-weight:600;margin:10px 0 3px;color:#4a463d}
+.paneel input,.paneel textarea{
+  width:100%;font:inherit;font-size:14px;padding:8px 10px;border:1px solid var(--rand);border-radius:7px;
+}
+.paneel textarea{resize:vertical;min-height:56px}
+.paneel .hint{font-size:12px;color:#8b8577;margin-top:10px}
+/* ---- de flyer zelf (A5) ---- */
+.vel{
+  width:148mm;min-height:210mm;background:#fff;box-shadow:0 6px 30px rgba(44,44,44,.18);
+  padding:13mm 13mm 11mm;display:flex;flex-direction:column;
+}
+.kop{display:flex;align-items:center;gap:5mm}
+.zon{width:13mm;height:13mm;flex:none}
+.naamblok .naam{font-family:var(--body);font-weight:500;font-size:17.5pt;letter-spacing:.28em;color:#4a463d}
+.naamblok .sub{font-size:8pt;letter-spacing:.5em;color:var(--accent);font-weight:600;margin-top:1.5mm;text-transform:uppercase}
+.tagline{
+  font-family:var(--display);font-style:italic;font-weight:500;font-size:23pt;line-height:1.25;
+  color:var(--primair-donker);margin-top:12mm;
+}
+.intro{font-size:10pt;line-height:1.65;color:#4a463d;margin-top:6mm;white-space:pre-line}
+.sectieLabel{
+  font-size:8pt;font-weight:600;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);
+  margin:9mm 0 4mm;display:flex;align-items:center;gap:4mm;
+}
+.sectieLabel:after{content:"";flex:1;height:1px;background:var(--rand)}
+.aanbod{display:flex;flex-direction:column;gap:3.5mm}
+.dienst{display:flex;gap:3.5mm;align-items:baseline}
+.dienst .stip{width:2mm;height:2mm;border-radius:50%;background:var(--primair);flex:none;transform:translateY(-0.5mm)}
+.dienst .dTitel{font-weight:600;font-size:10pt}
+.dienst .dTekst{font-size:9.5pt;color:#5d594e;line-height:1.5}
+.quote{
+  background:var(--licht);border-left:1.2mm solid var(--accent);border-radius:2mm;
+  padding:5mm 6mm;margin-top:9mm;font-family:var(--display);font-style:italic;font-size:13pt;
+  line-height:1.4;color:var(--primair-donker);
+}
+.voet{margin-top:auto;padding-top:6mm;border-top:1px solid var(--rand)}
+.voet .site{font-family:var(--display);font-size:14pt;color:var(--primair-donker);margin-bottom:2mm}
+.voet .regel{font-size:9pt;color:#5d594e;line-height:1.7}
+[contenteditable]:hover{outline:1.5px dashed var(--accent);outline-offset:3px;cursor:text}
+[contenteditable]:focus{outline:2px solid var(--primair);outline-offset:3px}
+@media print{
+  @page{size:A5;margin:0}
+  body{background:#fff}
+  .werkbalk,.paneel{display:none !important}
+  .omgeving{padding:0;display:block}
+  .vel{box-shadow:none;width:148mm;height:210mm;min-height:0}
+  [contenteditable]:hover{outline:none}
+}
+</style>
+</head>
+<body>
+
+<div class="werkbalk">
+  <h1>Flyer — A5</h1>
+  <button class="btn" id="btnReset" type="button">Teksten herstellen</button>
+  <button class="btn primair" id="btnPrint" type="button">Afdrukken / Opslaan als PDF</button>
+</div>
+
+<div class="omgeving">
+
+<div class="vel" id="vel">
+  <div class="kop">
+    <svg class="zon" viewBox="0 0 48 48" fill="none" stroke="#C8A96E" stroke-width="1.6" stroke-linecap="round">
+      <circle cx="24" cy="24" r="8.5"/>
+      <line x1="24" y1="4" x2="24" y2="10"/><line x1="24" y1="38" x2="24" y2="44"/>
+      <line x1="4" y1="24" x2="10" y2="24"/><line x1="38" y1="24" x2="44" y2="24"/>
+      <line x1="9.9" y1="9.9" x2="14.1" y2="14.1"/><line x1="33.9" y1="33.9" x2="38.1" y2="38.1"/>
+      <line x1="9.9" y1="38.1" x2="14.1" y2="33.9"/><line x1="33.9" y1="14.1" x2="38.1" y2="9.9"/>
+    </svg>
+    <div class="naamblok">
+      <div class="naam" id="tNaam" contenteditable="true" spellcheck="false">WILMA SMILDE</div>
+      <div class="sub" id="tSub" contenteditable="true" spellcheck="false">Coaching</div>
+    </div>
+  </div>
+
+  <div class="tagline" id="tTagline" contenteditable="true" spellcheck="false">Ruimte voor wat er echt toe doet</div>
+
+  <div class="intro" id="tIntro" contenteditable="true" spellcheck="false">Soms weet je dat het anders kan, maar is het lastig om alleen de eerste stap te zetten. In een rustig tempo en op een plek waar je je op je gemak voelt, kijken we samen naar wat jij nodig hebt — met aandacht, zonder oordeel.</div>
+
+  <div class="sectieLabel">Wat ik bied</div>
+  <div class="aanbod" id="tAanbod">
+    <div class="dienst"><span class="stip"></span><div><span class="dTitel" contenteditable="true">Individuele coaching</span><div class="dTekst" contenteditable="true">Eén-op-één gesprekken rond de vragen waar jij mee zit — persoonlijk of werkgerelateerd.</div></div></div>
+    <div class="dienst"><span class="stip"></span><div><span class="dTitel" contenteditable="true">Wandelcoaching</span><div class="dTekst" contenteditable="true">In beweging, buiten in de natuur, komen gedachten vaak vanzelf op gang.</div></div></div>
+    <div class="dienst"><span class="stip"></span><div><span class="dTitel" contenteditable="true">Kennismaking</span><div class="dTekst" contenteditable="true">Een vrijblijvend eerste gesprek om te ontdekken of het klikt — altijd kosteloos.</div></div></div>
+  </div>
+
+  <div class="quote" id="tQuote" contenteditable="true" spellcheck="false">“Je hoeft het niet alleen te doen.”</div>
+
+  <div class="voet">
+    <div class="site" id="tSite" contenteditable="true" spellcheck="false">wilmasmilde.nl</div>
+    <div class="regel" id="tContact" contenteditable="true" spellcheck="false">coaching@wilmasmilde.nl &nbsp;·&nbsp; 06 15 04 08 51<br>Eendekroos 14, 7772 MP Hardenberg</div>
+  </div>
+</div>
+
+<div class="paneel">
+  <h2>Bewerken</h2>
+  <p class="hint" style="margin-top:0">Klik gewoon <strong>in de flyer zelf</strong> op een tekst om die aan te passen — alles is bewerkbaar en wordt automatisch op dit apparaat bewaard.</p>
+  <p class="hint">Klaar? Kies <strong>Afdrukken / Opslaan als PDF</strong>. Kies in het printvenster papierformaat A5 (of A4 met 2 per vel) en zet marges op "Geen".</p>
+  <p class="hint">De teksten zijn een voorzet — vervang ze gerust door de teksten van wilmasmilde.nl.</p>
+</div>
+
+</div>
+
+<script>
+"use strict";
+const OPSLAG = "wf_flyer_html";
+const vel = document.getElementById("vel");
+const bewaar = () => localStorage.setItem(OPSLAG, vel.innerHTML);
+let t = null;
+vel.addEventListener("input", () => { clearTimeout(t); t = setTimeout(bewaar, 300); });
+const opgeslagen = localStorage.getItem(OPSLAG);
+if (opgeslagen) vel.innerHTML = opgeslagen;
+document.getElementById("btnPrint").addEventListener("click", () => window.print());
+document.getElementById("btnReset").addEventListener("click", () => {
+  if (confirm("Alle teksten terugzetten naar de standaardversie?")) {
+    localStorage.removeItem(OPSLAG);
+    location.reload();
+  }
+});
+</script>
+</body>
+</html>
