@@ -44,37 +44,37 @@ body{font-family:var(--body);background:#EAE3D8;color:var(--tekst);min-height:10
 }
 .paneel h2{font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:#7a7568;margin-bottom:8px}
 .paneel .hint{font-size:12px;color:#8b8577;margin-top:10px}
-/* ---- de flyer zelf (A5) ---- */
+/* ---- de flyer zelf (A4) ---- */
 .vel{
-  width:148mm;min-height:210mm;background:#FAF7F2;box-shadow:0 6px 30px rgba(44,44,44,.18);
-  padding:13mm 13mm 11mm;display:flex;flex-direction:column;position:relative;
+  width:210mm;min-height:297mm;background:#FAF7F2;box-shadow:0 6px 30px rgba(44,44,44,.18);
+  padding:15mm 18mm 13mm;display:flex;flex-direction:column;position:relative;
 }
 .kop{display:flex;align-items:center}
-.logo{width:60mm;max-width:100%;height:auto;display:block}
-.positie{font-size:8.5pt;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-top:4mm}
+.logo{width:78mm;max-width:100%;height:auto;display:block}
+.positie{font-size:11pt;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-top:5mm}
 .tagline{
-  font-family:var(--display);font-weight:700;font-size:22pt;line-height:1.28;
-  color:var(--primair-donker);margin-top:12mm;
+  font-family:var(--display);font-weight:700;font-size:29pt;line-height:1.26;
+  color:var(--primair-donker);margin-top:11mm;
 }
-.intro{font-size:10pt;line-height:1.65;color:#55504a;margin-top:6mm;white-space:pre-line}
+.intro{font-size:13pt;line-height:1.6;color:#55504a;margin-top:7mm;white-space:pre-line}
 .sectieLabel{
-  font-size:8pt;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);
-  margin:9mm 0 4mm;display:flex;align-items:center;gap:4mm;
+  font-size:10pt;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);
+  margin:10mm 0 5mm;display:flex;align-items:center;gap:5mm;
 }
 .sectieLabel:after{content:"";flex:1;height:1px;background:var(--rand)}
-.aanbod{display:flex;flex-direction:column;gap:3.5mm}
-.dienst{display:flex;gap:3.5mm;align-items:baseline}
-.dienst .stip{width:2mm;height:2mm;border-radius:50%;background:var(--primair);flex:none;transform:translateY(-0.5mm)}
-.dienst .dTitel{font-family:var(--display);font-weight:700;font-size:10pt;color:#5C4F43}
-.dienst .dTekst{font-size:9.5pt;color:#5d594e;line-height:1.5}
+.aanbod{display:flex;flex-direction:column;gap:5mm}
+.dienst{display:flex;gap:5mm;align-items:baseline}
+.dienst .stip{width:2.6mm;height:2.6mm;border-radius:50%;background:var(--primair);flex:none;transform:translateY(-0.5mm)}
+.dienst .dTitel{font-family:var(--display);font-weight:700;font-size:13pt;color:#5C4F43}
+.dienst .dTekst{font-size:12pt;color:#5d594e;line-height:1.5}
 .quote{
-  margin-top:9mm;font-family:var(--display);font-style:italic;font-weight:600;font-size:13.5pt;
-  line-height:1.45;color:var(--primair-donker);text-align:center;
+  margin-top:9mm;font-family:var(--display);font-style:italic;font-weight:600;font-size:17.5pt;
+  line-height:1.4;color:var(--primair-donker);text-align:center;
 }
-.cta{margin-top:8mm;text-align:center;font-family:var(--display);font-weight:700;font-size:12pt;letter-spacing:.02em;color:var(--primair-donker)}
+.cta{margin-top:8mm;text-align:center;font-family:var(--display);font-weight:700;font-size:15pt;letter-spacing:.02em;color:var(--primair-donker)}
 .voet{margin-top:auto;padding-top:6mm;border-top:1px solid var(--rand)}
-.voet .site{font-family:var(--display);font-weight:700;font-size:14pt;color:var(--primair-donker);margin-bottom:2mm}
-.voet .regel{font-size:9pt;color:#5d594e;line-height:1.7}
+.voet .site{font-family:var(--display);font-weight:700;font-size:18pt;color:var(--primair-donker);margin-bottom:2.5mm}
+.voet .regel{font-size:11.5pt;color:#5d594e;line-height:1.7}
 [contenteditable]:hover{outline:1.5px dashed var(--accent);outline-offset:3px;cursor:text}
 [contenteditable]:focus{outline:2px solid var(--primair);outline-offset:3px}
 
@@ -96,7 +96,7 @@ body[data-thema="rustiek"] .voet{border-top-color:#DED0BC}
 body[data-thema="rustiek"] .voet .site{color:#9C6A54}
 body[data-thema="rustiek"] .voet .regel{color:#66625a}
 body[data-thema="rustiek"] .vel::after{
-  content:"";position:absolute;right:9mm;bottom:32mm;width:24mm;height:32mm;opacity:.5;pointer-events:none;
+  content:"";position:absolute;right:13mm;bottom:44mm;width:30mm;height:40mm;opacity:.5;pointer-events:none;
   background:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 160' fill='none' stroke='%23A18F70' stroke-width='2.2' stroke-linecap='round'><path d='M60 150 C58 110 62 60 60 15'/><path d='M60 120 C45 118 34 108 32 92 C48 95 58 105 60 120'/><path d='M60 96 C75 94 86 84 88 68 C72 71 62 81 60 96'/><path d='M60 72 C45 70 36 60 34 46 C48 49 58 58 60 72'/><path d='M60 48 C73 46 82 37 84 24 C71 27 62 35 60 48'/></svg>") center/contain no-repeat;
 }
 
@@ -108,25 +108,25 @@ body[data-thema="horizon"] .zon{display:none}
 body[data-thema="horizon"] .naamblok .naam{color:#5C4F43;font-weight:700}
 body[data-thema="horizon"] .naamblok .sub{color:#C4857A}
 body[data-thema="horizon"] .vel::before{
-  content:"";display:block;height:20mm;margin-top:11mm;pointer-events:none;
+  content:"";display:block;height:18mm;margin-top:9mm;pointer-events:none;
   background:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 70' fill='none' stroke-linecap='round'><path d='M90 58 a30 30 0 0 1 60 0' stroke='%23C4857A' stroke-width='2.5'/><line x1='6' y1='58' x2='234' y2='58' stroke='%23C4AA8A' stroke-width='2'/><line x1='120' y1='16' x2='120' y2='26' stroke='%23C4857A' stroke-width='2'/><line x1='97' y1='24' x2='102' y2='32' stroke='%23C4857A' stroke-width='2'/><line x1='143' y1='24' x2='138' y2='32' stroke='%23C4857A' stroke-width='2'/></svg>") center/contain no-repeat;
 }
 body[data-thema="horizon"] .tagline{
-  font-family:var(--display);font-style:normal;font-weight:800;font-size:14.5pt;letter-spacing:.06em;
-  color:#A9685C;margin-top:8mm;text-align:center;line-height:1.4;
+  font-family:var(--display);font-style:normal;font-weight:800;font-size:18.5pt;letter-spacing:.06em;
+  color:#A9685C;margin-top:10mm;text-align:center;line-height:1.4;
 }
 body[data-thema="horizon"] .intro{
-  font-size:11pt;line-height:1.65;color:#55504a;text-align:center;margin-top:5mm;
+  font-size:13pt;line-height:1.65;color:#55504a;text-align:center;margin-top:7mm;
 }
 body[data-thema="horizon"] .sectieLabel{color:#B79A6E;justify-content:center}
 body[data-thema="horizon"] .sectieLabel:before{content:"";flex:1;height:1px;background:#E3DAcc}
 body[data-thema="horizon"] .sectieLabel:after{background:#E3DAcc}
-body[data-thema="horizon"] .dienst .stip{border-radius:0;width:4mm;height:1.5px;background:#C4857A;transform:translateY(-1mm)}
-body[data-thema="horizon"] .dienst .dTekst{font-size:10pt;color:#55544d}
-body[data-thema="horizon"] .quote{color:#A9685C;font-size:14pt}
-body[data-thema="horizon"] .cta{color:#A9685C;font-family:var(--body);font-weight:700;letter-spacing:.1em;text-transform:uppercase;font-size:10pt}
+body[data-thema="horizon"] .dienst .stip{border-radius:0;width:5mm;height:1.5px;background:#C4857A;transform:translateY(-1mm)}
+body[data-thema="horizon"] .dienst .dTekst{font-size:12pt;color:#55544d}
+body[data-thema="horizon"] .quote{color:#A9685C;font-size:17.5pt}
+body[data-thema="horizon"] .cta{color:#A9685C;font-family:var(--body);font-weight:700;letter-spacing:.1em;text-transform:uppercase;font-size:12pt}
 body[data-thema="horizon"] .voet{border-top-color:#E3DAcc;text-align:center}
-body[data-thema="horizon"] .voet .site{font-weight:800;font-size:12pt;letter-spacing:.04em;color:#5C4F43}
+body[data-thema="horizon"] .voet .site{font-weight:800;font-size:15pt;letter-spacing:.04em;color:#5C4F43}
 body[data-thema="horizon"] .voet .regel{color:#6c6b60}
 
 /* ============ STIJL: BLOESEM — zacht en bloesemroze ============ */
@@ -152,7 +152,7 @@ body[data-thema="bloesem"] .vel::after{
 }
 
 /* ============ STIJL: TERRACOTTA — warm en krachtig, met kleurband ============ */
-body[data-thema="terracotta"] .vel{background:#FAF6F1;color:#55504a;border-top:5mm solid #A9685C}
+body[data-thema="terracotta"] .vel{background:#FAF6F1;color:#55504a;border-top:7mm solid #A9685C}
 body[data-thema="terracotta"] .zon{stroke:#A9685C}
 body[data-thema="terracotta"] .naamblok .naam{color:#8F4F44}
 body[data-thema="terracotta"] .naamblok .sub{color:#A9685C}
@@ -197,26 +197,26 @@ body[data-palet="bloesem"]{--pal-paper:#FBF1EC;--pal-blok:#F7E7E1;--pal-accentbl
 /* ============ STIJL: BLOKKEN — rechte kleurblokken zoals op de site ============ */
 body[data-thema="blokken"] .vel{background:var(--pal-paper);color:var(--pal-tekst)}
 body[data-thema="blokken"] .positie{color:var(--pal-accent)}
-body[data-thema="blokken"] .tagline{color:var(--pal-primair);font-weight:800}
-body[data-thema="blokken"] .intro{color:var(--pal-tekst)}
+body[data-thema="blokken"] .tagline{color:var(--pal-primair);font-weight:800;margin-top:8mm}
+body[data-thema="blokken"] .intro{color:var(--pal-tekst);margin-top:5mm}
 body[data-thema="blokken"] .sectieLabel{color:var(--pal-primair)}
 body[data-thema="blokken"] .sectieLabel:after{background:var(--pal-accent);opacity:.55}
-body[data-thema="blokken"] .aanbod{background:var(--pal-blok);margin:3mm -13mm 0;padding:7mm 13mm}
-body[data-thema="blokken"] .dienst .stip{background:var(--pal-primair);border-radius:0;width:2.4mm;height:2.4mm}
+body[data-thema="blokken"] .aanbod{background:var(--pal-blok);margin:3mm -18mm 0;padding:6mm 18mm}
+body[data-thema="blokken"] .dienst .stip{background:var(--pal-primair);border-radius:0;width:2.8mm;height:2.8mm}
 body[data-thema="blokken"] .dienst .dTitel{color:var(--pal-primair)}
 body[data-thema="blokken"] .dienst .dTekst{color:var(--pal-tekst)}
-body[data-thema="blokken"] .quote{background:var(--pal-accentblok);color:var(--pal-op);margin:0 -13mm;padding:8mm 13mm;font-style:normal;font-weight:700;font-size:14pt}
-body[data-thema="blokken"] .cta{color:var(--pal-primair);margin-top:7mm}
+body[data-thema="blokken"] .quote{background:var(--pal-accentblok);color:var(--pal-op);margin:0 -18mm;padding:5mm 18mm;font-style:normal;font-weight:700;font-size:16.5pt}
+body[data-thema="blokken"] .cta{color:var(--pal-primair);margin-top:6mm}
 body[data-thema="blokken"] .voet{border-top-color:var(--pal-accent)}
 body[data-thema="blokken"] .voet .site{color:var(--pal-primair)}
 body[data-thema="blokken"] .voet .regel{color:var(--pal-tekst)}
 
 @media print{
-  @page{size:A5;margin:0}
+  @page{size:A4;margin:0}
   body{background:#fff}
   .werkbalk,.paneel{display:none !important}
   .omgeving{padding:0;display:block}
-  .vel{box-shadow:none;width:148mm;height:210mm;min-height:0}
+  .vel{box-shadow:none;width:210mm;height:297mm;min-height:0}
   [contenteditable]:hover{outline:none}
 }
 </style>
@@ -224,7 +224,7 @@ body[data-thema="blokken"] .voet .regel{color:var(--pal-tekst)}
 <body>
 
 <div class="werkbalk">
-  <h1>Flyer — A5</h1>
+  <h1>Flyer — A4</h1>
   <div class="stijlen">Stijl:
     <button class="btn stijlKnop" data-thema="salie" type="button">Salie</button>
     <button class="btn stijlKnop" data-thema="rustiek" type="button">Rustiek</button>
@@ -281,7 +281,7 @@ body[data-thema="blokken"] .voet .regel{color:var(--pal-tekst)}
   <h2>Bewerken</h2>
   <p class="hint" style="margin-top:0">Klik gewoon <strong>in de flyer zelf</strong> op een tekst om die aan te passen. Alles is bewerkbaar en wordt automatisch op dit apparaat bewaard.</p>
   <p class="hint">Kies bovenaan een <strong>stijl</strong>: Salie (zacht &amp; natuurlijk), Rustiek (aards, met bladmotief), Horizon (open en licht, met zonsopkomst), Bloesem (zacht bloesemroze), Terracotta (warm en krachtig), Zand (ingetogen tone-on-tone) of Blokken (rechte kleurblokken zoals op de site). De teksten blijven bij het wisselen gewoon staan.</p>
-  <p class="hint">Klaar? Kies <strong>Afdrukken / Opslaan als PDF</strong>. Kies papierformaat A5, zet marges op "Geen" en zet <strong>achtergrondafbeeldingen aan</strong> (nodig voor de kleuren en motieven).</p>
+  <p class="hint">Klaar? Kies <strong>Afdrukken / Opslaan als PDF</strong>. Kies papierformaat A4, zet marges op "Geen" en zet <strong>achtergrondafbeeldingen aan</strong> (nodig voor de kleuren en motieven).</p>
   <p class="hint">Met <strong>Blokken</strong> kun je met de <strong>Palet</strong>-knoppen wisselen tussen de kleuren van de site (Roze, Terracotta, Olijf, Zand, Bloesem) of met de kleurkiezers zelf de papier-, blok- en koppenkleur instellen.</p>
   <p class="hint">De teksten komen van wilmasmilde.nl. Pas ze gerust aan als je iets anders wilt communiceren.</p>
 </div>
