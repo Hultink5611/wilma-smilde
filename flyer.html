@@ -7,7 +7,7 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
   --primair:#7B9E87; --primair-donker:#5F806C; --accent:#C8A96E;
@@ -28,24 +28,21 @@ body{font-family:var(--body);background:#E9E4DB;color:var(--tekst);min-height:10
   border-radius:9px;border:1px solid var(--rand);background:#fff;color:var(--tekst);
 }
 .btn.primair{background:var(--primair);border-color:var(--primair);color:#fff}
+.stijlen{display:flex;align-items:center;gap:6px;font-size:13.5px;color:#4a463d;margin-right:8px}
+.stijlKnop.actief{background:var(--primair-donker);border-color:var(--primair-donker);color:#fff}
 .omgeving{display:flex;gap:24px;justify-content:center;align-items:flex-start;padding:24px 16px;flex-wrap:wrap}
 .paneel{
   background:#fff;border:1px solid var(--rand);border-radius:12px;padding:16px;width:340px;max-width:100%;
 }
 .paneel h2{font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:#7a7568;margin-bottom:8px}
-.paneel label{display:block;font-size:12.5px;font-weight:600;margin:10px 0 3px;color:#4a463d}
-.paneel input,.paneel textarea{
-  width:100%;font:inherit;font-size:14px;padding:8px 10px;border:1px solid var(--rand);border-radius:7px;
-}
-.paneel textarea{resize:vertical;min-height:56px}
 .paneel .hint{font-size:12px;color:#8b8577;margin-top:10px}
 /* ---- de flyer zelf (A5) ---- */
 .vel{
   width:148mm;min-height:210mm;background:#fff;box-shadow:0 6px 30px rgba(44,44,44,.18);
-  padding:13mm 13mm 11mm;display:flex;flex-direction:column;
+  padding:13mm 13mm 11mm;display:flex;flex-direction:column;position:relative;
 }
 .kop{display:flex;align-items:center;gap:5mm}
-.zon{width:13mm;height:13mm;flex:none}
+.zon{width:13mm;height:13mm;flex:none;stroke:#C8A96E}
 .naamblok .naam{font-family:var(--body);font-weight:500;font-size:17.5pt;letter-spacing:.28em;color:#4a463d}
 .naamblok .sub{font-size:8pt;letter-spacing:.5em;color:var(--accent);font-weight:600;margin-top:1.5mm;text-transform:uppercase}
 .tagline{
@@ -73,6 +70,58 @@ body{font-family:var(--body);background:#E9E4DB;color:var(--tekst);min-height:10
 .voet .regel{font-size:9pt;color:#5d594e;line-height:1.7}
 [contenteditable]:hover{outline:1.5px dashed var(--accent);outline-offset:3px;cursor:text}
 [contenteditable]:focus{outline:2px solid var(--primair);outline-offset:3px}
+
+/* ============ STIJL: RUSTIEK — aards perkament met bladmotief ============ */
+body[data-thema="rustiek"] .vel{background:#F2E8D5;color:#4E4E4A}
+body[data-thema="rustiek"] .zon{stroke:#A18F70}
+body[data-thema="rustiek"] .naamblok .naam{color:#4E4E4A}
+body[data-thema="rustiek"] .naamblok .sub{color:#A18F70}
+body[data-thema="rustiek"] .tagline{color:#8E7A57;font-weight:500}
+body[data-thema="rustiek"] .intro{color:#55534b}
+body[data-thema="rustiek"] .sectieLabel{color:#A18F70}
+body[data-thema="rustiek"] .sectieLabel:after{background:#DCCFB4}
+body[data-thema="rustiek"] .dienst .stip{background:#B5C6B2;border-radius:0 60% 60% 60%;transform:rotate(-45deg) translateY(-0.3mm);width:2.4mm;height:2.4mm}
+body[data-thema="rustiek"] .dienst .dTitel{color:#4E4E4A}
+body[data-thema="rustiek"] .dienst .dTekst{color:#66625a}
+body[data-thema="rustiek"] .quote{background:#FAF4E8;border-left-color:#B5C6B2;color:#6d5f43}
+body[data-thema="rustiek"] .voet{border-top-color:#DCCFB4}
+body[data-thema="rustiek"] .voet .site{color:#8E7A57}
+body[data-thema="rustiek"] .voet .regel{color:#66625a}
+body[data-thema="rustiek"] .vel::after{
+  content:"";position:absolute;right:9mm;bottom:32mm;width:24mm;height:32mm;opacity:.55;pointer-events:none;
+  background:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 160' fill='none' stroke='%23A18F70' stroke-width='2.2' stroke-linecap='round'><path d='M60 150 C58 110 62 60 60 15'/><path d='M60 120 C45 118 34 108 32 92 C48 95 58 105 60 120'/><path d='M60 96 C75 94 86 84 88 68 C72 71 62 81 60 96'/><path d='M60 72 C45 70 36 60 34 46 C48 49 58 58 60 72'/><path d='M60 48 C73 46 82 37 84 24 C71 27 62 35 60 48'/></svg>") center/contain no-repeat;
+}
+
+/* ============ STIJL: HORIZON — open en licht, met horizonlijn ============ */
+body[data-thema="horizon"] .vel{background:#EDE7E0;color:#3C3C39}
+body[data-thema="horizon"] .kop{order:-1}
+body[data-thema="horizon"] .zon{display:none}
+body[data-thema="horizon"] .naamblok .naam{color:#3C3C39;font-weight:600}
+body[data-thema="horizon"] .naamblok .sub{color:#9DB39E}
+body[data-thema="horizon"] .vel::before{
+  content:"";display:block;height:20mm;margin-top:11mm;pointer-events:none;
+  background:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 70' fill='none' stroke-linecap='round'><path d='M90 58 a30 30 0 0 1 60 0' stroke='%239DB39E' stroke-width='2.5'/><line x1='6' y1='58' x2='234' y2='58' stroke='%23B2A589' stroke-width='2'/><line x1='120' y1='16' x2='120' y2='26' stroke='%239DB39E' stroke-width='2'/><line x1='97' y1='24' x2='102' y2='32' stroke='%239DB39E' stroke-width='2'/><line x1='143' y1='24' x2='138' y2='32' stroke='%239DB39E' stroke-width='2'/></svg>") center/contain no-repeat;
+}
+body[data-thema="horizon"] .tagline{
+  font-family:var(--body);font-style:normal;font-weight:700;font-size:14.5pt;letter-spacing:.14em;
+  text-transform:uppercase;color:#3C3C39;margin-top:8mm;text-align:center;line-height:1.45;
+}
+body[data-thema="horizon"] .intro{
+  font-family:var(--display);font-size:12.5pt;line-height:1.6;color:#4c4b45;text-align:center;margin-top:5mm;
+}
+body[data-thema="horizon"] .sectieLabel{color:#B2A589;justify-content:center}
+body[data-thema="horizon"] .sectieLabel:before{content:"";flex:1;height:1px;background:#D8D0C4}
+body[data-thema="horizon"] .sectieLabel:after{background:#D8D0C4}
+body[data-thema="horizon"] .dienst .stip{background:none;border-radius:0;width:4mm;height:1.5px;background:#9DB39E;transform:translateY(-1mm)}
+body[data-thema="horizon"] .dienst .dTekst{font-family:var(--display);font-size:11pt;color:#55544d}
+body[data-thema="horizon"] .quote{
+  background:none;border-left:none;border-top:1px solid #B2A589;border-bottom:1px solid #B2A589;border-radius:0;
+  text-align:center;color:#6c6b60;font-size:13.5pt;
+}
+body[data-thema="horizon"] .voet{border-top-color:#D8D0C4;text-align:center}
+body[data-thema="horizon"] .voet .site{font-family:var(--body);font-weight:700;font-size:11.5pt;letter-spacing:.1em;color:#3C3C39}
+body[data-thema="horizon"] .voet .regel{color:#6c6b60}
+
 @media print{
   @page{size:A5;margin:0}
   body{background:#fff}
@@ -87,6 +136,11 @@ body{font-family:var(--body);background:#E9E4DB;color:var(--tekst);min-height:10
 
 <div class="werkbalk">
   <h1>Flyer — A5</h1>
+  <div class="stijlen">Stijl:
+    <button class="btn stijlKnop" data-thema="salie" type="button">Salie</button>
+    <button class="btn stijlKnop" data-thema="rustiek" type="button">Rustiek</button>
+    <button class="btn stijlKnop" data-thema="horizon" type="button">Horizon</button>
+  </div>
   <button class="btn" id="btnReset" type="button">Teksten herstellen</button>
   <button class="btn primair" id="btnPrint" type="button">Afdrukken / Opslaan als PDF</button>
 </div>
@@ -95,7 +149,7 @@ body{font-family:var(--body);background:#E9E4DB;color:var(--tekst);min-height:10
 
 <div class="vel" id="vel">
   <div class="kop">
-    <svg class="zon" viewBox="0 0 48 48" fill="none" stroke="#C8A96E" stroke-width="1.6" stroke-linecap="round">
+    <svg class="zon" viewBox="0 0 48 48" fill="none" stroke-width="1.6" stroke-linecap="round">
       <circle cx="24" cy="24" r="8.5"/>
       <line x1="24" y1="4" x2="24" y2="10"/><line x1="24" y1="38" x2="24" y2="44"/>
       <line x1="4" y1="24" x2="10" y2="24"/><line x1="38" y1="24" x2="44" y2="24"/>
@@ -130,7 +184,8 @@ body{font-family:var(--body);background:#E9E4DB;color:var(--tekst);min-height:10
 <div class="paneel">
   <h2>Bewerken</h2>
   <p class="hint" style="margin-top:0">Klik gewoon <strong>in de flyer zelf</strong> op een tekst om die aan te passen — alles is bewerkbaar en wordt automatisch op dit apparaat bewaard.</p>
-  <p class="hint">Klaar? Kies <strong>Afdrukken / Opslaan als PDF</strong>. Kies in het printvenster papierformaat A5 (of A4 met 2 per vel) en zet marges op "Geen".</p>
+  <p class="hint">Kies bovenaan een <strong>stijl</strong>: Salie (klassiek), Rustiek (aards, met bladmotief) of Horizon (open en licht). De teksten blijven bij het wisselen gewoon staan.</p>
+  <p class="hint">Klaar? Kies <strong>Afdrukken / Opslaan als PDF</strong>. Kies papierformaat A5, zet marges op "Geen" en zet <strong>achtergrondafbeeldingen aan</strong> (nodig voor Rustiek en Horizon).</p>
   <p class="hint">De teksten zijn een voorzet — vervang ze gerust door de teksten van wilmasmilde.nl.</p>
 </div>
 
@@ -139,12 +194,23 @@ body{font-family:var(--body);background:#E9E4DB;color:var(--tekst);min-height:10
 <script>
 "use strict";
 const OPSLAG = "wf_flyer_html";
+const THEMAS = ["salie","rustiek","horizon"];
 const vel = document.getElementById("vel");
 const bewaar = () => localStorage.setItem(OPSLAG, vel.innerHTML);
 let t = null;
 vel.addEventListener("input", () => { clearTimeout(t); t = setTimeout(bewaar, 300); });
 const opgeslagen = localStorage.getItem(OPSLAG);
 if (opgeslagen) vel.innerHTML = opgeslagen;
+
+function zetThema(naam){
+  if(!THEMAS.includes(naam)) naam = "salie";
+  document.body.dataset.thema = naam;
+  localStorage.setItem("wf_thema", naam);
+  document.querySelectorAll(".stijlKnop").forEach(b => b.classList.toggle("actief", b.dataset.thema === naam));
+}
+document.querySelectorAll(".stijlKnop").forEach(b => b.addEventListener("click", () => zetThema(b.dataset.thema)));
+zetThema(localStorage.getItem("wf_thema") || "salie");
+
 document.getElementById("btnPrint").addEventListener("click", () => window.print());
 document.getElementById("btnReset").addEventListener("click", () => {
   if (confirm("Alle teksten terugzetten naar de standaardversie?")) {
