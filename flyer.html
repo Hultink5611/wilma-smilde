@@ -121,6 +121,64 @@ body[data-thema="horizon"] .voet{border-top-color:#E3DAcc;text-align:center}
 body[data-thema="horizon"] .voet .site{font-weight:800;font-size:12pt;letter-spacing:.04em;color:#5C4F43}
 body[data-thema="horizon"] .voet .regel{color:#6c6b60}
 
+/* ============ STIJL: BLOESEM — zacht en bloesemroze ============ */
+body[data-thema="bloesem"] .vel{background:#FBF1EC;color:#6b5a54}
+body[data-thema="bloesem"] .zon{stroke:#D4A49C}
+body[data-thema="bloesem"] .naamblok .naam{color:#A9685C}
+body[data-thema="bloesem"] .naamblok .sub{color:#C99A8F}
+body[data-thema="bloesem"] .tagline{color:#B0685C;font-weight:700}
+body[data-thema="bloesem"] .intro{color:#6b5a54}
+body[data-thema="bloesem"] .sectieLabel{color:#C99A8F}
+body[data-thema="bloesem"] .sectieLabel:after{background:#EEDCD5}
+body[data-thema="bloesem"] .dienst .stip{background:#D4A49C}
+body[data-thema="bloesem"] .dienst .dTitel{color:#A9685C}
+body[data-thema="bloesem"] .dienst .dTekst{color:#6f605a}
+body[data-thema="bloesem"] .quote{color:#B0685C}
+body[data-thema="bloesem"] .cta{color:#A9685C}
+body[data-thema="bloesem"] .voet{border-top-color:#EEDCD5}
+body[data-thema="bloesem"] .voet .site{color:#B0685C}
+body[data-thema="bloesem"] .voet .regel{color:#6f605a}
+body[data-thema="bloesem"] .vel::after{
+  content:"";position:absolute;right:11mm;bottom:30mm;width:22mm;height:22mm;opacity:.5;pointer-events:none;
+  background:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='none' stroke='%23D4A49C' stroke-width='2.4'><ellipse cx='50' cy='28' rx='9' ry='15'/><ellipse cx='50' cy='72' rx='9' ry='15'/><ellipse cx='28' cy='50' rx='15' ry='9'/><ellipse cx='72' cy='50' rx='15' ry='9'/><circle cx='50' cy='50' r='6' stroke='%23C4857A'/></svg>") center/contain no-repeat;
+}
+
+/* ============ STIJL: TERRACOTTA — warm en krachtig, met kleurband ============ */
+body[data-thema="terracotta"] .vel{background:#FAF6F1;color:#55504a;border-top:5mm solid #A9685C}
+body[data-thema="terracotta"] .zon{stroke:#A9685C}
+body[data-thema="terracotta"] .naamblok .naam{color:#8F4F44}
+body[data-thema="terracotta"] .naamblok .sub{color:#A9685C}
+body[data-thema="terracotta"] .tagline{color:#A9685C;font-weight:800}
+body[data-thema="terracotta"] .intro{color:#55504a}
+body[data-thema="terracotta"] .sectieLabel{color:#A9685C}
+body[data-thema="terracotta"] .sectieLabel:after{background:#E4D3CB}
+body[data-thema="terracotta"] .dienst .stip{background:#A9685C;border-radius:0;width:2.4mm;height:2.4mm}
+body[data-thema="terracotta"] .dienst .dTitel{color:#8F4F44}
+body[data-thema="terracotta"] .dienst .dTekst{color:#5d594e}
+body[data-thema="terracotta"] .quote{color:#8F4F44;font-weight:700}
+body[data-thema="terracotta"] .cta{color:#8F4F44}
+body[data-thema="terracotta"] .voet{border-top-color:#E4D3CB}
+body[data-thema="terracotta"] .voet .site{color:#A9685C}
+body[data-thema="terracotta"] .voet .regel{color:#5d594e}
+
+/* ============ STIJL: ZAND — warm zand, ingetogen tone-on-tone ============ */
+body[data-thema="zand"] .vel{background:#EFE7DB;color:#6a6152}
+body[data-thema="zand"] .zon{stroke:#C4857A}
+body[data-thema="zand"] .naamblok .naam{color:#5C4F43}
+body[data-thema="zand"] .naamblok .sub{color:#A08B6B}
+body[data-thema="zand"] .tagline{color:#6E5D4B;font-weight:700}
+body[data-thema="zand"] .intro{color:#6a6152}
+body[data-thema="zand"] .sectieLabel{color:#A08B6B}
+body[data-thema="zand"] .sectieLabel:after{background:#D9CEBB}
+body[data-thema="zand"] .dienst .stip{background:#B7A489}
+body[data-thema="zand"] .dienst .dTitel{color:#5C4F43}
+body[data-thema="zand"] .dienst .dTekst{color:#6a6152}
+body[data-thema="zand"] .quote{color:#6E5D4B}
+body[data-thema="zand"] .cta{color:#8a7458}
+body[data-thema="zand"] .voet{border-top-color:#D9CEBB}
+body[data-thema="zand"] .voet .site{color:#6E5D4B}
+body[data-thema="zand"] .voet .regel{color:#6a6152}
+
 @media print{
   @page{size:A5;margin:0}
   body{background:#fff}
@@ -139,6 +197,9 @@ body[data-thema="horizon"] .voet .regel{color:#6c6b60}
     <button class="btn stijlKnop" data-thema="salie" type="button">Salie</button>
     <button class="btn stijlKnop" data-thema="rustiek" type="button">Rustiek</button>
     <button class="btn stijlKnop" data-thema="horizon" type="button">Horizon</button>
+    <button class="btn stijlKnop" data-thema="bloesem" type="button">Bloesem</button>
+    <button class="btn stijlKnop" data-thema="terracotta" type="button">Terracotta</button>
+    <button class="btn stijlKnop" data-thema="zand" type="button">Zand</button>
   </div>
   <button class="btn" id="btnReset" type="button">Teksten herstellen</button>
   <button class="btn primair" id="btnPrint" type="button">Afdrukken / Opslaan als PDF</button>
@@ -185,7 +246,7 @@ body[data-thema="horizon"] .voet .regel{color:#6c6b60}
 <div class="paneel">
   <h2>Bewerken</h2>
   <p class="hint" style="margin-top:0">Klik gewoon <strong>in de flyer zelf</strong> op een tekst om die aan te passen. Alles is bewerkbaar en wordt automatisch op dit apparaat bewaard.</p>
-  <p class="hint">Kies bovenaan een <strong>stijl</strong>: Salie (zacht &amp; natuurlijk), Rustiek (aards, met bladmotief) of Horizon (open en licht, met zonsopkomst). De teksten blijven bij het wisselen gewoon staan.</p>
+  <p class="hint">Kies bovenaan een <strong>stijl</strong>: Salie (zacht &amp; natuurlijk), Rustiek (aards, met bladmotief), Horizon (open en licht, met zonsopkomst), Bloesem (zacht bloesemroze), Terracotta (warm en krachtig) of Zand (ingetogen tone-on-tone). De teksten blijven bij het wisselen gewoon staan.</p>
   <p class="hint">Klaar? Kies <strong>Afdrukken / Opslaan als PDF</strong>. Kies papierformaat A5, zet marges op "Geen" en zet <strong>achtergrondafbeeldingen aan</strong> (nodig voor de kleuren en motieven).</p>
   <p class="hint">De teksten komen van wilmasmilde.nl. Pas ze gerust aan als je iets anders wilt communiceren.</p>
 </div>
@@ -195,7 +256,7 @@ body[data-thema="horizon"] .voet .regel{color:#6c6b60}
 <script>
 "use strict";
 const OPSLAG = "wf_flyer_html";
-const THEMAS = ["salie","rustiek","horizon"];
+const THEMAS = ["salie","rustiek","horizon","bloesem","terracotta","zand"];
 const vel = document.getElementById("vel");
 const bewaar = () => localStorage.setItem(OPSLAG, vel.innerHTML);
 let t = null;
