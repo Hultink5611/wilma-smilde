@@ -7,21 +7,21 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💳</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --primair:#7B9E87; --primair-donker:#5F806C; --accent:#C8A96E;
-  --tekst:#2C2C2C; --licht:#F7F4EF; --rand:#E0D9CE;
-  --display:"Cormorant Garamond",Georgia,serif;
-  --body:"Inter",-apple-system,"Segoe UI",Roboto,sans-serif;
+  --primair:#C4857A; --primair-donker:#A9685C; --accent:#C4AA8A;
+  --tekst:#46403A; --licht:#F5EEE5; --rand:#E7DBCC;
+  --display:"Nunito Sans","Segoe UI",sans-serif;
+  --body:"Open Sans",-apple-system,"Segoe UI",Roboto,sans-serif;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:var(--body);background:#E9E4DB;color:var(--tekst);min-height:100vh}
+body{font-family:var(--body);background:#EAE3D8;color:var(--tekst);min-height:100vh}
 .werkbalk{
   position:sticky;top:0;z-index:10;background:#fff;border-bottom:1px solid var(--rand);
   padding:10px 16px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;
 }
-.werkbalk h1{font-family:var(--display);font-size:20px;color:var(--primair-donker);margin-right:auto}
+.werkbalk h1{font-family:var(--display);font-weight:700;font-size:20px;color:var(--primair-donker);margin-right:auto}
 .btn{
   font:inherit;font-size:14px;font-weight:600;cursor:pointer;min-height:42px;padding:8px 16px;
   border-radius:9px;border:1px solid var(--rand);background:#fff;color:var(--tekst);
@@ -39,53 +39,53 @@ body{font-family:var(--body);background:#E9E4DB;color:var(--tekst);min-height:10
 .voorbeeldRij .lbl{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:#7a7568;text-align:center;margin-bottom:8px}
 /* ---- het kaartje: 85 x 55 mm ---- */
 .kaart{
-  width:85mm;height:55mm;background:#fff;overflow:hidden;position:relative;
+  width:85mm;height:55mm;background:#FAF7F2;overflow:hidden;position:relative;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
 }
 .schermKaart .kaart{box-shadow:0 4px 20px rgba(44,44,44,.18);border-radius:2mm}
-.kaart .zon{width:9mm;height:9mm;stroke:#C8A96E}
-.kaart .naam{font-weight:500;font-size:12.5pt;letter-spacing:.3em;color:#4a463d;margin-top:3mm;text-indent:.3em}
-.kaart .sub{font-size:6.5pt;letter-spacing:.55em;color:var(--accent);font-weight:600;text-transform:uppercase;margin-top:1.6mm;text-indent:.55em}
+.kaart .zon{width:9mm;height:9mm;stroke:#C4AA8A}
+.kaart .naam{font-family:var(--display);font-weight:600;font-size:12.5pt;letter-spacing:.28em;color:#5C4F43;margin-top:3mm;text-indent:.28em}
+.kaart .sub{font-size:6.5pt;letter-spacing:.35em;color:var(--accent);font-weight:700;text-transform:uppercase;margin-top:1.8mm;text-indent:.35em}
 .kaart.achter{background:var(--licht)}
-.kaart.achter .persoon{font-family:var(--display);font-size:14pt;font-weight:600;color:var(--primair-donker)}
-.kaart.achter .rol{font-size:7pt;letter-spacing:.35em;text-transform:uppercase;color:var(--accent);font-weight:600;margin:1.4mm 0 3.5mm;text-indent:.35em}
+.kaart.achter .persoon{font-family:var(--display);font-size:14pt;font-weight:700;color:var(--primair-donker)}
+.kaart.achter .rol{font-family:var(--display);font-size:7.5pt;letter-spacing:.04em;color:var(--accent);font-weight:600;font-style:italic;margin:1.2mm 0 3.2mm}
 .kaart.achter .lijn{width:14mm;height:1px;background:var(--accent);margin-bottom:3.5mm}
-.kaart.achter .gegeven{font-size:7.5pt;color:#4a463d;line-height:1.9;text-align:center}
-.kaart.achter .site{font-weight:600;color:var(--primair-donker)}
+.kaart.achter .gegeven{font-size:7.5pt;color:#4a463d;line-height:1.85;text-align:center}
+.kaart.achter .site{font-family:var(--display);font-weight:700;color:var(--primair-donker)}
 [contenteditable]:hover{outline:1.5px dashed var(--accent);outline-offset:2px;cursor:text}
 [contenteditable]:focus{outline:2px solid var(--primair);outline-offset:2px}
 
 /* ============ STIJL: RUSTIEK — aards perkament met bladmotief ============ */
-body[data-thema="rustiek"] .kaart{background:#F2E8D5}
+body[data-thema="rustiek"] .kaart{background:#F2EAE1}
 body[data-thema="rustiek"] .kaart .zon{stroke:#A18F70}
-body[data-thema="rustiek"] .kaart .naam{color:#4E4E4A}
-body[data-thema="rustiek"] .kaart .sub{color:#A18F70}
+body[data-thema="rustiek"] .kaart .naam{color:#4E463D}
+body[data-thema="rustiek"] .kaart .sub{color:#A88F6F}
 body[data-thema="rustiek"] .kaart:not(.achter)::after{
   content:"";position:absolute;right:4mm;bottom:3mm;width:8mm;height:11mm;opacity:.5;pointer-events:none;
   background:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 160' fill='none' stroke='%23A18F70' stroke-width='3' stroke-linecap='round'><path d='M60 150 C58 110 62 60 60 15'/><path d='M60 120 C45 118 34 108 32 92 C48 95 58 105 60 120'/><path d='M60 96 C75 94 86 84 88 68 C72 71 62 81 60 96'/><path d='M60 72 C45 70 36 60 34 46 C48 49 58 58 60 72'/><path d='M60 48 C73 46 82 37 84 24 C71 27 62 35 60 48'/></svg>") center/contain no-repeat;
 }
-body[data-thema="rustiek"] .kaart.achter{background:#FAF4E8}
-body[data-thema="rustiek"] .kaart.achter .persoon{color:#6d5f43}
-body[data-thema="rustiek"] .kaart.achter .rol{color:#A18F70}
-body[data-thema="rustiek"] .kaart.achter .lijn{background:#B5C6B2;width:16mm}
+body[data-thema="rustiek"] .kaart.achter{background:#FAF3E9}
+body[data-thema="rustiek"] .kaart.achter .persoon{color:#9C6A54}
+body[data-thema="rustiek"] .kaart.achter .rol{color:#A88F6F}
+body[data-thema="rustiek"] .kaart.achter .lijn{background:#A7B39A;width:16mm}
 body[data-thema="rustiek"] .kaart.achter .gegeven{color:#55534b}
-body[data-thema="rustiek"] .kaart.achter .site{color:#8E7A57}
+body[data-thema="rustiek"] .kaart.achter .site{color:#9C6A54}
 
-/* ============ STIJL: HORIZON — open en licht, met horizonlijn ============ */
-body[data-thema="horizon"] .kaart{background:#EDE7E0}
+/* ============ STIJL: HORIZON — open en licht, met zonsopkomst ============ */
+body[data-thema="horizon"] .kaart{background:#FBF9F5}
 body[data-thema="horizon"] .kaart .zon{display:none}
 body[data-thema="horizon"] .kaart:not(.achter)::before{
   content:"";width:30mm;height:8mm;margin-bottom:2.5mm;pointer-events:none;
-  background:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 70' fill='none' stroke-linecap='round'><path d='M90 58 a30 30 0 0 1 60 0' stroke='%239DB39E' stroke-width='3'/><line x1='6' y1='58' x2='234' y2='58' stroke='%23B2A589' stroke-width='2.5'/><line x1='120' y1='16' x2='120' y2='26' stroke='%239DB39E' stroke-width='2.5'/><line x1='97' y1='24' x2='102' y2='32' stroke='%239DB39E' stroke-width='2.5'/><line x1='143' y1='24' x2='138' y2='32' stroke='%239DB39E' stroke-width='2.5'/></svg>") center/contain no-repeat;
+  background:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 70' fill='none' stroke-linecap='round'><path d='M90 58 a30 30 0 0 1 60 0' stroke='%23C4857A' stroke-width='3'/><line x1='6' y1='58' x2='234' y2='58' stroke='%23C4AA8A' stroke-width='2.5'/><line x1='120' y1='16' x2='120' y2='26' stroke='%23C4857A' stroke-width='2.5'/><line x1='97' y1='24' x2='102' y2='32' stroke='%23C4857A' stroke-width='2.5'/><line x1='143' y1='24' x2='138' y2='32' stroke='%23C4857A' stroke-width='2.5'/></svg>") center/contain no-repeat;
 }
-body[data-thema="horizon"] .kaart .naam{color:#3C3C39;font-weight:600;font-size:11.5pt}
-body[data-thema="horizon"] .kaart .sub{color:#9DB39E}
-body[data-thema="horizon"] .kaart.achter{background:#F5F1EB}
-body[data-thema="horizon"] .kaart.achter .persoon{font-family:var(--body);font-weight:700;font-size:10.5pt;letter-spacing:.12em;text-transform:uppercase;color:#3C3C39}
-body[data-thema="horizon"] .kaart.achter .rol{color:#9DB39E}
-body[data-thema="horizon"] .kaart.achter .lijn{background:#B2A589;width:18mm}
-body[data-thema="horizon"] .kaart.achter .gegeven{font-family:var(--display);font-size:9pt;color:#55544d;line-height:1.75}
-body[data-thema="horizon"] .kaart.achter .site{font-family:var(--body);font-weight:700;font-size:7.5pt;letter-spacing:.08em;color:#3C3C39}
+body[data-thema="horizon"] .kaart .naam{color:#5C4F43;font-weight:700;font-size:11.5pt}
+body[data-thema="horizon"] .kaart .sub{color:#C4857A}
+body[data-thema="horizon"] .kaart.achter{background:#FBF9F5}
+body[data-thema="horizon"] .kaart.achter .persoon{font-family:var(--body);font-weight:800;font-size:10.5pt;letter-spacing:.1em;text-transform:uppercase;color:#5C4F43}
+body[data-thema="horizon"] .kaart.achter .rol{color:#C4857A;font-style:normal}
+body[data-thema="horizon"] .kaart.achter .lijn{background:#C4AA8A;width:18mm}
+body[data-thema="horizon"] .kaart.achter .gegeven{font-size:8pt;color:#55544d;line-height:1.75}
+body[data-thema="horizon"] .kaart.achter .site{font-family:var(--body);font-weight:700;letter-spacing:.06em;color:#5C4F43}
 
 /* ---- printvel A4: 2 x 4 = 8 kaartjes per zijde ---- */
 .printvel{display:none}
@@ -121,11 +121,11 @@ body[data-thema="horizon"] .kaart.achter .site{font-family:var(--body);font-weig
 <div class="omgeving">
   <div class="uitleg">
     Klik op een tekst in de kaartjes om die aan te passen (wordt automatisch bewaard) en kies bovenaan een
-    <strong>stijl</strong> — dezelfde stijlkeuze geldt ook voor de flyer.
-    Afdrukken levert een <strong>A4-vel met 8 voorkanten</strong> en een <strong>tweede vel met 8 achterkanten</strong> —
-    dubbelzijdig printen met omslaan over de lange zijde legt ze precies op elkaar.
+    <strong>stijl</strong>; dezelfde stijlkeuze geldt ook voor de flyer.
+    Afdrukken levert een <strong>A4-vel met 8 voorkanten</strong> en een <strong>tweede vel met 8 achterkanten</strong>.
+    Dubbelzijdig printen met omslaan over de lange zijde legt ze precies op elkaar.
     Zet in het printvenster de marges op "Geen", schakel kop-/voetteksten uit en zet
-    <strong>achtergrondafbeeldingen aan</strong> (nodig voor Rustiek en Horizon).
+    <strong>achtergrondafbeeldingen aan</strong> (nodig voor de kleuren en motieven).
     Voor professioneel drukwerk (bijv. 350 grams): sla op als PDF en lever die aan.
   </div>
 
@@ -140,15 +140,15 @@ body[data-thema="horizon"] .kaart.achter .site{font-family:var(--body);font-weig
           <line x1="9.9" y1="38.1" x2="14.1" y2="33.9"/><line x1="33.9" y1="14.1" x2="38.1" y2="9.9"/>
         </svg>
         <div class="naam" contenteditable="true" spellcheck="false">WILMA SMILDE</div>
-        <div class="sub" contenteditable="true" spellcheck="false">Coaching</div>
+        <div class="sub" contenteditable="true" spellcheck="false">HSP-Coaching</div>
       </div>
     </div>
     <div><div class="lbl">Achterkant</div>
       <div class="kaart achter" id="kAchter">
         <div class="persoon" contenteditable="true" spellcheck="false">Wilma Smilde</div>
-        <div class="rol" contenteditable="true" spellcheck="false">Coach</div>
+        <div class="rol" contenteditable="true" spellcheck="false">Coach voor hoogsensitieve vrouwen</div>
         <div class="lijn"></div>
-        <div class="gegeven" contenteditable="true" spellcheck="false">06 15 04 08 51<br>coaching@wilmasmilde.nl<br><span class="site">wilmasmilde.nl</span></div>
+        <div class="gegeven" contenteditable="true" spellcheck="false">06 15 04 08 51 &nbsp;·&nbsp; coaching@wilmasmilde.nl<br>Eendekroos 14, Hardenberg<br><span class="site">wilmasmilde.nl</span></div>
       </div>
     </div>
   </div>
