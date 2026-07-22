@@ -12,6 +12,11 @@ https://hultink5611.github.io/wilma-smilde/
 
 Op de telefoon: menu → **"Toevoegen aan beginscherm"** voor een app-gevoel.
 
+Daarnaast in dezelfde huisstijl, met bewerkbare teksten en print-/PDF-knop:
+
+- **Flyer (A5):** [`/flyer.html`](https://hultink5611.github.io/wilma-smilde/flyer.html)
+- **Visitekaartjes (85×55 mm, A4-vel met 8 stuks, voor- en achterkant):** [`/visitekaartjes.html`](https://hultink5611.github.io/wilma-smilde/visitekaartjes.html)
+
 ## Functies
 
 - **Nieuwe factuur** — klant kiezen of snel invullen, automatische factuurnummering (bijv. `2026-001`), regels met aantal × prijs, BTW 21% of vrijgesteld (incl. wettelijke vermelding), voorbeeld, PDF-download en print-fallback.

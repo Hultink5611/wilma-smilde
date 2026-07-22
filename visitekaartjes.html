@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wilma Smilde — Visitekaartjes</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💳</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --primair:#7B9E87; --primair-donker:#5F806C; --accent:#C8A96E;
+  --tekst:#2C2C2C; --licht:#F7F4EF; --rand:#E0D9CE;
+  --display:"Cormorant Garamond",Georgia,serif;
+  --body:"Inter",-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--body);background:#E9E4DB;color:var(--tekst);min-height:100vh}
+.werkbalk{
+  position:sticky;top:0;z-index:10;background:#fff;border-bottom:1px solid var(--rand);
+  padding:10px 16px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;
+}
+.werkbalk h1{font-family:var(--display);font-size:20px;color:var(--primair-donker);margin-right:auto}
+.btn{
+  font:inherit;font-size:14px;font-weight:600;cursor:pointer;min-height:42px;padding:8px 16px;
+  border-radius:9px;border:1px solid var(--rand);background:#fff;color:var(--tekst);
+}
+.btn.primair{background:var(--primair);border-color:var(--primair);color:#fff}
+.schakel{display:flex;align-items:center;gap:6px;font-size:13.5px;color:#4a463d}
+.omgeving{padding:24px 16px;display:flex;flex-direction:column;align-items:center;gap:20px}
+.uitleg{
+  background:#fff;border:1px solid var(--rand);border-radius:12px;padding:14px 18px;max-width:640px;
+  font-size:13.5px;color:#5d594e;line-height:1.6;
+}
+.voorbeeldRij{display:flex;gap:24px;flex-wrap:wrap;justify-content:center}
+.voorbeeldRij .lbl{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:#7a7568;text-align:center;margin-bottom:8px}
+/* ---- het kaartje: 85 x 55 mm ---- */
+.kaart{
+  width:85mm;height:55mm;background:#fff;overflow:hidden;position:relative;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+}
+.schermKaart .kaart{box-shadow:0 4px 20px rgba(44,44,44,.18);border-radius:2mm}
+.kaart .zon{width:9mm;height:9mm}
+.kaart .naam{font-weight:500;font-size:12.5pt;letter-spacing:.3em;color:#4a463d;margin-top:3mm;text-indent:.3em}
+.kaart .sub{font-size:6.5pt;letter-spacing:.55em;color:var(--accent);font-weight:600;text-transform:uppercase;margin-top:1.6mm;text-indent:.55em}
+.kaart.achter{background:var(--licht)}
+.kaart.achter .persoon{font-family:var(--display);font-size:14pt;font-weight:600;color:var(--primair-donker)}
+.kaart.achter .rol{font-size:7pt;letter-spacing:.35em;text-transform:uppercase;color:var(--accent);font-weight:600;margin:1.4mm 0 3.5mm;text-indent:.35em}
+.kaart.achter .lijn{width:14mm;height:1px;background:var(--accent);margin-bottom:3.5mm}
+.kaart.achter .gegeven{font-size:7.5pt;color:#4a463d;line-height:1.9;text-align:center}
+.kaart.achter .site{font-weight:600;color:var(--primair-donker)}
+[contenteditable]:hover{outline:1.5px dashed var(--accent);outline-offset:2px;cursor:text}
+[contenteditable]:focus{outline:2px solid var(--primair);outline-offset:2px}
+/* ---- printvel A4: 2 x 4 = 8 kaartjes per zijde ---- */
+.printvel{display:none}
+@media print{
+  @page{size:A4;margin:0}
+  body{background:#fff}
+  .werkbalk,.omgeving{display:none !important}
+  .printvel{
+    display:grid;width:210mm;height:296mm;
+    grid-template-columns:85mm 85mm;grid-auto-rows:55mm;gap:4mm;
+    justify-content:center;align-content:center;
+  }
+  .printvel .kaart{outline:0.3mm dashed #d8d2c6;outline-offset:-0.15mm}
+  .printvel.zonderLijnen .kaart{outline:none}
+  .velBreek{break-before:page}
+}
+</style>
+</head>
+<body>
+
+<div class="werkbalk">
+  <h1>Visitekaartjes — 85 × 55 mm</h1>
+  <label class="schakel"><input type="checkbox" id="chkLijnen" checked> snijlijnen</label>
+  <button class="btn" id="btnReset" type="button">Teksten herstellen</button>
+  <button class="btn primair" id="btnPrint" type="button">Afdrukken / Opslaan als PDF</button>
+</div>
+
+<div class="omgeving">
+  <div class="uitleg">
+    Klik op een tekst in de kaartjes om die aan te passen (wordt automatisch bewaard).
+    Afdrukken levert een <strong>A4-vel met 8 voorkanten</strong> en een <strong>tweede vel met 8 achterkanten</strong> —
+    dubbelzijdig printen met omslaan over de lange zijde legt ze precies op elkaar.
+    Zet in het printvenster de marges op "Geen" en schakel eventuele kop-/voetteksten uit.
+    Voor professioneel drukwerk (bijv. 350 grams): sla op als PDF en lever die aan.
+  </div>
+
+  <div class="voorbeeldRij schermKaart">
+    <div><div class="lbl">Voorkant</div>
+      <div class="kaart" id="kVoor">
+        <svg class="zon" viewBox="0 0 48 48" fill="none" stroke="#C8A96E" stroke-width="1.6" stroke-linecap="round">
+          <circle cx="24" cy="24" r="8.5"/>
+          <line x1="24" y1="4" x2="24" y2="10"/><line x1="24" y1="38" x2="24" y2="44"/>
+          <line x1="4" y1="24" x2="10" y2="24"/><line x1="38" y1="24" x2="44" y2="24"/>
+          <line x1="9.9" y1="9.9" x2="14.1" y2="14.1"/><line x1="33.9" y1="33.9" x2="38.1" y2="38.1"/>
+          <line x1="9.9" y1="38.1" x2="14.1" y2="33.9"/><line x1="33.9" y1="14.1" x2="38.1" y2="9.9"/>
+        </svg>
+        <div class="naam" contenteditable="true" spellcheck="false">WILMA SMILDE</div>
+        <div class="sub" contenteditable="true" spellcheck="false">Coaching</div>
+      </div>
+    </div>
+    <div><div class="lbl">Achterkant</div>
+      <div class="kaart achter" id="kAchter">
+        <div class="persoon" contenteditable="true" spellcheck="false">Wilma Smilde</div>
+        <div class="rol" contenteditable="true" spellcheck="false">Coach</div>
+        <div class="lijn"></div>
+        <div class="gegeven" contenteditable="true" spellcheck="false">06 15 04 08 51<br>coaching@wilmasmilde.nl<br><span class="site">wilmasmilde.nl</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- printvellen worden bij het afdrukken gevuld met kopieën van de kaartjes -->
+<div class="printvel" id="velVoor"></div>
+<div class="printvel velBreek" id="velAchter"></div>
+
+<script>
+"use strict";
+const OPSLAG = "wf_kaart_html";
+const kVoor = document.getElementById("kVoor");
+const kAchter = document.getElementById("kAchter");
+function bewaar(){
+  localStorage.setItem(OPSLAG, JSON.stringify({ voor: kVoor.innerHTML, achter: kAchter.innerHTML }));
+}
+let t = null;
+document.querySelector(".voorbeeldRij").addEventListener("input", ()=>{ clearTimeout(t); t = setTimeout(bewaar, 300); });
+try{
+  const d = JSON.parse(localStorage.getItem(OPSLAG));
+  if(d && d.voor && d.achter){ kVoor.innerHTML = d.voor; kAchter.innerHTML = d.achter; }
+}catch{}
+
+function vulVellen(){
+  const velVoor = document.getElementById("velVoor");
+  const velAchter = document.getElementById("velAchter");
+  velVoor.innerHTML = ""; velAchter.innerHTML = "";
+  const lijnen = document.getElementById("chkLijnen").checked;
+  velVoor.classList.toggle("zonderLijnen", !lijnen);
+  velAchter.classList.toggle("zonderLijnen", !lijnen);
+  for(let i = 0; i < 8; i++){
+    const v = kVoor.cloneNode(true);  v.removeAttribute("id");
+    const a = kAchter.cloneNode(true); a.removeAttribute("id");
+    [v, a].forEach(k => k.querySelectorAll("[contenteditable]").forEach(e => e.removeAttribute("contenteditable")));
+    velVoor.appendChild(v); velAchter.appendChild(a);
+  }
+}
+window.addEventListener("beforeprint", vulVellen);
+document.getElementById("btnPrint").addEventListener("click", ()=>{ vulVellen(); window.print(); });
+document.getElementById("btnReset").addEventListener("click", ()=>{
+  if(confirm("Alle teksten terugzetten naar de standaardversie?")){
+    localStorage.removeItem(OPSLAG);
+    location.reload();
+  }
+});
+</script>
+</body>
+</html>
