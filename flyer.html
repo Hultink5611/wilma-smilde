@@ -7,22 +7,22 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --primair:#7B9E87; --primair-donker:#5F806C; --accent:#C8A96E;
-  --tekst:#2C2C2C; --licht:#F7F4EF; --rand:#E0D9CE;
-  --display:"Cormorant Garamond",Georgia,serif;
-  --body:"Inter",-apple-system,"Segoe UI",Roboto,sans-serif;
+  --primair:#C4857A; --primair-donker:#A9685C; --accent:#C4AA8A;
+  --tekst:#46403A; --licht:#F5EEE5; --rand:#E7DBCC;
+  --display:"Nunito Sans","Segoe UI",sans-serif;
+  --body:"Open Sans",-apple-system,"Segoe UI",Roboto,sans-serif;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:var(--body);background:#E9E4DB;color:var(--tekst);min-height:100vh}
+body{font-family:var(--body);background:#EAE3D8;color:var(--tekst);min-height:100vh}
 /* ---- schermweergave ---- */
 .werkbalk{
   position:sticky;top:0;z-index:10;background:#fff;border-bottom:1px solid var(--rand);
   padding:10px 16px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;
 }
-.werkbalk h1{font-family:var(--display);font-size:20px;color:var(--primair-donker);margin-right:auto}
+.werkbalk h1{font-family:var(--display);font-weight:700;font-size:20px;color:var(--primair-donker);margin-right:auto}
 .btn{
   font:inherit;font-size:14px;font-weight:600;cursor:pointer;min-height:42px;padding:8px 16px;
   border-radius:9px;border:1px solid var(--rand);background:#fff;color:var(--tekst);
@@ -38,88 +38,87 @@ body{font-family:var(--body);background:#E9E4DB;color:var(--tekst);min-height:10
 .paneel .hint{font-size:12px;color:#8b8577;margin-top:10px}
 /* ---- de flyer zelf (A5) ---- */
 .vel{
-  width:148mm;min-height:210mm;background:#fff;box-shadow:0 6px 30px rgba(44,44,44,.18);
+  width:148mm;min-height:210mm;background:#FAF7F2;box-shadow:0 6px 30px rgba(44,44,44,.18);
   padding:13mm 13mm 11mm;display:flex;flex-direction:column;position:relative;
 }
 .kop{display:flex;align-items:center;gap:5mm}
-.zon{width:13mm;height:13mm;flex:none;stroke:#C8A96E}
-.naamblok .naam{font-family:var(--body);font-weight:500;font-size:17.5pt;letter-spacing:.28em;color:#4a463d}
-.naamblok .sub{font-size:8pt;letter-spacing:.5em;color:var(--accent);font-weight:600;margin-top:1.5mm;text-transform:uppercase}
+.zon{width:13mm;height:13mm;flex:none;stroke:#C4AA8A}
+.naamblok .naam{font-family:var(--display);font-weight:600;font-size:17.5pt;letter-spacing:.26em;color:#5C4F43}
+.naamblok .sub{font-size:8pt;letter-spacing:.16em;color:var(--accent);font-weight:700;margin-top:2mm;text-transform:uppercase}
 .tagline{
-  font-family:var(--display);font-style:italic;font-weight:500;font-size:23pt;line-height:1.25;
+  font-family:var(--display);font-weight:700;font-size:22pt;line-height:1.28;
   color:var(--primair-donker);margin-top:12mm;
 }
-.intro{font-size:10pt;line-height:1.65;color:#4a463d;margin-top:6mm;white-space:pre-line}
+.intro{font-size:10pt;line-height:1.65;color:#55504a;margin-top:6mm;white-space:pre-line}
 .sectieLabel{
-  font-size:8pt;font-weight:600;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);
+  font-size:8pt;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);
   margin:9mm 0 4mm;display:flex;align-items:center;gap:4mm;
 }
 .sectieLabel:after{content:"";flex:1;height:1px;background:var(--rand)}
 .aanbod{display:flex;flex-direction:column;gap:3.5mm}
 .dienst{display:flex;gap:3.5mm;align-items:baseline}
 .dienst .stip{width:2mm;height:2mm;border-radius:50%;background:var(--primair);flex:none;transform:translateY(-0.5mm)}
-.dienst .dTitel{font-weight:600;font-size:10pt}
+.dienst .dTitel{font-family:var(--display);font-weight:700;font-size:10pt;color:#5C4F43}
 .dienst .dTekst{font-size:9.5pt;color:#5d594e;line-height:1.5}
 .quote{
-  background:var(--licht);border-left:1.2mm solid var(--accent);border-radius:2mm;
-  padding:5mm 6mm;margin-top:9mm;font-family:var(--display);font-style:italic;font-size:13pt;
-  line-height:1.4;color:var(--primair-donker);
+  margin-top:9mm;font-family:var(--display);font-style:italic;font-weight:600;font-size:13.5pt;
+  line-height:1.45;color:var(--primair-donker);text-align:center;
 }
+.cta{margin-top:8mm;text-align:center;font-family:var(--display);font-weight:700;font-size:12pt;letter-spacing:.02em;color:var(--primair-donker)}
 .voet{margin-top:auto;padding-top:6mm;border-top:1px solid var(--rand)}
-.voet .site{font-family:var(--display);font-size:14pt;color:var(--primair-donker);margin-bottom:2mm}
+.voet .site{font-family:var(--display);font-weight:700;font-size:14pt;color:var(--primair-donker);margin-bottom:2mm}
 .voet .regel{font-size:9pt;color:#5d594e;line-height:1.7}
 [contenteditable]:hover{outline:1.5px dashed var(--accent);outline-offset:3px;cursor:text}
 [contenteditable]:focus{outline:2px solid var(--primair);outline-offset:3px}
 
 /* ============ STIJL: RUSTIEK — aards perkament met bladmotief ============ */
-body[data-thema="rustiek"] .vel{background:#F2E8D5;color:#4E4E4A}
+body[data-thema="rustiek"] .vel{background:#F2EAE1;color:#544D45}
 body[data-thema="rustiek"] .zon{stroke:#A18F70}
-body[data-thema="rustiek"] .naamblok .naam{color:#4E4E4A}
-body[data-thema="rustiek"] .naamblok .sub{color:#A18F70}
-body[data-thema="rustiek"] .tagline{color:#8E7A57;font-weight:500}
-body[data-thema="rustiek"] .intro{color:#55534b}
-body[data-thema="rustiek"] .sectieLabel{color:#A18F70}
-body[data-thema="rustiek"] .sectieLabel:after{background:#DCCFB4}
-body[data-thema="rustiek"] .dienst .stip{background:#B5C6B2;border-radius:0 60% 60% 60%;transform:rotate(-45deg) translateY(-0.3mm);width:2.4mm;height:2.4mm}
-body[data-thema="rustiek"] .dienst .dTitel{color:#4E4E4A}
+body[data-thema="rustiek"] .naamblok .naam{color:#4E463D}
+body[data-thema="rustiek"] .naamblok .sub{color:#A88F6F}
+body[data-thema="rustiek"] .tagline{color:#9C6A54;font-weight:700}
+body[data-thema="rustiek"] .intro{color:#5c554b}
+body[data-thema="rustiek"] .sectieLabel{color:#A88F6F}
+body[data-thema="rustiek"] .sectieLabel:after{background:#DED0BC}
+body[data-thema="rustiek"] .dienst .stip{background:#A7B39A;border-radius:0 60% 60% 60%;transform:rotate(-45deg) translateY(-0.3mm);width:2.4mm;height:2.4mm}
+body[data-thema="rustiek"] .dienst .dTitel{color:#4E463D}
 body[data-thema="rustiek"] .dienst .dTekst{color:#66625a}
-body[data-thema="rustiek"] .quote{background:#FAF4E8;border-left-color:#B5C6B2;color:#6d5f43}
-body[data-thema="rustiek"] .voet{border-top-color:#DCCFB4}
-body[data-thema="rustiek"] .voet .site{color:#8E7A57}
+body[data-thema="rustiek"] .quote{color:#8A5A46}
+body[data-thema="rustiek"] .cta{color:#9C6A54}
+body[data-thema="rustiek"] .voet{border-top-color:#DED0BC}
+body[data-thema="rustiek"] .voet .site{color:#9C6A54}
 body[data-thema="rustiek"] .voet .regel{color:#66625a}
 body[data-thema="rustiek"] .vel::after{
-  content:"";position:absolute;right:9mm;bottom:32mm;width:24mm;height:32mm;opacity:.55;pointer-events:none;
+  content:"";position:absolute;right:9mm;bottom:32mm;width:24mm;height:32mm;opacity:.5;pointer-events:none;
   background:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 160' fill='none' stroke='%23A18F70' stroke-width='2.2' stroke-linecap='round'><path d='M60 150 C58 110 62 60 60 15'/><path d='M60 120 C45 118 34 108 32 92 C48 95 58 105 60 120'/><path d='M60 96 C75 94 86 84 88 68 C72 71 62 81 60 96'/><path d='M60 72 C45 70 36 60 34 46 C48 49 58 58 60 72'/><path d='M60 48 C73 46 82 37 84 24 C71 27 62 35 60 48'/></svg>") center/contain no-repeat;
 }
 
-/* ============ STIJL: HORIZON — open en licht, met horizonlijn ============ */
-body[data-thema="horizon"] .vel{background:#EDE7E0;color:#3C3C39}
+/* ============ STIJL: HORIZON — open en licht, met zonsopkomst ============ */
+body[data-thema="horizon"] .vel{background:#FBF9F5;color:#4b453e}
 body[data-thema="horizon"] .kop{order:-1}
 body[data-thema="horizon"] .zon{display:none}
-body[data-thema="horizon"] .naamblok .naam{color:#3C3C39;font-weight:600}
-body[data-thema="horizon"] .naamblok .sub{color:#9DB39E}
+body[data-thema="horizon"] .naamblok .naam{color:#5C4F43;font-weight:700}
+body[data-thema="horizon"] .naamblok .sub{color:#C4857A}
 body[data-thema="horizon"] .vel::before{
   content:"";display:block;height:20mm;margin-top:11mm;pointer-events:none;
-  background:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 70' fill='none' stroke-linecap='round'><path d='M90 58 a30 30 0 0 1 60 0' stroke='%239DB39E' stroke-width='2.5'/><line x1='6' y1='58' x2='234' y2='58' stroke='%23B2A589' stroke-width='2'/><line x1='120' y1='16' x2='120' y2='26' stroke='%239DB39E' stroke-width='2'/><line x1='97' y1='24' x2='102' y2='32' stroke='%239DB39E' stroke-width='2'/><line x1='143' y1='24' x2='138' y2='32' stroke='%239DB39E' stroke-width='2'/></svg>") center/contain no-repeat;
+  background:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 70' fill='none' stroke-linecap='round'><path d='M90 58 a30 30 0 0 1 60 0' stroke='%23C4857A' stroke-width='2.5'/><line x1='6' y1='58' x2='234' y2='58' stroke='%23C4AA8A' stroke-width='2'/><line x1='120' y1='16' x2='120' y2='26' stroke='%23C4857A' stroke-width='2'/><line x1='97' y1='24' x2='102' y2='32' stroke='%23C4857A' stroke-width='2'/><line x1='143' y1='24' x2='138' y2='32' stroke='%23C4857A' stroke-width='2'/></svg>") center/contain no-repeat;
 }
 body[data-thema="horizon"] .tagline{
-  font-family:var(--body);font-style:normal;font-weight:700;font-size:14.5pt;letter-spacing:.14em;
-  text-transform:uppercase;color:#3C3C39;margin-top:8mm;text-align:center;line-height:1.45;
+  font-family:var(--display);font-style:normal;font-weight:800;font-size:14.5pt;letter-spacing:.06em;
+  color:#A9685C;margin-top:8mm;text-align:center;line-height:1.4;
 }
 body[data-thema="horizon"] .intro{
-  font-family:var(--display);font-size:12.5pt;line-height:1.6;color:#4c4b45;text-align:center;margin-top:5mm;
+  font-size:11pt;line-height:1.65;color:#55504a;text-align:center;margin-top:5mm;
 }
-body[data-thema="horizon"] .sectieLabel{color:#B2A589;justify-content:center}
-body[data-thema="horizon"] .sectieLabel:before{content:"";flex:1;height:1px;background:#D8D0C4}
-body[data-thema="horizon"] .sectieLabel:after{background:#D8D0C4}
-body[data-thema="horizon"] .dienst .stip{background:none;border-radius:0;width:4mm;height:1.5px;background:#9DB39E;transform:translateY(-1mm)}
-body[data-thema="horizon"] .dienst .dTekst{font-family:var(--display);font-size:11pt;color:#55544d}
-body[data-thema="horizon"] .quote{
-  background:none;border-left:none;border-top:1px solid #B2A589;border-bottom:1px solid #B2A589;border-radius:0;
-  text-align:center;color:#6c6b60;font-size:13.5pt;
-}
-body[data-thema="horizon"] .voet{border-top-color:#D8D0C4;text-align:center}
-body[data-thema="horizon"] .voet .site{font-family:var(--body);font-weight:700;font-size:11.5pt;letter-spacing:.1em;color:#3C3C39}
+body[data-thema="horizon"] .sectieLabel{color:#B79A6E;justify-content:center}
+body[data-thema="horizon"] .sectieLabel:before{content:"";flex:1;height:1px;background:#E3DAcc}
+body[data-thema="horizon"] .sectieLabel:after{background:#E3DAcc}
+body[data-thema="horizon"] .dienst .stip{border-radius:0;width:4mm;height:1.5px;background:#C4857A;transform:translateY(-1mm)}
+body[data-thema="horizon"] .dienst .dTekst{font-size:10pt;color:#55544d}
+body[data-thema="horizon"] .quote{color:#A9685C;font-size:14pt}
+body[data-thema="horizon"] .cta{color:#A9685C;font-family:var(--body);font-weight:700;letter-spacing:.1em;text-transform:uppercase;font-size:10pt}
+body[data-thema="horizon"] .voet{border-top-color:#E3DAcc;text-align:center}
+body[data-thema="horizon"] .voet .site{font-weight:800;font-size:12pt;letter-spacing:.04em;color:#5C4F43}
 body[data-thema="horizon"] .voet .regel{color:#6c6b60}
 
 @media print{
@@ -158,22 +157,24 @@ body[data-thema="horizon"] .voet .regel{color:#6c6b60}
     </svg>
     <div class="naamblok">
       <div class="naam" id="tNaam" contenteditable="true" spellcheck="false">WILMA SMILDE</div>
-      <div class="sub" id="tSub" contenteditable="true" spellcheck="false">Coaching</div>
+      <div class="sub" id="tSub" contenteditable="true" spellcheck="false">Coach voor hoogsensitieve vrouwen</div>
     </div>
   </div>
 
-  <div class="tagline" id="tTagline" contenteditable="true" spellcheck="false">Ruimte voor wat er echt toe doet</div>
+  <div class="tagline" id="tTagline" contenteditable="true" spellcheck="false">Omdat gewoon jezelf zijn enorm bevrijdend is</div>
 
-  <div class="intro" id="tIntro" contenteditable="true" spellcheck="false">Soms weet je dat het anders kan, maar is het lastig om alleen de eerste stap te zetten. In een rustig tempo en op een plek waar je je op je gemak voelt, kijken we samen naar wat jij nodig hebt — met aandacht, zonder oordeel.</div>
+  <div class="intro" id="tIntro" contenteditable="true" spellcheck="false">Raak jij snel overprikkeld, voel je haarfijn aan wat anderen nodig hebben en ben je na een ‘gewone’ dag vaak moe? Grote kans dat je hoogsensitief bent. Samen ontdekken we wat jouw gevoeligheid voor jóu betekent, en hoe je haar inzet als kracht. In jouw tempo, met aandacht en zonder oordeel.</div>
 
-  <div class="sectieLabel">Wat ik bied</div>
+  <div class="sectieLabel">Wat je bij mij vindt</div>
   <div class="aanbod" id="tAanbod">
-    <div class="dienst"><span class="stip"></span><div><span class="dTitel" contenteditable="true">Individuele coaching</span><div class="dTekst" contenteditable="true">Eén-op-één gesprekken rond de vragen waar jij mee zit — persoonlijk of werkgerelateerd.</div></div></div>
-    <div class="dienst"><span class="stip"></span><div><span class="dTitel" contenteditable="true">Wandelcoaching</span><div class="dTekst" contenteditable="true">In beweging, buiten in de natuur, komen gedachten vaak vanzelf op gang.</div></div></div>
-    <div class="dienst"><span class="stip"></span><div><span class="dTitel" contenteditable="true">Kennismaking</span><div class="dTekst" contenteditable="true">Een vrijblijvend eerste gesprek om te ontdekken of het klikt — altijd kosteloos.</div></div></div>
+    <div class="dienst"><span class="stip"></span><div><span class="dTitel" contenteditable="true">Coachgesprekken</span><div class="dTekst" contenteditable="true">Persoonlijke 1-op-1 sessies van 60 tot 90 minuten, volledig afgestemd op jouw tempo en behoeften.</div></div></div>
+    <div class="dienst"><span class="stip"></span><div><span class="dTitel" contenteditable="true">Praktische handvatten</span><div class="dTekst" contenteditable="true">Concrete oefeningen die aansluiten bij jouw situatie en die je direct kunt inzetten in het dagelijks leven.</div></div></div>
+    <div class="dienst"><span class="stip"></span><div><span class="dTitel" contenteditable="true">Tussentijds bereikbaar</span><div class="dTekst" contenteditable="true">Een korte vraag of een steuntje in de rug? Via WhatsApp of telefoon sta ik ook tussen de gesprekken door voor je klaar.</div></div></div>
   </div>
 
-  <div class="quote" id="tQuote" contenteditable="true" spellcheck="false">“Je hoeft het niet alleen te doen.”</div>
+  <div class="quote" id="tQuote" contenteditable="true" spellcheck="false">“Zelfbewustzijn brengt je bij de kern. Daar ligt je kracht!”</div>
+
+  <div class="cta" id="tCta" contenteditable="true" spellcheck="false">Plan een gratis &amp; vrijblijvend kennismakingsgesprek</div>
 
   <div class="voet">
     <div class="site" id="tSite" contenteditable="true" spellcheck="false">wilmasmilde.nl</div>
@@ -183,10 +184,10 @@ body[data-thema="horizon"] .voet .regel{color:#6c6b60}
 
 <div class="paneel">
   <h2>Bewerken</h2>
-  <p class="hint" style="margin-top:0">Klik gewoon <strong>in de flyer zelf</strong> op een tekst om die aan te passen — alles is bewerkbaar en wordt automatisch op dit apparaat bewaard.</p>
-  <p class="hint">Kies bovenaan een <strong>stijl</strong>: Salie (klassiek), Rustiek (aards, met bladmotief) of Horizon (open en licht). De teksten blijven bij het wisselen gewoon staan.</p>
-  <p class="hint">Klaar? Kies <strong>Afdrukken / Opslaan als PDF</strong>. Kies papierformaat A5, zet marges op "Geen" en zet <strong>achtergrondafbeeldingen aan</strong> (nodig voor Rustiek en Horizon).</p>
-  <p class="hint">De teksten zijn een voorzet — vervang ze gerust door de teksten van wilmasmilde.nl.</p>
+  <p class="hint" style="margin-top:0">Klik gewoon <strong>in de flyer zelf</strong> op een tekst om die aan te passen. Alles is bewerkbaar en wordt automatisch op dit apparaat bewaard.</p>
+  <p class="hint">Kies bovenaan een <strong>stijl</strong>: Salie (zacht &amp; natuurlijk), Rustiek (aards, met bladmotief) of Horizon (open en licht, met zonsopkomst). De teksten blijven bij het wisselen gewoon staan.</p>
+  <p class="hint">Klaar? Kies <strong>Afdrukken / Opslaan als PDF</strong>. Kies papierformaat A5, zet marges op "Geen" en zet <strong>achtergrondafbeeldingen aan</strong> (nodig voor de kleuren en motieven).</p>
+  <p class="hint">De teksten komen van wilmasmilde.nl. Pas ze gerust aan als je iets anders wilt communiceren.</p>
 </div>
 
 </div>
