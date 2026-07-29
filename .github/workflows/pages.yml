@@ -1,7 +1,8 @@
 name: Deploy naar GitHub Pages
 
-# GitHub Pages staat op branch-deploy vanaf gh-pages; deze workflow
-# spiegelt main naar gh-pages zodat elke merge automatisch live gaat.
+# Publiceert de repo-root op GitHub Pages. De workflow schakelt Pages zo nodig
+# zelf in (enablement) en publiceert via een artifact. Als dat niet lukt, blijft
+# de gh-pages-branch als vangnet bijgewerkt zodat branch-deploy ook werkt.
 on:
   push:
     branches: [main]
@@ -9,6 +10,8 @@ on:
 
 permissions:
   contents: write
+  pages: write
+  id-token: write
 
 concurrency:
   group: pages
@@ -17,6 +20,36 @@ concurrency:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
-      - run: git push --force origin HEAD:gh-pages
+
+      - name: gh-pages bijwerken (vangnet voor branch-deploy)
+        run: git push --force origin HEAD:gh-pages
+
+      - name: Pages inschakelen
+        id: configure
+        continue-on-error: true
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
+      - name: Artifact uploaden
+        if: steps.configure.outcome == 'success'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+      - name: Publiceren
+        id: deployment
+        if: steps.configure.outcome == 'success'
+        uses: actions/deploy-pages@v4
+
+      - name: Melding als Pages nog uit staat
+        if: steps.configure.outcome != 'success'
+        run: |
+          echo "::warning::Pages kon niet automatisch worden ingeschakeld."
+          echo "Zet het handmatig aan via Settings -> Pages -> Deploy from a branch -> gh-pages / root."
+          echo "De gh-pages-branch is wel bijgewerkt, dus daarna staat de site meteen live."
