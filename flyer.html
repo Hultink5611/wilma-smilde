@@ -7,209 +7,156 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,400;0,600;0,700;0,800;1,400;1,600&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
+/* ===================================================================
+   Huisstijl wilmasmilde.nl — alle kleuren komen uit het sitepalet.
+   Elk blok van de flyer heeft een eigen --c-* variabele, die
+   terugvalt op de paletkleur zolang je hem niet zelf instelt.
+   =================================================================== */
 :root{
-  --primair:#C4857A; --primair-donker:#A9685C; --accent:#C4AA8A;
-  --tekst:#46403A; --licht:#F5EEE5; --rand:#E7DBCC;
+  /* sitepalet */
+  --site-primair:#C4AA8A;   --site-secundair:#E8DCC8;
+  --site-tekst:#5C4F43;     --site-accent:#B39A7D;
+  --site-creme:#FBF9F5;     --site-zandlicht:#F2EAE1;
+  --site-ivoor:#FFFFFE;     --site-roze1:#C4857A;
+  --site-roze2:#D4A49C;     --site-roze3:#B8715E;
+
+  /* actief palet (via de paletknoppen; standaard 'Roze') */
+  --pal-paper:#FBF9F5; --pal-blok:#F2EAE1; --pal-accentblok:#C4857A;
+  --pal-op:#FBF9F5;    --pal-primair:#B8715E; --pal-accent:#B39A7D;
+  --pal-tekst:#5C4F43;
+
   --display:"Nunito Sans","Segoe UI",sans-serif;
   --body:"Open Sans",-apple-system,"Segoe UI",Roboto,sans-serif;
-  /* palet (bewerkbaar via de kleur-editor, standaard = Roze van de site) */
-  --pal-paper:#FAF7F2; --pal-blok:#F2EAE1; --pal-accentblok:#C4857A; --pal-op:#FBF3EF;
-  --pal-primair:#A9685C; --pal-accent:#C4AA8A; --pal-tekst:#55504a;
+  --rand:#E7DBCC;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:var(--body);background:#EAE3D8;color:var(--tekst);min-height:100vh}
-/* ---- schermweergave ---- */
+body{font-family:var(--body);background:#EAE3D8;color:var(--site-tekst);min-height:100vh}
+
+/* ---------------- werkbalk ---------------- */
 .werkbalk{
   position:sticky;top:0;z-index:10;background:#fff;border-bottom:1px solid var(--rand);
   padding:10px 16px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;
 }
-.werkbalk h1{font-family:var(--display);font-weight:700;font-size:20px;color:var(--primair-donker);margin-right:auto}
+.werkbalk h1{font-family:var(--display);font-weight:700;font-size:20px;color:var(--pal-primair);margin-right:auto}
 .btn{
   font:inherit;font-size:14px;font-weight:600;cursor:pointer;min-height:42px;padding:8px 16px;
-  border-radius:9px;border:1px solid var(--rand);background:#fff;color:var(--tekst);
+  border-radius:9px;border:1px solid var(--rand);background:#fff;color:var(--site-tekst);
+  display:inline-flex;align-items:center;gap:6px;
 }
-.btn.primair{background:var(--primair);border-color:var(--primair);color:#fff}
-.stijlen{display:flex;align-items:center;gap:6px;font-size:13.5px;color:#4a463d;margin-right:8px}
-.stijlKnop.actief{background:var(--primair-donker);border-color:var(--primair-donker);color:#fff}
-.palet{display:flex;align-items:center;gap:6px;font-size:13.5px;color:#4a463d;margin-right:8px;flex-wrap:wrap}
-.paletKnop{width:22px;height:22px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px var(--rand);cursor:pointer;padding:0}
-.paletKnop.actief{box-shadow:0 0 0 2px var(--primair-donker);transform:scale(1.12)}
-.paletKleur{display:inline-flex;align-items:center;gap:3px;font-size:11px;color:#6a655c}
-.paletKleur input[type=color]{width:26px;height:24px;border:1px solid var(--rand);border-radius:5px;padding:0;background:none;cursor:pointer}
+.btn:hover{background:#FBF7F3}
+.btn.primair{background:var(--pal-accentblok);border-color:var(--pal-accentblok);color:#fff}
+.waarschuwing{
+  background:#FBEEE9;border:1px solid #E0B4A6;color:#9c4f38;border-radius:8px;
+  padding:7px 12px;font-size:13px;font-weight:600;
+}
+.verborgen{display:none !important}
+
+/* ---------------- zijpaneel ---------------- */
 .omgeving{display:flex;gap:24px;justify-content:center;align-items:flex-start;padding:24px 16px;flex-wrap:wrap}
 .paneel{
-  background:#fff;border:1px solid var(--rand);border-radius:12px;padding:16px;width:340px;max-width:100%;
+  background:#fff;border:1px solid var(--rand);border-radius:12px;padding:16px;width:330px;max-width:100%;
+  position:sticky;top:76px;
 }
-.paneel h2{font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:#7a7568;margin-bottom:8px}
-.paneel .hint{font-size:12px;color:#8b8577;margin-top:10px}
-/* ---- de flyer zelf (A4) ---- */
+.paneel h2{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:#8b8577;margin:0 0 8px}
+.paneel h2:not(:first-child){margin-top:20px}
+.paneel .hint{font-size:12px;color:#8b8577;line-height:1.55;margin-top:10px}
+.paneel select{
+  width:100%;font:inherit;font-size:14px;padding:9px 10px;border:1px solid var(--rand);
+  border-radius:8px;background:#fff;color:var(--site-tekst);min-height:42px;
+}
+.paletRij{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px}
+.paletKnop{
+  flex:1 1 auto;min-width:62px;min-height:38px;border-radius:8px;border:1px solid var(--rand);
+  background:#fff;font:inherit;font-size:12.5px;font-weight:600;color:var(--site-tekst);cursor:pointer;
+  display:flex;align-items:center;gap:6px;justify-content:center;padding:6px 8px;
+}
+.paletKnop i{width:14px;height:14px;border-radius:50%;display:block;border:1px solid rgba(0,0,0,.08)}
+.paletKnop.actief{border-color:var(--pal-accentblok);box-shadow:0 0 0 1px var(--pal-accentblok)}
+.stalen{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin:8px 0}
+.staal{
+  aspect-ratio:1/1;border-radius:8px;border:1px solid rgba(0,0,0,.12);cursor:pointer;padding:0;
+  position:relative;
+}
+.staal.actief::after{
+  content:"";position:absolute;inset:-3px;border-radius:10px;border:2px solid var(--site-tekst);
+}
+.eigenRij{display:flex;align-items:center;gap:8px;margin-top:8px}
+.eigenRij input[type=color]{
+  width:44px;height:38px;border:1px solid var(--rand);border-radius:8px;padding:0;background:none;cursor:pointer;
+}
+.eigenRij .btn{flex:1;min-height:38px;font-size:13px;padding:6px 10px;justify-content:center}
+
+/* ---------------- de flyer (A4) ---------------- */
 .vel{
-  width:210mm;min-height:297mm;background:#FAF7F2;box-shadow:0 6px 30px rgba(44,44,44,.18);
-  padding:15mm 18mm 13mm;display:flex;flex-direction:column;position:relative;
+  width:210mm;min-height:297mm;background:var(--c-paper, var(--pal-paper));
+  box-shadow:0 6px 30px rgba(44,44,44,.18);
+  padding:14mm 17mm 11mm;display:flex;flex-direction:column;position:relative;overflow:hidden;
 }
-.kop{display:flex;align-items:center}
-.logo{width:78mm;max-width:100%;height:auto;display:block}
-.positie{font-size:11pt;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-top:5mm}
+.kop{display:flex;align-items:center;gap:8mm}
+.logo{width:72mm;max-width:100%;height:auto;display:block}
+.fotoVak{margin-left:auto;flex:none}
+.fotoVak img{width:34mm;height:34mm;border-radius:50%;object-fit:cover;display:block}
+.fotoVak img[hidden]{display:none}
+.positie{
+  font-size:10.5pt;letter-spacing:.17em;text-transform:uppercase;font-weight:700;
+  color:var(--c-kopregel, var(--pal-accent));margin-top:6mm;
+}
 .tagline{
-  font-family:var(--display);font-weight:700;font-size:29pt;line-height:1.26;
-  color:var(--primair-donker);margin-top:11mm;
+  font-family:var(--display);font-weight:800;font-size:27pt;line-height:1.24;
+  color:var(--c-titel, var(--pal-primair));margin-top:5mm;
 }
-.intro{font-size:13pt;line-height:1.6;color:#55504a;margin-top:7mm;white-space:pre-line}
+.intro{
+  font-size:12.5pt;line-height:1.6;margin-top:5mm;white-space:pre-line;
+  color:var(--c-intro, var(--pal-tekst));
+}
 .sectieLabel{
-  font-size:10pt;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);
-  margin:10mm 0 5mm;display:flex;align-items:center;gap:5mm;
+  font-size:9.5pt;font-weight:700;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--c-sectie, var(--pal-primair));margin:9mm 0 0;
 }
-.sectieLabel:after{content:"";flex:1;height:1px;background:var(--rand)}
-.aanbod{display:flex;flex-direction:column;gap:5mm}
-.dienst{display:flex;gap:5mm;align-items:baseline}
-.dienst .stip{width:2.6mm;height:2.6mm;border-radius:50%;background:var(--primair);flex:none;transform:translateY(-0.5mm)}
-.dienst .dTitel{font-family:var(--display);font-weight:700;font-size:13pt;color:#5C4F43}
-.dienst .dTekst{font-size:12pt;color:#5d594e;line-height:1.5}
+.aanbod{
+  background:var(--c-aanbodbg, var(--pal-blok));margin:4mm -17mm 0;padding:6mm 17mm;
+  display:flex;flex-direction:column;gap:4.5mm;
+}
+.dienst{display:flex;gap:4.5mm;align-items:baseline}
+.dienst .stip{
+  width:2.6mm;height:2.6mm;flex:none;transform:translateY(-0.4mm);
+  background:var(--c-punttitel, var(--pal-primair));
+}
+.dienst .dTitel{font-family:var(--display);font-weight:700;font-size:12.5pt;color:var(--c-punttitel, var(--pal-primair))}
+.dienst .dTekst{font-size:11.5pt;line-height:1.5;color:var(--c-punttekst, var(--pal-tekst))}
 .quote{
-  margin-top:9mm;font-family:var(--display);font-style:italic;font-weight:600;font-size:17.5pt;
-  line-height:1.4;color:var(--primair-donker);text-align:center;
+  background:var(--c-quotebg, var(--pal-accentblok));color:var(--c-quotetekst, var(--pal-op));
+  margin:7mm -17mm 0;padding:6mm 17mm;text-align:center;
+  font-family:var(--display);font-weight:700;font-size:15.5pt;line-height:1.4;
 }
-.cta{margin-top:8mm;text-align:center;font-family:var(--display);font-weight:700;font-size:15pt;letter-spacing:.02em;color:var(--primair-donker)}
-.voet{margin-top:auto;padding-top:6mm;border-top:1px solid var(--rand)}
-.voet .site{font-family:var(--display);font-weight:700;font-size:18pt;color:var(--primair-donker);margin-bottom:2.5mm}
-.voet .regel{font-size:11.5pt;color:#5d594e;line-height:1.7}
-[contenteditable]:hover{outline:1.5px dashed var(--accent);outline-offset:3px;cursor:text}
-[contenteditable]:focus{outline:2px solid var(--primair);outline-offset:3px}
-
-/* ============ STIJL: RUSTIEK — aards perkament met bladmotief ============ */
-body[data-thema="rustiek"] .vel{background:#F2EAE1;color:#544D45}
-body[data-thema="rustiek"] .zon{stroke:#A18F70}
-body[data-thema="rustiek"] .naamblok .naam{color:#4E463D}
-body[data-thema="rustiek"] .naamblok .sub{color:#A88F6F}
-body[data-thema="rustiek"] .tagline{color:#9C6A54;font-weight:700}
-body[data-thema="rustiek"] .intro{color:#5c554b}
-body[data-thema="rustiek"] .sectieLabel{color:#A88F6F}
-body[data-thema="rustiek"] .sectieLabel:after{background:#DED0BC}
-body[data-thema="rustiek"] .dienst .stip{background:#A7B39A;border-radius:0 60% 60% 60%;transform:rotate(-45deg) translateY(-0.3mm);width:2.4mm;height:2.4mm}
-body[data-thema="rustiek"] .dienst .dTitel{color:#4E463D}
-body[data-thema="rustiek"] .dienst .dTekst{color:#66625a}
-body[data-thema="rustiek"] .quote{color:#8A5A46}
-body[data-thema="rustiek"] .cta{color:#9C6A54}
-body[data-thema="rustiek"] .voet{border-top-color:#DED0BC}
-body[data-thema="rustiek"] .voet .site{color:#9C6A54}
-body[data-thema="rustiek"] .voet .regel{color:#66625a}
-body[data-thema="rustiek"] .vel::after{
-  content:"";position:absolute;right:13mm;bottom:44mm;width:30mm;height:40mm;opacity:.5;pointer-events:none;
-  background:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 160' fill='none' stroke='%23A18F70' stroke-width='2.2' stroke-linecap='round'><path d='M60 150 C58 110 62 60 60 15'/><path d='M60 120 C45 118 34 108 32 92 C48 95 58 105 60 120'/><path d='M60 96 C75 94 86 84 88 68 C72 71 62 81 60 96'/><path d='M60 72 C45 70 36 60 34 46 C48 49 58 58 60 72'/><path d='M60 48 C73 46 82 37 84 24 C71 27 62 35 60 48'/></svg>") center/contain no-repeat;
+.cta{
+  margin-top:7mm;text-align:center;font-family:var(--display);font-weight:700;font-size:14pt;
+  color:var(--c-cta, var(--pal-primair));
 }
-
-/* ============ STIJL: HORIZON — open en licht, met zonsopkomst ============ */
-body[data-thema="horizon"] .vel{background:#FBF9F5;color:#4b453e}
-body[data-thema="horizon"] .kop{order:-1;justify-content:center}
-body[data-thema="horizon"] .positie{text-align:center}
-body[data-thema="horizon"] .zon{display:none}
-body[data-thema="horizon"] .naamblok .naam{color:#5C4F43;font-weight:700}
-body[data-thema="horizon"] .naamblok .sub{color:#C4857A}
-body[data-thema="horizon"] .vel::before{
-  content:"";display:block;height:18mm;margin-top:9mm;pointer-events:none;
-  background:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 70' fill='none' stroke-linecap='round'><path d='M90 58 a30 30 0 0 1 60 0' stroke='%23C4857A' stroke-width='2.5'/><line x1='6' y1='58' x2='234' y2='58' stroke='%23C4AA8A' stroke-width='2'/><line x1='120' y1='16' x2='120' y2='26' stroke='%23C4857A' stroke-width='2'/><line x1='97' y1='24' x2='102' y2='32' stroke='%23C4857A' stroke-width='2'/><line x1='143' y1='24' x2='138' y2='32' stroke='%23C4857A' stroke-width='2'/></svg>") center/contain no-repeat;
+.voet{margin-top:auto;padding-top:5mm;border-top:1px solid var(--c-lijn, var(--pal-accent))}
+.voet .site{
+  font-family:var(--display);font-weight:800;font-size:17pt;margin-bottom:2mm;
+  color:var(--c-voet, var(--pal-primair));
 }
-body[data-thema="horizon"] .tagline{
-  font-family:var(--display);font-style:normal;font-weight:800;font-size:18.5pt;letter-spacing:.06em;
-  color:#A9685C;margin-top:10mm;text-align:center;line-height:1.4;
+.voet .regel{font-size:11pt;line-height:1.65;color:var(--c-voettekst, var(--pal-tekst))}
+
+/* ---------------- bewerken ---------------- */
+[contenteditable]:hover{outline:1.5px dashed var(--pal-accent);outline-offset:3px;cursor:text}
+[contenteditable]:focus{outline:2px solid var(--pal-accentblok);outline-offset:3px}
+.bewerkKnop{
+  font:inherit;font-size:11.5px;line-height:1;cursor:pointer;background:#fff;color:#a05a49;
+  border:1px solid var(--rand);border-radius:6px;padding:5px 8px;flex:none;align-self:flex-start;
 }
-body[data-thema="horizon"] .intro{
-  font-size:13pt;line-height:1.65;color:#55504a;text-align:center;margin-top:7mm;
+.bewerkKnop:hover{background:#FDF6F3}
+.puntWeg{margin-left:auto}
+.puntErbij{margin:4mm 0 0}
+.fotoLeeg{
+  width:34mm;height:34mm;border-radius:50%;border:1.5px dashed var(--rand);
+  display:flex;align-items:center;justify-content:center;color:#a89f95;background:none;
+  font-size:11px;padding:0;align-self:center;
 }
-body[data-thema="horizon"] .sectieLabel{color:#B79A6E;justify-content:center}
-body[data-thema="horizon"] .sectieLabel:before{content:"";flex:1;height:1px;background:#E3DAcc}
-body[data-thema="horizon"] .sectieLabel:after{background:#E3DAcc}
-body[data-thema="horizon"] .dienst .stip{border-radius:0;width:5mm;height:1.5px;background:#C4857A;transform:translateY(-1mm)}
-body[data-thema="horizon"] .dienst .dTekst{font-size:12pt;color:#55544d}
-body[data-thema="horizon"] .quote{color:#A9685C;font-size:17.5pt}
-body[data-thema="horizon"] .cta{color:#A9685C;font-family:var(--body);font-weight:700;letter-spacing:.1em;text-transform:uppercase;font-size:12pt}
-body[data-thema="horizon"] .voet{border-top-color:#E3DAcc;text-align:center}
-body[data-thema="horizon"] .voet .site{font-weight:800;font-size:15pt;letter-spacing:.04em;color:#5C4F43}
-body[data-thema="horizon"] .voet .regel{color:#6c6b60}
-
-/* ============ STIJL: BLOESEM — zacht en bloesemroze ============ */
-body[data-thema="bloesem"] .vel{background:#FBF1EC;color:#6b5a54}
-body[data-thema="bloesem"] .zon{stroke:#D4A49C}
-body[data-thema="bloesem"] .naamblok .naam{color:#A9685C}
-body[data-thema="bloesem"] .naamblok .sub{color:#C99A8F}
-body[data-thema="bloesem"] .tagline{color:#B0685C;font-weight:700}
-body[data-thema="bloesem"] .intro{color:#6b5a54}
-body[data-thema="bloesem"] .sectieLabel{color:#C99A8F}
-body[data-thema="bloesem"] .sectieLabel:after{background:#EEDCD5}
-body[data-thema="bloesem"] .dienst .stip{background:#D4A49C}
-body[data-thema="bloesem"] .dienst .dTitel{color:#A9685C}
-body[data-thema="bloesem"] .dienst .dTekst{color:#6f605a}
-body[data-thema="bloesem"] .quote{color:#B0685C}
-body[data-thema="bloesem"] .cta{color:#A9685C}
-body[data-thema="bloesem"] .voet{border-top-color:#EEDCD5}
-body[data-thema="bloesem"] .voet .site{color:#B0685C}
-body[data-thema="bloesem"] .voet .regel{color:#6f605a}
-body[data-thema="bloesem"] .vel::after{
-  content:"";position:absolute;right:11mm;bottom:30mm;width:22mm;height:22mm;opacity:.5;pointer-events:none;
-  background:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='none' stroke='%23D4A49C' stroke-width='2.4'><ellipse cx='50' cy='28' rx='9' ry='15'/><ellipse cx='50' cy='72' rx='9' ry='15'/><ellipse cx='28' cy='50' rx='15' ry='9'/><ellipse cx='72' cy='50' rx='15' ry='9'/><circle cx='50' cy='50' r='6' stroke='%23C4857A'/></svg>") center/contain no-repeat;
-}
-
-/* ============ STIJL: TERRACOTTA — warm en krachtig, met kleurband ============ */
-body[data-thema="terracotta"] .vel{background:#FAF6F1;color:#55504a;border-top:7mm solid #A9685C}
-body[data-thema="terracotta"] .zon{stroke:#A9685C}
-body[data-thema="terracotta"] .naamblok .naam{color:#8F4F44}
-body[data-thema="terracotta"] .naamblok .sub{color:#A9685C}
-body[data-thema="terracotta"] .tagline{color:#A9685C;font-weight:800}
-body[data-thema="terracotta"] .intro{color:#55504a}
-body[data-thema="terracotta"] .sectieLabel{color:#A9685C}
-body[data-thema="terracotta"] .sectieLabel:after{background:#E4D3CB}
-body[data-thema="terracotta"] .dienst .stip{background:#A9685C;border-radius:0;width:2.4mm;height:2.4mm}
-body[data-thema="terracotta"] .dienst .dTitel{color:#8F4F44}
-body[data-thema="terracotta"] .dienst .dTekst{color:#5d594e}
-body[data-thema="terracotta"] .quote{color:#8F4F44;font-weight:700}
-body[data-thema="terracotta"] .cta{color:#8F4F44}
-body[data-thema="terracotta"] .voet{border-top-color:#E4D3CB}
-body[data-thema="terracotta"] .voet .site{color:#A9685C}
-body[data-thema="terracotta"] .voet .regel{color:#5d594e}
-
-/* ============ STIJL: ZAND — warm zand, ingetogen tone-on-tone ============ */
-body[data-thema="zand"] .vel{background:#EFE7DB;color:#6a6152}
-body[data-thema="zand"] .zon{stroke:#C4857A}
-body[data-thema="zand"] .naamblok .naam{color:#5C4F43}
-body[data-thema="zand"] .naamblok .sub{color:#A08B6B}
-body[data-thema="zand"] .tagline{color:#6E5D4B;font-weight:700}
-body[data-thema="zand"] .intro{color:#6a6152}
-body[data-thema="zand"] .sectieLabel{color:#A08B6B}
-body[data-thema="zand"] .sectieLabel:after{background:#D9CEBB}
-body[data-thema="zand"] .dienst .stip{background:#B7A489}
-body[data-thema="zand"] .dienst .dTitel{color:#5C4F43}
-body[data-thema="zand"] .dienst .dTekst{color:#6a6152}
-body[data-thema="zand"] .quote{color:#6E5D4B}
-body[data-thema="zand"] .cta{color:#8a7458}
-body[data-thema="zand"] .voet{border-top-color:#D9CEBB}
-body[data-thema="zand"] .voet .site{color:#6E5D4B}
-body[data-thema="zand"] .voet .regel{color:#6a6152}
-
-/* ============ PALETTEN van de site (voor de stijl Blokken + kleur-editor) ============ */
-body[data-palet="roze"]{--pal-paper:#FAF7F2;--pal-blok:#F2EAE1;--pal-accentblok:#C4857A;--pal-op:#FBF3EF;--pal-primair:#A9685C;--pal-accent:#C4AA8A;--pal-tekst:#55504a}
-body[data-palet="terracotta"]{--pal-paper:#FAF6F1;--pal-blok:#EFE1DA;--pal-accentblok:#A9685C;--pal-op:#FBF3EF;--pal-primair:#8F4F44;--pal-accent:#C4AA8A;--pal-tekst:#55504a}
-body[data-palet="olijf"]{--pal-paper:#F7F6EF;--pal-blok:#ECEBDD;--pal-accentblok:#97A06E;--pal-op:#FBFBF3;--pal-primair:#6F7A50;--pal-accent:#C4857A;--pal-tekst:#55524a}
-body[data-palet="zand"]{--pal-paper:#EFE7DB;--pal-blok:#E4DBC9;--pal-accentblok:#6E5D4B;--pal-op:#F5EFE6;--pal-primair:#6E5D4B;--pal-accent:#B7A489;--pal-tekst:#6a6152}
-body[data-palet="bloesem"]{--pal-paper:#FBF1EC;--pal-blok:#F7E7E1;--pal-accentblok:#CE9A90;--pal-op:#FFF6F2;--pal-primair:#B0685C;--pal-accent:#C99A8F;--pal-tekst:#6b5a54}
-
-/* ============ STIJL: BLOKKEN — rechte kleurblokken zoals op de site ============ */
-body[data-thema="blokken"] .vel{background:var(--pal-paper);color:var(--pal-tekst)}
-body[data-thema="blokken"] .positie{color:var(--pal-accent)}
-body[data-thema="blokken"] .tagline{color:var(--pal-primair);font-weight:800;margin-top:8mm}
-body[data-thema="blokken"] .intro{color:var(--pal-tekst);margin-top:5mm}
-body[data-thema="blokken"] .sectieLabel{color:var(--pal-primair)}
-body[data-thema="blokken"] .sectieLabel:after{background:var(--pal-accent);opacity:.55}
-body[data-thema="blokken"] .aanbod{background:var(--pal-blok);margin:3mm -18mm 0;padding:6mm 18mm}
-body[data-thema="blokken"] .dienst .stip{background:var(--pal-primair);border-radius:0;width:2.8mm;height:2.8mm}
-body[data-thema="blokken"] .dienst .dTitel{color:var(--pal-primair)}
-body[data-thema="blokken"] .dienst .dTekst{color:var(--pal-tekst)}
-body[data-thema="blokken"] .quote{background:var(--pal-accentblok);color:var(--pal-op);margin:0 -18mm;padding:5mm 18mm;font-style:normal;font-weight:700;font-size:16.5pt}
-body[data-thema="blokken"] .cta{color:var(--pal-primair);margin-top:6mm}
-body[data-thema="blokken"] .voet{border-top-color:var(--pal-accent)}
-body[data-thema="blokken"] .voet .site{color:var(--pal-primair)}
-body[data-thema="blokken"] .voet .regel{color:var(--pal-tekst)}
 
 @media print{
   @page{size:A4;margin:0}
@@ -218,6 +165,7 @@ body[data-thema="blokken"] .voet .regel{color:var(--pal-tekst)}
   .omgeving{padding:0;display:block}
   .vel{box-shadow:none;width:210mm;height:297mm;min-height:0}
   [contenteditable]:hover{outline:none}
+  .bewerkKnop,.fotoLeeg{display:none !important}
 }
 </style>
 </head>
@@ -225,26 +173,12 @@ body[data-thema="blokken"] .voet .regel{color:var(--pal-tekst)}
 
 <div class="werkbalk">
   <h1>Flyer — A4</h1>
-  <div class="stijlen">Stijl:
-    <button class="btn stijlKnop" data-thema="salie" type="button">Salie</button>
-    <button class="btn stijlKnop" data-thema="rustiek" type="button">Rustiek</button>
-    <button class="btn stijlKnop" data-thema="horizon" type="button">Horizon</button>
-    <button class="btn stijlKnop" data-thema="bloesem" type="button">Bloesem</button>
-    <button class="btn stijlKnop" data-thema="terracotta" type="button">Terracotta</button>
-    <button class="btn stijlKnop" data-thema="zand" type="button">Zand</button>
-    <button class="btn stijlKnop" data-thema="blokken" type="button">Blokken</button>
-  </div>
-  <div class="palet" title="Kleurpalet (voor de stijl Blokken)">Palet:
-    <button class="paletKnop" data-palet="roze" style="background:#C4857A" title="Roze" type="button"></button>
-    <button class="paletKnop" data-palet="terracotta" style="background:#A9685C" title="Terracotta" type="button"></button>
-    <button class="paletKnop" data-palet="olijf" style="background:#97A06E" title="Olijf" type="button"></button>
-    <button class="paletKnop" data-palet="zand" style="background:#6E5D4B" title="Zand" type="button"></button>
-    <button class="paletKnop" data-palet="bloesem" style="background:#CE9A90" title="Bloesem" type="button"></button>
-    <label class="paletKleur">Papier<input type="color" id="cPaper" value="#FAF7F2"></label>
-    <label class="paletKleur">Blok<input type="color" id="cBlok" value="#C4857A"></label>
-    <label class="paletKleur">Koppen<input type="color" id="cPrimair" value="#A9685C"></label>
-  </div>
-  <button class="btn" id="btnReset" type="button">Teksten herstellen</button>
+  <label class="btn" title="Foto kiezen">Foto<input type="file" id="fFoto" accept="image/*" hidden></label>
+  <button class="btn" id="btnFotoWeg" type="button">Foto weg</button>
+  <button class="btn" id="btnTekstOp" type="button">Opslaan als bestand</button>
+  <label class="btn" title="Eerder opgeslagen flyer laden">Bestand laden<input type="file" id="fTekst" accept="application/json,.json" hidden></label>
+  <span class="waarschuwing verborgen" id="overloop">Past niet meer op één A4</span>
+  <button class="btn" id="btnReset" type="button">Alles herstellen</button>
   <button class="btn primair" id="btnPrint" type="button">Afdrukken / Opslaan als PDF</button>
 </div>
 
@@ -253,111 +187,362 @@ body[data-thema="blokken"] .voet .regel{color:var(--pal-tekst)}
 <div class="vel" id="vel">
   <div class="kop">
     <img class="logo" src="data:image/png;base64,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" alt="Wilma Smilde Coaching">
+    <div class="fotoVak" id="fotoVak">
+      <img id="tFoto" alt="" hidden>
+    </div>
   </div>
-  <div class="positie" id="tSub" contenteditable="true" spellcheck="false">Coach voor hoogsensitieve vrouwen</div>
 
-  <div class="tagline" id="tTagline" contenteditable="true" spellcheck="false">Omdat gewoon jezelf zijn enorm bevrijdend is</div>
+  <div class="positie" contenteditable="true" spellcheck="false">Coach voor hoogsensitieve vrouwen</div>
 
-  <div class="intro" id="tIntro" contenteditable="true" spellcheck="false">Raak jij snel overprikkeld, voel je haarfijn aan wat anderen nodig hebben en ben je na een ‘gewone’ dag vaak moe? Grote kans dat je hoogsensitief bent. Samen ontdekken we wat jouw gevoeligheid voor jóu betekent, en hoe je haar inzet als kracht. In jouw tempo, met aandacht en zonder oordeel.</div>
+  <div class="tagline" contenteditable="true" spellcheck="false">Klaar om jezelf beter te begrijpen?</div>
 
-  <div class="sectieLabel">Wat je bij mij vindt</div>
+  <div class="intro" contenteditable="true" spellcheck="false">Raak jij snel overprikkeld, voel je haarfijn aan wat anderen nodig hebben en ben je na een ‘gewone’ dag vaak moe? Grote kans dat je hoogsensitief bent. Samen ontdekken we wat jouw gevoeligheid voor jóu betekent, en hoe je haar inzet als kracht. In jouw tempo, met aandacht en zonder oordeel.</div>
+
+  <div class="sectieLabel" id="tSectie" contenteditable="true" spellcheck="false">Wat je bij mij vindt</div>
+
   <div class="aanbod" id="tAanbod">
     <div class="dienst"><span class="stip"></span><div><span class="dTitel" contenteditable="true">Coachgesprekken</span><div class="dTekst" contenteditable="true">Persoonlijke 1-op-1 sessies van 60 tot 90 minuten, volledig afgestemd op jouw tempo en behoeften.</div></div></div>
     <div class="dienst"><span class="stip"></span><div><span class="dTitel" contenteditable="true">Praktische handvatten</span><div class="dTekst" contenteditable="true">Concrete oefeningen die aansluiten bij jouw situatie en die je direct kunt inzetten in het dagelijks leven.</div></div></div>
-    <div class="dienst"><span class="stip"></span><div><span class="dTitel" contenteditable="true">Tussentijds bereikbaar</span><div class="dTekst" contenteditable="true">Een korte vraag of een steuntje in de rug? Via WhatsApp of telefoon sta ik ook tussen de gesprekken door voor je klaar.</div></div></div>
+    <div class="dienst"><span class="stip"></span><div><span class="dTitel" contenteditable="true">Tussentijds bereikbaar</span><div class="dTekst" contenteditable="true">Een korte vraag of een steuntje in de rug? Via WhatsApp sta ik ook tussen de gesprekken door voor je klaar.</div></div></div>
   </div>
 
-  <div class="quote" id="tQuote" contenteditable="true" spellcheck="false">“Zelfbewustzijn brengt je bij de kern. Daar ligt je kracht!”</div>
+  <div class="quote" contenteditable="true" spellcheck="false">“Je kunt niet meer worden dan jezelf.<br>Je kunt wel meer jezelf worden”</div>
 
-  <div class="cta" id="tCta" contenteditable="true" spellcheck="false">Plan een gratis &amp; vrijblijvend kennismakingsgesprek</div>
+  <div class="cta" contenteditable="true" spellcheck="false">Plan een gratis &amp; vrijblijvend kennismakingsgesprek.</div>
 
   <div class="voet">
-    <div class="site" id="tSite" contenteditable="true" spellcheck="false">wilmasmilde.nl</div>
-    <div class="regel" id="tContact" contenteditable="true" spellcheck="false">coaching@wilmasmilde.nl &nbsp;·&nbsp; 06 15 04 08 51<br>Eendekroos 14, 7772 MP Hardenberg</div>
+    <div class="site" contenteditable="true" spellcheck="false">wilmasmilde.nl</div>
+    <div class="regel" contenteditable="true" spellcheck="false">coaching@wilmasmilde.nl &nbsp;·&nbsp; 06 15 04 08 51<br>Eendekroos 14, 7772 MP Hardenberg</div>
   </div>
 </div>
 
 <div class="paneel">
-  <h2>Bewerken</h2>
-  <p class="hint" style="margin-top:0">Klik gewoon <strong>in de flyer zelf</strong> op een tekst om die aan te passen. Alles is bewerkbaar en wordt automatisch op dit apparaat bewaard.</p>
-  <p class="hint">Kies bovenaan een <strong>stijl</strong>: Salie (zacht &amp; natuurlijk), Rustiek (aards, met bladmotief), Horizon (open en licht, met zonsopkomst), Bloesem (zacht bloesemroze), Terracotta (warm en krachtig), Zand (ingetogen tone-on-tone) of Blokken (rechte kleurblokken zoals op de site). De teksten blijven bij het wisselen gewoon staan.</p>
-  <p class="hint">Klaar? Kies <strong>Afdrukken / Opslaan als PDF</strong>. Kies papierformaat A4, zet marges op "Geen" en zet <strong>achtergrondafbeeldingen aan</strong> (nodig voor de kleuren en motieven).</p>
-  <p class="hint">Met <strong>Blokken</strong> kun je met de <strong>Palet</strong>-knoppen wisselen tussen de kleuren van de site (Roze, Terracotta, Olijf, Zand, Bloesem) of met de kleurkiezers zelf de papier-, blok- en koppenkleur instellen.</p>
-  <p class="hint">De teksten komen van wilmasmilde.nl. Pas ze gerust aan als je iets anders wilt communiceren.</p>
+  <h2>Kleurpalet</h2>
+  <div class="paletRij" id="paletRij"></div>
+  <p class="hint" style="margin-top:2px">Zet in één klik de hele flyer om. Alle kleuren komen uit het palet van wilmasmilde.nl.</p>
+
+  <h2>Kleur per blok</h2>
+  <select id="blokKeuze" aria-label="Kies een blok"></select>
+  <div class="stalen" id="stalen"></div>
+  <div class="eigenRij">
+    <input type="color" id="eigenKleur" title="Eigen kleur kiezen">
+    <button class="btn" id="btnBlokStandaard" type="button">Terug naar palet</button>
+  </div>
+  <p class="hint" style="margin-top:2px">Kies eerst een blok, klik dan een kleur. Met het vierkantje links kies je desnoods een kleur buiten het palet.</p>
+
+  <h2>Tekst</h2>
+  <p class="hint" style="margin-top:0">Klik in de flyer op een tekst om die aan te passen. Met <strong>+ punt toevoegen</strong> en het kruisje achter een punt bepaal je zelf hoeveel punten er staan.</p>
+  <p class="hint">Alles wordt automatisch op dit apparaat bewaard. Gebruik <strong>Opslaan als bestand</strong> voor een reservekopie of om de flyer op een andere computer te openen.</p>
+  <p class="hint">Zet bij het afdrukken de marges op “Geen” en <strong>achtergrondafbeeldingen aan</strong>, anders blijven de gekleurde vlakken wit.</p>
 </div>
 
 </div>
 
 <script>
 "use strict";
-const OPSLAG = "wf_flyer_html";
-const THEMAS = ["salie","rustiek","horizon","bloesem","terracotta","zand","blokken"];
+
+/* ================= sitepalet ================= */
+const SITEKLEUREN = [
+  ["Primair",     "#C4AA8A"], ["Secundair", "#E8DCC8"], ["Tekst",      "#5C4F43"],
+  ["Accent",      "#B39A7D"], ["Crème",     "#FBF9F5"], ["Zand licht", "#F2EAE1"],
+  ["Warm ivoor",  "#FFFFFE"], ["Roze 01",   "#C4857A"], ["Roze 02",    "#D4A49C"],
+  ["Roze 03",     "#B8715E"]
+];
+
+const PALETTEN = {
+  roze:       { naam:"Roze",       paper:"#FBF9F5", blok:"#F2EAE1", accentblok:"#C4857A", primair:"#B8715E", accent:"#B39A7D", tekst:"#5C4F43" },
+  zachtroze:  { naam:"Zacht roze", paper:"#FBF9F5", blok:"#F2EAE1", accentblok:"#D4A49C", primair:"#B8715E", accent:"#B39A7D", tekst:"#5C4F43" },
+  zand:       { naam:"Zand",       paper:"#FBF9F5", blok:"#E8DCC8", accentblok:"#C4AA8A", primair:"#5C4F43", accent:"#B39A7D", tekst:"#5C4F43" },
+  terracotta: { naam:"Terracotta", paper:"#FFFFFE", blok:"#F2EAE1", accentblok:"#B8715E", primair:"#B8715E", accent:"#C4AA8A", tekst:"#5C4F43" }
+};
+
+/* blokken die los te kleuren zijn; elk valt terug op een paletkleur */
+const BLOKKEN = [
+  { v:"--c-paper",      naam:"Papier (achtergrond)",     val:"paper" },
+  { v:"--c-kopregel",   naam:"Kopregel boven de titel",  val:"accent" },
+  { v:"--c-titel",      naam:"Titel",                    val:"primair" },
+  { v:"--c-intro",      naam:"Introtekst",               val:"tekst" },
+  { v:"--c-sectie",     naam:"Kopje boven de punten",    val:"primair" },
+  { v:"--c-aanbodbg",   naam:"Puntenblok — vlak",        val:"blok" },
+  { v:"--c-punttitel",  naam:"Puntenblok — titels",      val:"primair" },
+  { v:"--c-punttekst",  naam:"Puntenblok — tekst",       val:"tekst" },
+  { v:"--c-quotebg",    naam:"Quoteblok — vlak",         val:"accentblok" },
+  { v:"--c-quotetekst", naam:"Quoteblok — tekst",        val:"op" },
+  { v:"--c-cta",        naam:"Oproep onderaan",          val:"primair" },
+  { v:"--c-lijn",       naam:"Lijn boven de voettekst",  val:"accent" },
+  { v:"--c-voet",       naam:"Voettekst — website",      val:"primair" },
+  { v:"--c-voettekst",  naam:"Voettekst — gegevens",     val:"tekst" }
+];
+
+const K_HTML = "wf_flyer_v2";
+const K_PALET = "wf_flyer_palet";
+const K_BLOKKLEUR = "wf_flyer_blokkleuren";
+
 const vel = document.getElementById("vel");
-const bewaar = () => localStorage.setItem(OPSLAG, vel.innerHTML);
-let t = null;
-vel.addEventListener("input", () => { clearTimeout(t); t = setTimeout(bewaar, 300); });
-const opgeslagen = localStorage.getItem(OPSLAG);
-if (opgeslagen) vel.innerHTML = opgeslagen;
+const $ = s => document.querySelector(s);
 
-function zetThema(naam){
-  if(!THEMAS.includes(naam)) naam = "salie";
-  document.body.dataset.thema = naam;
-  localStorage.setItem("wf_thema", naam);
-  document.querySelectorAll(".stijlKnop").forEach(b => b.classList.toggle("actief", b.dataset.thema === naam));
-}
-document.querySelectorAll(".stijlKnop").forEach(b => b.addEventListener("click", () => zetThema(b.dataset.thema)));
-
-/* ---- kleur-editor: paletten van de site + eigen kleuren, werkt met de stijl Blokken ---- */
-const cPaper = document.getElementById("cPaper");
-const cBlok = document.getElementById("cBlok");
-const cPrimair = document.getElementById("cPrimair");
-function lichter(hex, amt){
-  const c = hex.replace("#",""); let r=parseInt(c.substr(0,2),16),g=parseInt(c.substr(2,2),16),b=parseInt(c.substr(4,2),16);
-  r=Math.round(r+(255-r)*amt); g=Math.round(g+(255-g)*amt); b=Math.round(b+(255-b)*amt);
-  return "#"+[r,g,b].map(x=>x.toString(16).padStart(2,"0")).join("");
-}
+/* leesbare tekstkleur op een gekleurd vlak */
 function opKleur(hex){
-  const c = hex.replace("#",""); const r=parseInt(c.substr(0,2),16),g=parseInt(c.substr(2,2),16),b=parseInt(c.substr(4,2),16);
-  return (0.299*r+0.587*g+0.114*b)/255 > 0.62 ? "#4a403a" : "#FBF3EF";
+  const c = hex.replace("#","");
+  const r = parseInt(c.substr(0,2),16), g = parseInt(c.substr(2,2),16), b = parseInt(c.substr(4,2),16);
+  return (0.299*r + 0.587*g + 0.114*b) / 255 > 0.62 ? "#5C4F43" : "#FBF9F5";
 }
-const PAL_VARS = ["--pal-paper","--pal-blok","--pal-accentblok","--pal-op","--pal-primair","--pal-accent","--pal-tekst"];
-function zetPalet(naam, opslaan=true){
-  PAL_VARS.forEach(v => document.body.style.removeProperty(v));
-  document.body.dataset.palet = naam;
-  if(opslaan){ localStorage.setItem("wf_palet", naam); localStorage.removeItem("wf_palet_custom"); }
-  document.querySelectorAll(".paletKnop").forEach(b => b.classList.toggle("actief", b.dataset.palet === naam));
-  const s = getComputedStyle(document.body);
-  cPaper.value = s.getPropertyValue("--pal-paper").trim() || "#FAF7F2";
-  cBlok.value = s.getPropertyValue("--pal-accentblok").trim() || "#C4857A";
-  cPrimair.value = s.getPropertyValue("--pal-primair").trim() || "#A9685C";
-}
-function eigenKleur(varNaam, val){
-  const st = document.body.style;
-  st.setProperty(varNaam, val);
-  if(varNaam === "--pal-accentblok"){ st.setProperty("--pal-blok", lichter(val, 0.8)); st.setProperty("--pal-op", opKleur(val)); }
-  document.querySelectorAll(".paletKnop").forEach(b => b.classList.remove("actief"));
-  const custom = JSON.parse(localStorage.getItem("wf_palet_custom") || "{}");
-  custom[varNaam] = val;
-  if(varNaam === "--pal-accentblok"){ custom["--pal-blok"] = lichter(val, 0.8); custom["--pal-op"] = opKleur(val); }
-  localStorage.setItem("wf_palet_custom", JSON.stringify(custom));
-}
-document.querySelectorAll(".paletKnop").forEach(b => b.addEventListener("click", () => { zetPalet(b.dataset.palet); zetThema("blokken"); }));
-cPaper.addEventListener("input", () => { eigenKleur("--pal-paper", cPaper.value); zetThema("blokken"); });
-cBlok.addEventListener("input", () => { eigenKleur("--pal-accentblok", cBlok.value); zetThema("blokken"); });
-cPrimair.addEventListener("input", () => { eigenKleur("--pal-primair", cPrimair.value); zetThema("blokken"); });
 
-zetPalet(localStorage.getItem("wf_palet") || "roze", false);
-const paletCustom = JSON.parse(localStorage.getItem("wf_palet_custom") || "null");
-if(paletCustom){ Object.entries(paletCustom).forEach(([k,v]) => document.body.style.setProperty(k, v)); document.querySelectorAll(".paletKnop").forEach(b => b.classList.remove("actief")); cPaper.value = getComputedStyle(document.body).getPropertyValue("--pal-paper").trim(); cBlok.value = getComputedStyle(document.body).getPropertyValue("--pal-accentblok").trim(); cPrimair.value = getComputedStyle(document.body).getPropertyValue("--pal-primair").trim(); }
-zetThema(localStorage.getItem("wf_thema") || "salie");
+/* ================= opslag van de tekst ================= */
+function schoonHtml(){
+  const k = vel.cloneNode(true);
+  k.querySelectorAll(".bewerkKnop").forEach(e => e.remove());
+  return k.innerHTML;
+}
+let tmr = null;
+function bewaar(){
+  localStorage.setItem(K_HTML, schoonHtml());
+  checkOverloop();
+}
+vel.addEventListener("input", () => { clearTimeout(tmr); tmr = setTimeout(bewaar, 300); });
+
+const bewaardeHtml = localStorage.getItem(K_HTML);
+if(bewaardeHtml) vel.innerHTML = bewaardeHtml;
+
+/* ================= palet ================= */
+let huidigPalet = localStorage.getItem(K_PALET) || "roze";
+let blokKleuren = {};
+try{ blokKleuren = JSON.parse(localStorage.getItem(K_BLOKKLEUR) || "{}") || {}; }catch{ blokKleuren = {}; }
+
+function paletWaarden(naam){
+  const p = PALETTEN[naam] || PALETTEN.roze;
+  return { ...p, op: opKleur(p.accentblok) };
+}
+function pasPaletToe(){
+  const p = paletWaarden(huidigPalet);
+  const st = document.body.style;
+  st.setProperty("--pal-paper", p.paper);
+  st.setProperty("--pal-blok", p.blok);
+  st.setProperty("--pal-accentblok", p.accentblok);
+  st.setProperty("--pal-primair", p.primair);
+  st.setProperty("--pal-accent", p.accent);
+  st.setProperty("--pal-tekst", p.tekst);
+  st.setProperty("--pal-op", p.op);
+  document.querySelectorAll(".paletKnop").forEach(b => b.classList.toggle("actief", b.dataset.palet === huidigPalet));
+}
+function pasBlokKleurenToe(){
+  const st = document.body.style;
+  BLOKKEN.forEach(b => st.removeProperty(b.v));
+  Object.entries(blokKleuren).forEach(([v, kleur]) => {
+    st.setProperty(v, kleur);
+    /* tekst op het quotevlak automatisch leesbaar houden */
+    if(v === "--c-quotebg" && !blokKleuren["--c-quotetekst"]) st.setProperty("--c-quotetekst", opKleur(kleur));
+  });
+}
+function bewaarKleuren(){
+  localStorage.setItem(K_PALET, huidigPalet);
+  localStorage.setItem(K_BLOKKLEUR, JSON.stringify(blokKleuren));
+}
+
+/* paletknoppen */
+const paletRij = document.getElementById("paletRij");
+Object.entries(PALETTEN).forEach(([id, p]) => {
+  const b = document.createElement("button");
+  b.type = "button"; b.className = "paletKnop"; b.dataset.palet = id;
+  b.innerHTML = `<i style="background:${p.accentblok}"></i>${p.naam}`;
+  b.addEventListener("click", () => {
+    huidigPalet = id;
+    pasPaletToe(); bewaarKleuren(); toonHuidigeBlokKleur();
+  });
+  paletRij.appendChild(b);
+});
+
+/* blokkeuze + stalen */
+const blokKeuze = document.getElementById("blokKeuze");
+BLOKKEN.forEach(b => {
+  const o = document.createElement("option");
+  o.value = b.v; o.textContent = b.naam;
+  blokKeuze.appendChild(o);
+});
+const stalen = document.getElementById("stalen");
+SITEKLEUREN.forEach(([naam, hex]) => {
+  const b = document.createElement("button");
+  b.type = "button"; b.className = "staal"; b.dataset.kleur = hex;
+  b.style.background = hex; b.title = `${naam} (${hex})`;
+  b.addEventListener("click", () => zetBlokKleur(hex));
+  stalen.appendChild(b);
+});
+const eigenKleur = document.getElementById("eigenKleur");
+eigenKleur.addEventListener("input", () => zetBlokKleur(eigenKleur.value));
+
+function huidigBlok(){ return BLOKKEN.find(b => b.v === blokKeuze.value) || BLOKKEN[0]; }
+function zetBlokKleur(hex){
+  blokKleuren[huidigBlok().v] = hex;
+  if(huidigBlok().v === "--c-quotebg") delete blokKleuren["--c-quotetekst"];
+  pasBlokKleurenToe(); bewaarKleuren(); toonHuidigeBlokKleur();
+}
+document.getElementById("btnBlokStandaard").addEventListener("click", () => {
+  delete blokKleuren[huidigBlok().v];
+  pasBlokKleurenToe(); bewaarKleuren(); toonHuidigeBlokKleur();
+});
+function toonHuidigeBlokKleur(){
+  const b = huidigBlok();
+  const p = paletWaarden(huidigPalet);
+  const actief = (blokKleuren[b.v] || p[b.val] || "#FFFFFF").toUpperCase();
+  eigenKleur.value = actief.length === 7 ? actief : "#FFFFFF";
+  document.querySelectorAll(".staal").forEach(s =>
+    s.classList.toggle("actief", s.dataset.kleur.toUpperCase() === actief));
+}
+blokKeuze.addEventListener("change", toonHuidigeBlokKleur);
+
+/* ================= punten toevoegen / verwijderen + fotoknop ================= */
+function bouwKnoppen(){
+  vel.querySelectorAll(".dienst").forEach(d => {
+    if(!d.querySelector(".puntWeg")){
+      const b = document.createElement("button");
+      b.type = "button"; b.className = "bewerkKnop puntWeg";
+      b.title = "Dit punt verwijderen"; b.textContent = "✕";
+      d.appendChild(b);
+    }
+  });
+  const aanbod = vel.querySelector(".aanbod");
+  if(aanbod && !vel.querySelector(".puntErbij")){
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "bewerkKnop puntErbij";
+    b.textContent = "+ punt toevoegen";
+    aanbod.insertAdjacentElement("afterend", b);
+  }
+  const vak = vel.querySelector("#fotoVak");
+  if(vak && !vak.querySelector(".fotoLeeg")){
+    const f = document.createElement("button");
+    f.type = "button"; f.className = "bewerkKnop fotoLeeg";
+    f.title = "Foto toevoegen"; f.textContent = "+ foto";
+    vak.appendChild(f);
+  }
+}
+vel.addEventListener("click", e => {
+  if(e.target.classList.contains("puntWeg")){
+    if(vel.querySelectorAll(".dienst").length <= 1){
+      alert("Er moet minstens één punt overblijven.");
+      return;
+    }
+    e.target.closest(".dienst").remove();
+    bewaar();
+    return;
+  }
+  if(e.target.classList.contains("puntErbij")){
+    const punten = vel.querySelectorAll(".dienst");
+    const laatste = punten[punten.length - 1];
+    const nieuw = laatste.cloneNode(true);
+    nieuw.querySelectorAll(".bewerkKnop").forEach(x => x.remove());
+    nieuw.querySelector(".dTitel").textContent = "Nieuwe titel";
+    nieuw.querySelector(".dTekst").textContent = "Korte toelichting bij dit punt.";
+    laatste.insertAdjacentElement("afterend", nieuw);
+    bouwKnoppen(); bewaar();
+    const t = nieuw.querySelector(".dTitel");
+    t.focus(); getSelection().selectAllChildren(t);
+    return;
+  }
+  if(e.target.classList.contains("fotoLeeg")) document.getElementById("fFoto").click();
+});
+
+/* ================= foto ================= */
+function toonFoto(){
+  const img = vel.querySelector("#tFoto");
+  const leeg = vel.querySelector(".fotoLeeg");
+  const heeft = !!(img && img.getAttribute("src"));
+  if(img) img.hidden = !heeft;
+  if(leeg) leeg.style.display = heeft ? "none" : "";
+}
+document.getElementById("fFoto").addEventListener("change", e => {
+  const file = e.target.files[0]; if(!file) return;
+  const img = new Image();
+  const url = URL.createObjectURL(file);
+  img.onload = () => {
+    const max = 700, sc = Math.min(1, max / Math.max(img.width, img.height));
+    const c = document.createElement("canvas");
+    c.width = Math.round(img.width * sc); c.height = Math.round(img.height * sc);
+    c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+    URL.revokeObjectURL(url);
+    try{
+      vel.querySelector("#tFoto").src = c.toDataURL("image/jpeg", 0.9);
+      toonFoto(); bewaar();
+    }catch(err){
+      alert("De foto kon niet worden opgeslagen. Probeer een kleiner bestand.");
+    }
+  };
+  img.onerror = () => { URL.revokeObjectURL(url); alert("Dit bestand kon niet als afbeelding worden gelezen."); };
+  img.src = url;
+  e.target.value = "";
+});
+document.getElementById("btnFotoWeg").addEventListener("click", () => {
+  const img = vel.querySelector("#tFoto");
+  if(img && img.getAttribute("src")){ img.removeAttribute("src"); toonFoto(); bewaar(); }
+});
+
+/* ================= past het nog op één A4? ================= */
+const MM = 96 / 25.4;
+function checkOverloop(){
+  /* bewerkknoppen staan niet op papier, dus die tellen niet mee in de meting */
+  const knoppen = [...vel.querySelectorAll(".bewerkKnop")];
+  knoppen.forEach(k => k.style.display = "none");
+  const hoogte = vel.scrollHeight;
+  knoppen.forEach(k => k.style.removeProperty("display"));
+  toonFoto();
+  document.getElementById("overloop").classList.toggle("verborgen", hoogte <= 297 * MM + 4);
+}
+
+/* ================= opslaan / laden als bestand ================= */
+document.getElementById("btnTekstOp").addEventListener("click", () => {
+  const data = {
+    app:"wilma-flyer", versie:2,
+    html: schoonHtml(), palet: huidigPalet, blokKleuren
+  };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type:"application/json" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "wilma-flyer.json";
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+});
+document.getElementById("fTekst").addEventListener("change", e => {
+  const file = e.target.files[0]; if(!file) return;
+  const lezer = new FileReader();
+  lezer.onload = () => {
+    try{
+      const d = JSON.parse(lezer.result);
+      if(!d || d.app !== "wilma-flyer" || typeof d.html !== "string"){
+        alert("Dit is geen opgeslagen flyer."); return;
+      }
+      if(!confirm("De huidige flyer vervangen door dit bestand?")) return;
+      /* direct toepassen; geen herlaadslag nodig */
+      vel.innerHTML = d.html;
+      huidigPalet = PALETTEN[d.palet] ? d.palet : "roze";
+      blokKleuren = (d.blokKleuren && typeof d.blokKleuren === "object") ? d.blokKleuren : {};
+      pasPaletToe();
+      pasBlokKleurenToe();
+      bouwKnoppen();
+      toonFoto();
+      toonHuidigeBlokKleur();
+      bewaar();
+      bewaarKleuren();
+    }catch{ alert("Het bestand kon niet worden gelezen."); }
+  };
+  lezer.readAsText(file);
+  e.target.value = "";
+});
 
 document.getElementById("btnPrint").addEventListener("click", () => window.print());
 document.getElementById("btnReset").addEventListener("click", () => {
-  if (confirm("Alle teksten terugzetten naar de standaardversie?")) {
-    localStorage.removeItem(OPSLAG);
+  if(confirm("Alle teksten en kleuren terugzetten naar de standaardversie?")){
+    [K_HTML, K_PALET, K_BLOKKLEUR].forEach(k => localStorage.removeItem(k));
     location.reload();
   }
 });
+
+/* ================= start ================= */
+pasPaletToe();
+pasBlokKleurenToe();
+bouwKnoppen();
+toonFoto();
+toonHuidigeBlokKleur();
+checkOverloop();
+window.addEventListener("load", checkOverloop);
 </script>
 </body>
 </html>
