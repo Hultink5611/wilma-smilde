@@ -46,6 +46,7 @@ body{font-family:var(--body);background:#EAE3D8;color:var(--site-tekst);min-heig
   display:inline-flex;align-items:center;gap:6px;
 }
 .btn:hover{background:#FBF7F3}
+.btn:disabled{opacity:.45;cursor:default;background:#fff}
 .btn.primair{background:var(--pal-accentblok);border-color:var(--pal-accentblok);color:#fff}
 .waarschuwing{
   background:#FBEEE9;border:1px solid #E0B4A6;color:#9c4f38;border-radius:8px;
@@ -188,6 +189,7 @@ body{font-family:var(--body);background:#EAE3D8;color:var(--site-tekst);min-heig
   <button class="btn" id="btnTekstOp" type="button">Opslaan als bestand</button>
   <label class="btn" title="Eerder opgeslagen flyer laden">Bestand laden<input type="file" id="fTekst" accept="application/json,.json" hidden></label>
   <span class="waarschuwing verborgen" id="overloop">Past niet meer op één A4</span>
+  <button class="btn" id="btnUndo" type="button" title="Laatste wijziging terugdraaien (Ctrl+Z)" disabled>Ongedaan maken</button>
   <button class="btn" id="btnReset" type="button">Alles herstellen</button>
   <button class="btn primair" id="btnPrint" type="button">Afdrukken / Opslaan als PDF</button>
 </div>
@@ -240,6 +242,8 @@ body{font-family:var(--body);background:#EAE3D8;color:var(--site-tekst);min-heig
     <button class="btn" id="btnBlokStandaard" type="button">Terug naar palet</button>
   </div>
   <p class="hint" style="margin-top:2px">Klik een kleur om hem toe te passen. Met het vierkantje links kies je desnoods een kleur buiten het palet.</p>
+
+  <button class="btn" id="btnBlokTekst" type="button" style="width:100%;justify-content:center;margin-top:8px">Standaardtekst van dit blok terug</button>
 
   <h2>Tekst</h2>
   <p class="hint" style="margin-top:0">Klik in de flyer op een tekst om die aan te passen (en om dat blok te kiezen voor een kleur). Met <strong>+ punt toevoegen</strong> en het kruisje achter een punt bepaal je zelf hoeveel punten er staan.</p>
@@ -308,6 +312,14 @@ const BLOK_SELECTOR = {
   "--c-cta":".cta", "--c-lijn":".voet", "--c-voet":".voet .site", "--c-voettekst":".voet .regel"
 };
 
+/* standaardtekst terugzetten per blok; punten herstellen als geheel */
+const TEKST_HERSTEL = {
+  "--c-kopregel":".positie", "--c-titel":".tagline", "--c-intro":".intro",
+  "--c-sectie":".sectieLabel", "--c-aanbodbg":".aanbod", "--c-punttitel":".aanbod",
+  "--c-punttekst":".aanbod", "--c-quotebg":".quote", "--c-quotetekst":".quote",
+  "--c-cta":".cta", "--c-lijn":".voet", "--c-voet":".voet .site", "--c-voettekst":".voet .regel"
+};
+
 const K_HTML = "wf_flyer_v2";
 const K_PALET = "wf_flyer_palet";
 const K_BLOKKLEUR = "wf_flyer_blokkleuren";
@@ -316,6 +328,7 @@ const vel = document.getElementById("vel");
 const $ = s => document.querySelector(s);
 /* vastleggen vóórdat opgeslagen inhoud wordt teruggezet, zodat "logo herstellen" blijft werken */
 const STANDAARD_LOGO = vel.querySelector(".logo").getAttribute("src");
+const STANDAARD_HTML = vel.innerHTML;
 
 /* leesbare tekstkleur op een gekleurd vlak */
 function opKleur(hex){
@@ -467,11 +480,13 @@ vel.addEventListener("click", e => {
       alert("Er moet minstens één punt overblijven.");
       return;
     }
+    onthoud();
     e.target.closest(".dienst").remove();
     bewaar();
     return;
   }
   if(e.target.classList.contains("puntErbij")){
+    onthoud();
     const punten = vel.querySelectorAll(".dienst");
     const laatste = punten[punten.length - 1];
     const nieuw = laatste.cloneNode(true);
@@ -611,6 +626,59 @@ document.getElementById("fTekst").addEventListener("change", e => {
   e.target.value = "";
 });
 
+/* ================= ongedaan maken ================= */
+const historie = [];
+let herstelBezig = false;
+function onthoud(){
+  if(herstelBezig) return;
+  const nu = schoonHtml();
+  if(historie[historie.length - 1] === nu) return;
+  historie.push(nu);
+  if(historie.length > 60) historie.shift();
+  toonUndoKnop();
+}
+function toonUndoKnop(){
+  document.getElementById("btnUndo").disabled = historie.length === 0;
+}
+let laatsteMoment = 0;
+vel.addEventListener("beforeinput", () => {
+  const nu = Date.now();
+  if(nu - laatsteMoment > 800){ onthoud(); laatsteMoment = nu; }
+});
+function ongedaanMaken(){
+  if(!historie.length) return;
+  herstelBezig = true;
+  vel.innerHTML = historie.pop();
+  bouwKnoppen();
+  herstelBezig = false;
+  toonFoto(); markeerBlok(); bewaar(); toonUndoKnop();
+}
+document.getElementById("btnUndo").addEventListener("click", ongedaanMaken);
+/* Ctrl/Cmd+Z buiten een tekstveld: de browser doet niets, wij wel */
+document.addEventListener("keydown", e => {
+  const inTekst = document.activeElement && document.activeElement.isContentEditable;
+  if((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "z" && !e.shiftKey && !inTekst){
+    e.preventDefault();
+    ongedaanMaken();
+  }
+});
+
+/* ================= standaardtekst van één blok terugzetten ================= */
+document.getElementById("btnBlokTekst").addEventListener("click", () => {
+  const sel = TEKST_HERSTEL[blokKeuze.value];
+  if(!sel){ alert("Kies eerst een onderdeel met tekst (papier heeft geen tekst)."); return; }
+  const sjabloon = document.createElement("div");
+  sjabloon.innerHTML = STANDAARD_HTML;
+  const bron = sjabloon.querySelector(sel);
+  const doel = vel.querySelector(sel);
+  if(!bron || !doel){ alert("Dit onderdeel staat niet meer in de flyer. Gebruik 'Ongedaan maken'."); return; }
+  const naam = huidigBlok().naam;
+  if(!confirm(`De standaardtekst van “${naam}” terugzetten? Wat daar nu staat gaat verloren.`)) return;
+  onthoud();
+  doel.innerHTML = bron.innerHTML;
+  bouwKnoppen(); toonFoto(); markeerBlok(); bewaar();
+});
+
 document.getElementById("btnPrint").addEventListener("click", () => window.print());
 document.getElementById("btnReset").addEventListener("click", () => {
   if(confirm("Alle teksten en kleuren terugzetten naar de standaardversie?")){
@@ -625,6 +693,7 @@ pasBlokKleurenToe();
 bouwKnoppen();
 toonFoto();
 toonHuidigeBlokKleur();
+toonUndoKnop();
 checkOverloop();
 window.addEventListener("load", checkOverloop);
 </script>
