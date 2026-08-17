@@ -92,6 +92,7 @@ body{font-family:var(--body);background:#EAE3D8;color:var(--site-tekst);min-heig
 /* ---------------- de flyer (A4) ---------------- */
 .vel{
   width:210mm;min-height:297mm;background:var(--c-paper, var(--pal-paper));
+  -webkit-print-color-adjust:exact;print-color-adjust:exact;
   box-shadow:0 6px 30px rgba(44,44,44,.18);
   padding:14mm 17mm 11mm;display:flex;flex-direction:column;position:relative;overflow:hidden;
 }
@@ -144,6 +145,11 @@ body{font-family:var(--body);background:#EAE3D8;color:var(--site-tekst);min-heig
 }
 .voet .regel{font-size:11pt;line-height:1.65;color:var(--c-voettekst, var(--pal-tekst))}
 
+/* ---------------- exportmodus (tijdens pdf maken) ---------------- */
+body.exportModus .bewerkKnop,body.exportModus .fotoLeeg{display:none !important}
+body.exportModus .blokActief{outline:none !important}
+body.exportModus .vel{box-shadow:none !important}
+
 /* ---------------- gekozen blok markeren ---------------- */
 .blokActief{outline:1.5px dashed var(--pal-accentblok) !important;outline-offset:2px !important;border-radius:2px}
 .vel.blokActief{outline-offset:-6px !important}
@@ -169,6 +175,7 @@ body{font-family:var(--body);background:#EAE3D8;color:var(--site-tekst);min-heig
 @media print{
   @page{size:A4;margin:0}
   body{background:#fff}
+  .vel,.vel *{-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important}
   .werkbalk,.paneel{display:none !important}
   .omgeving{padding:0;display:block}
   .vel{box-shadow:none;width:210mm;height:297mm;min-height:0}
@@ -191,7 +198,8 @@ body{font-family:var(--body);background:#EAE3D8;color:var(--site-tekst);min-heig
   <span class="waarschuwing verborgen" id="overloop">Past niet meer op één A4</span>
   <button class="btn" id="btnUndo" type="button" title="Laatste wijziging terugdraaien (Ctrl+Z)" disabled>Ongedaan maken</button>
   <button class="btn" id="btnReset" type="button">Alles herstellen</button>
-  <button class="btn primair" id="btnPrint" type="button">Afdrukken / Opslaan als PDF</button>
+  <button class="btn" id="btnPrint" type="button">Afdrukken</button>
+  <button class="btn primair" id="btnPdf" type="button">Download PDF</button>
 </div>
 
 <div class="omgeving">
@@ -248,7 +256,7 @@ body{font-family:var(--body);background:#EAE3D8;color:var(--site-tekst);min-heig
   <h2>Tekst</h2>
   <p class="hint" style="margin-top:0">Klik in de flyer op een tekst om die aan te passen (en om dat blok te kiezen voor een kleur). Met <strong>+ punt toevoegen</strong> en het kruisje achter een punt bepaal je zelf hoeveel punten er staan.</p>
   <p class="hint">Alles wordt automatisch op dit apparaat bewaard. Gebruik <strong>Opslaan als bestand</strong> voor een reservekopie of om de flyer op een andere computer te openen.</p>
-  <p class="hint">Zet bij het afdrukken de marges op “Geen” en <strong>achtergrondafbeeldingen aan</strong>, anders blijven de gekleurde vlakken wit.</p>
+  <p class="hint">Gebruik <strong>Download PDF</strong> voor een bestand met alle kleuren erin — dat is de veiligste weg. Print je liever rechtstreeks, zet dan in het printvenster de marges op “Geen”.</p>
 </div>
 
 </div>
@@ -679,6 +687,50 @@ document.getElementById("btnBlokTekst").addEventListener("click", () => {
   bouwKnoppen(); toonFoto(); markeerBlok(); bewaar();
 });
 
+/* ================= PDF maken ================= */
+let html2pdfLaden = null;
+function laadHtml2pdf(){
+  if(window.html2pdf) return Promise.resolve();
+  if(!html2pdfLaden){
+    html2pdfLaden = new Promise((klaar, mis) => {
+      const sc = document.createElement("script");
+      sc.src = "https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js";
+      sc.onload = klaar;
+      sc.onerror = () => { html2pdfLaden = null; mis(new Error("html2pdf niet beschikbaar")); };
+      document.head.appendChild(sc);
+    });
+  }
+  return html2pdfLaden;
+}
+async function maakPdf(){
+  const knop = document.getElementById("btnPdf");
+  const tekst = knop.textContent;
+  knop.disabled = true; knop.textContent = "Bezig…";
+  /* bewerkhulpjes en schaduw eruit, en naar boven scrollen:
+     html2canvas rekent de scrollpositie anders mee */
+  document.body.classList.add("exportModus");
+  const sx = window.scrollX, sy = window.scrollY;
+  window.scrollTo(0, 0);
+  try{
+    await laadHtml2pdf();
+    await html2pdf().set({
+      margin: 0,
+      filename: "Wilma-Smilde-flyer.pdf",
+      image: { type: "jpeg", quality: 0.98 },
+      html2canvas: { scale: 3, useCORS: true, scrollX: 0, scrollY: 0, backgroundColor: null },
+      jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }
+    }).from(vel).save();
+  }catch(err){
+    if(confirm("De PDF kon niet worden gemaakt (mogelijk geen internetverbinding).\n\nWil je in plaats daarvan het afdrukvenster openen? Kies daar ‘Opslaan als PDF’ en zet ‘Achtergrondafbeeldingen’ aan.")){
+      window.print();
+    }
+  }finally{
+    document.body.classList.remove("exportModus");
+    window.scrollTo(sx, sy);
+    knop.disabled = false; knop.textContent = tekst;
+  }
+}
+document.getElementById("btnPdf").addEventListener("click", maakPdf);
 document.getElementById("btnPrint").addEventListener("click", () => window.print());
 document.getElementById("btnReset").addEventListener("click", () => {
   if(confirm("Alle teksten en kleuren terugzetten naar de standaardversie?")){
