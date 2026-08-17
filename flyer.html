@@ -96,6 +96,7 @@ body{font-family:var(--body);background:#EAE3D8;color:var(--site-tekst);min-heig
 }
 .kop{display:flex;align-items:center;gap:8mm}
 .logo{width:72mm;max-width:100%;height:auto;display:block}
+.logo{cursor:pointer}
 .fotoVak{margin-left:auto;flex:none}
 .fotoVak img{width:34mm;height:34mm;border-radius:50%;object-fit:cover;display:block}
 .fotoVak img[hidden]{display:none}
@@ -142,6 +143,12 @@ body{font-family:var(--body);background:#EAE3D8;color:var(--site-tekst);min-heig
 }
 .voet .regel{font-size:11pt;line-height:1.65;color:var(--c-voettekst, var(--pal-tekst))}
 
+/* ---------------- gekozen blok markeren ---------------- */
+.blokActief{outline:1.5px dashed var(--pal-accentblok) !important;outline-offset:2px !important;border-radius:2px}
+.vel.blokActief{outline-offset:-6px !important}
+.kiesHint{font-size:12px;color:#8b8577;line-height:1.55;margin:0 0 8px}
+.gekozenBlok{font-weight:700;color:var(--site-tekst)}
+
 /* ---------------- bewerken ---------------- */
 [contenteditable]:hover{outline:1.5px dashed var(--pal-accent);outline-offset:3px;cursor:text}
 [contenteditable]:focus{outline:2px solid var(--pal-accentblok);outline-offset:3px}
@@ -166,6 +173,7 @@ body{font-family:var(--body);background:#EAE3D8;color:var(--site-tekst);min-heig
   .vel{box-shadow:none;width:210mm;height:297mm;min-height:0}
   [contenteditable]:hover{outline:none}
   .bewerkKnop,.fotoLeeg{display:none !important}
+  .blokActief{outline:none !important}
 }
 </style>
 </head>
@@ -173,6 +181,8 @@ body{font-family:var(--body);background:#EAE3D8;color:var(--site-tekst);min-heig
 
 <div class="werkbalk">
   <h1>Flyer — A4</h1>
+  <label class="btn" title="Eigen logo kiezen">Logo<input type="file" id="fLogo" accept="image/*" hidden></label>
+  <button class="btn" id="btnLogoTerug" type="button">Logo herstellen</button>
   <label class="btn" title="Foto kiezen">Foto<input type="file" id="fFoto" accept="image/*" hidden></label>
   <button class="btn" id="btnFotoWeg" type="button">Foto weg</button>
   <button class="btn" id="btnTekstOp" type="button">Opslaan als bestand</button>
@@ -222,16 +232,17 @@ body{font-family:var(--body);background:#EAE3D8;color:var(--site-tekst);min-heig
   <p class="hint" style="margin-top:2px">Zet in één klik de hele flyer om. Alle kleuren komen uit het palet van wilmasmilde.nl.</p>
 
   <h2>Kleur per blok</h2>
+  <p class="kiesHint">Klik in de flyer op het onderdeel dat je wilt kleuren — of kies het hieronder. Gekozen: <span class="gekozenBlok" id="gekozenBlok">Papier</span></p>
   <select id="blokKeuze" aria-label="Kies een blok"></select>
   <div class="stalen" id="stalen"></div>
   <div class="eigenRij">
     <input type="color" id="eigenKleur" title="Eigen kleur kiezen">
     <button class="btn" id="btnBlokStandaard" type="button">Terug naar palet</button>
   </div>
-  <p class="hint" style="margin-top:2px">Kies eerst een blok, klik dan een kleur. Met het vierkantje links kies je desnoods een kleur buiten het palet.</p>
+  <p class="hint" style="margin-top:2px">Klik een kleur om hem toe te passen. Met het vierkantje links kies je desnoods een kleur buiten het palet.</p>
 
   <h2>Tekst</h2>
-  <p class="hint" style="margin-top:0">Klik in de flyer op een tekst om die aan te passen. Met <strong>+ punt toevoegen</strong> en het kruisje achter een punt bepaal je zelf hoeveel punten er staan.</p>
+  <p class="hint" style="margin-top:0">Klik in de flyer op een tekst om die aan te passen (en om dat blok te kiezen voor een kleur). Met <strong>+ punt toevoegen</strong> en het kruisje achter een punt bepaal je zelf hoeveel punten er staan.</p>
   <p class="hint">Alles wordt automatisch op dit apparaat bewaard. Gebruik <strong>Opslaan als bestand</strong> voor een reservekopie of om de flyer op een andere computer te openen.</p>
   <p class="hint">Zet bij het afdrukken de marges op “Geen” en <strong>achtergrondafbeeldingen aan</strong>, anders blijven de gekleurde vlakken wit.</p>
 </div>
@@ -274,12 +285,37 @@ const BLOKKEN = [
   { v:"--c-voettekst",  naam:"Voettekst — gegevens",     val:"tekst" }
 ];
 
+/* klik in de flyer -> bijbehorend blok; specifiek gaat vóór algemeen */
+const KLIKBAAR = [
+  [".dTitel",      "--c-punttitel"],
+  [".dTekst",      "--c-punttekst"],
+  [".aanbod",      "--c-aanbodbg"],
+  [".quote",       "--c-quotebg"],
+  [".positie",     "--c-kopregel"],
+  [".tagline",     "--c-titel"],
+  [".intro",       "--c-intro"],
+  [".sectieLabel", "--c-sectie"],
+  [".cta",         "--c-cta"],
+  [".voet .site",  "--c-voet"],
+  [".voet .regel", "--c-voettekst"],
+  [".voet",        "--c-lijn"],
+  [".vel",         "--c-paper"]
+];
+const BLOK_SELECTOR = {
+  "--c-paper":".vel", "--c-kopregel":".positie", "--c-titel":".tagline", "--c-intro":".intro",
+  "--c-sectie":".sectieLabel", "--c-aanbodbg":".aanbod", "--c-punttitel":".dTitel",
+  "--c-punttekst":".dTekst", "--c-quotebg":".quote", "--c-quotetekst":".quote",
+  "--c-cta":".cta", "--c-lijn":".voet", "--c-voet":".voet .site", "--c-voettekst":".voet .regel"
+};
+
 const K_HTML = "wf_flyer_v2";
 const K_PALET = "wf_flyer_palet";
 const K_BLOKKLEUR = "wf_flyer_blokkleuren";
 
 const vel = document.getElementById("vel");
 const $ = s => document.querySelector(s);
+/* vastleggen vóórdat opgeslagen inhoud wordt teruggezet, zodat "logo herstellen" blijft werken */
+const STANDAARD_LOGO = vel.querySelector(".logo").getAttribute("src");
 
 /* leesbare tekstkleur op een gekleurd vlak */
 function opKleur(hex){
@@ -380,8 +416,18 @@ document.getElementById("btnBlokStandaard").addEventListener("click", () => {
   delete blokKleuren[huidigBlok().v];
   pasBlokKleurenToe(); bewaarKleuren(); toonHuidigeBlokKleur();
 });
+function markeerBlok(){
+  vel.querySelectorAll(".blokActief").forEach(e => e.classList.remove("blokActief"));
+  vel.classList.remove("blokActief");
+  const sel = BLOK_SELECTOR[blokKeuze.value];
+  if(!sel) return;
+  if(sel === ".vel"){ vel.classList.add("blokActief"); return; }
+  vel.querySelectorAll(sel).forEach(e => e.classList.add("blokActief"));
+}
 function toonHuidigeBlokKleur(){
   const b = huidigBlok();
+  document.getElementById("gekozenBlok").textContent = b.naam;
+  markeerBlok();
   const p = paletWaarden(huidigPalet);
   const actief = (blokKleuren[b.v] || p[b.val] || "#FFFFFF").toUpperCase();
   eigenKleur.value = actief.length === 7 ? actief : "#FFFFFF";
@@ -438,7 +484,17 @@ vel.addEventListener("click", e => {
     t.focus(); getSelection().selectAllChildren(t);
     return;
   }
-  if(e.target.classList.contains("fotoLeeg")) document.getElementById("fFoto").click();
+  if(e.target.classList.contains("fotoLeeg")){ document.getElementById("fFoto").click(); return; }
+  if(e.target.classList.contains("logo")){ document.getElementById("fLogo").click(); return; }
+
+  /* klik op een onderdeel kiest dat blok in het kleurpaneel */
+  for(const [sel, v] of KLIKBAAR){
+    if(e.target.closest(sel)){
+      blokKeuze.value = v;
+      toonHuidigeBlokKleur();
+      return;
+    }
+  }
 });
 
 /* ================= foto ================= */
@@ -470,6 +526,34 @@ document.getElementById("fFoto").addEventListener("change", e => {
   img.src = url;
   e.target.value = "";
 });
+/* ---- eigen logo ---- */
+document.getElementById("fLogo").addEventListener("change", e => {
+  const file = e.target.files[0]; if(!file) return;
+  const img = new Image();
+  const url = URL.createObjectURL(file);
+  img.onload = () => {
+    const max = 900, sc = Math.min(1, max / Math.max(img.width, img.height));
+    const c = document.createElement("canvas");
+    c.width = Math.round(img.width * sc); c.height = Math.round(img.height * sc);
+    c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+    URL.revokeObjectURL(url);
+    try{
+      /* png, zodat een doorzichtige achtergrond doorzichtig blijft */
+      vel.querySelector(".logo").src = c.toDataURL("image/png");
+      bewaar();
+    }catch(err){
+      alert("Het logo kon niet worden opgeslagen. Probeer een kleiner bestand.");
+    }
+  };
+  img.onerror = () => { URL.revokeObjectURL(url); alert("Dit bestand kon niet als afbeelding worden gelezen."); };
+  img.src = url;
+  e.target.value = "";
+});
+document.getElementById("btnLogoTerug").addEventListener("click", () => {
+  vel.querySelector(".logo").src = STANDAARD_LOGO;
+  bewaar();
+});
+
 document.getElementById("btnFotoWeg").addEventListener("click", () => {
   const img = vel.querySelector("#tFoto");
   if(img && img.getAttribute("src")){ img.removeAttribute("src"); toonFoto(); bewaar(); }
