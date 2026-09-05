@@ -162,6 +162,20 @@ body.exportModus .fotoVak img{cursor:default;box-shadow:none}
 }
 .voet .regel{font-size:calc(11pt * var(--f-voettekst, 1));font-weight:var(--w-voettekst, 400);line-height:1.65;color:var(--c-voettekst, var(--pal-tekst))}
 
+/* ---------------- blokken aan/uit ---------------- */
+.blokUit{display:none !important}
+.blokRij{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--site-tekst);padding:5px 0;cursor:pointer}
+.blokRij input{width:17px;height:17px;accent-color:var(--pal-accentblok);cursor:pointer;margin:0}
+.vulling{
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+  border:1px solid var(--rand);border-radius:8px;padding:8px 11px;font-size:12.5px;margin-top:10px;
+}
+.vulling b{font-weight:700}
+.vulling.vol{background:#FBEEE9;border-color:#E0B4A6;color:#9c4f38}
+.balk{height:5px;border-radius:3px;background:var(--rand);overflow:hidden;margin-top:6px}
+.balk i{display:block;height:100%;background:var(--pal-accentblok);transition:width .15s}
+.balk.vol i{background:#c0533a}
+
 /* ---------------- exportmodus (tijdens pdf maken) ---------------- */
 body.exportModus .bewerkKnop,body.exportModus .fotoLeeg{display:none !important}
 body.exportModus .blokActief{outline:none !important}
@@ -275,6 +289,12 @@ body.exportModus .vel{box-shadow:none !important}
   <input type="range" id="fDikte" min="0" max="4" step="1" value="3" aria-label="Letterdikte">
   <button class="btn" id="btnTypoTerug" type="button" style="width:100%;justify-content:center;margin-top:10px">Letters terug naar standaard</button>
   <p class="hint" id="typoHint" style="margin-top:8px">Geldt voor het blok dat je hierboven hebt gekozen.</p>
+
+  <h2>Blokken aan of uit</h2>
+  <div id="blokLijst"></div>
+  <div class="vulling" id="vulling"><span>Ruimte op de A4</span><b id="vulPct">–</b></div>
+  <div class="balk" id="vulBalk"><i style="width:0%"></i></div>
+  <p class="hint" style="margin-top:8px">Onder de 100% past alles op één pagina. Zet blokken uit of maak letters kleiner om ruimte te winnen.</p>
 
   <h2>Foto</h2>
   <div class="schuifRij"><span>Inzoomen</span><b id="valZoom">100%</b></div>
@@ -632,6 +652,20 @@ vel.addEventListener("click", e => {
 /* html2canvas (de motor achter de pdf) negeert object-fit, dus we "bakken"
    zelf een vierkante uitsnede. Die uitsnede staat in de flyer en gaat dus
    precies zo mee in de pdf. Slepen en zoomen verschuiven de uitsnede. */
+/* blokken die als geheel aan of uit kunnen */
+const AANUIT = [
+  { sel:".logo",        naam:"Logo" },
+  { sel:".fotoVak",     naam:"Foto" },
+  { sel:".positie",     naam:"Kopregel" },
+  { sel:".tagline",     naam:"Titel" },
+  { sel:".intro",       naam:"Introtekst" },
+  { sel:".sectieLabel", naam:"Kopje boven de punten" },
+  { sel:".aanbod",      naam:"Puntenblok" },
+  { sel:".quote",       naam:"Quote" },
+  { sel:".cta",         naam:"Oproep onderaan" },
+  { sel:".voet",        naam:"Voettekst" }
+];
+
 const K_FOTO = "wf_flyer_foto";
 let fotoBron = null, fotoX = 0.5, fotoY = 0.5, fotoZoom = 1;
 try{
@@ -821,16 +855,61 @@ document.getElementById("btnFotoWeg").addEventListener("click", () => {
   }
 });
 
+/* ================= blokken aan of uit ================= */
+function bouwBlokLijst(){
+  const lijst = document.getElementById("blokLijst");
+  lijst.innerHTML = "";
+  AANUIT.forEach(b => {
+    const el = vel.querySelector(b.sel);
+    const rij = document.createElement("label");
+    rij.className = "blokRij";
+    const vink = document.createElement("input");
+    vink.type = "checkbox";
+    vink.checked = !!el && !el.classList.contains("blokUit");
+    vink.disabled = !el;
+    vink.addEventListener("change", () => {
+      const doel = vel.querySelector(b.sel);
+      if(!doel) return;
+      onthoud();
+      doel.classList.toggle("blokUit", !vink.checked);
+      /* de knop "+ punt toevoegen" hoort bij het puntenblok */
+      if(b.sel === ".aanbod"){
+        const knop = vel.querySelector(".puntErbij");
+        if(knop) knop.classList.toggle("blokUit", !vink.checked);
+      }
+      bewaar();
+    });
+    rij.appendChild(vink);
+    rij.appendChild(document.createTextNode(b.naam));
+    lijst.appendChild(rij);
+  });
+}
+
 /* ================= past het nog op één A4? ================= */
 const MM = 96 / 25.4;
 function checkOverloop(){
   /* bewerkknoppen staan niet op papier, dus die tellen niet mee in de meting */
   const knoppen = [...vel.querySelectorAll(".bewerkKnop")];
   knoppen.forEach(k => k.style.display = "none");
+  /* min-height houdt het vel altijd op A4; even loslaten om de echte
+     inhoudshoogte te meten, anders blijft de meter op 100% staan */
+  vel.style.minHeight = "0";
   const hoogte = vel.scrollHeight;
+  vel.style.removeProperty("min-height");
   knoppen.forEach(k => k.style.removeProperty("display"));
   toonFoto();
-  document.getElementById("overloop").classList.toggle("verborgen", hoogte <= 297 * MM + 4);
+  const max = 297 * MM;
+  const teVol = hoogte > max + 4;
+  document.getElementById("overloop").classList.toggle("verborgen", !teVol);
+  const pct = Math.round(hoogte / max * 100);
+  const vulling = document.getElementById("vulling");
+  const balk = document.getElementById("vulBalk");
+  if(vulling){
+    document.getElementById("vulPct").textContent = pct + "%";
+    vulling.classList.toggle("vol", teVol);
+    balk.classList.toggle("vol", teVol);
+    balk.firstElementChild.style.width = Math.min(100, pct) + "%";
+  }
 }
 
 /* ================= opslaan / laden als bestand ================= */
@@ -871,6 +950,7 @@ document.getElementById("fTekst").addEventListener("change", e => {
       pasTypoToe();
       bewaarTypo();
       bouwKnoppen();
+      bouwBlokLijst();
       toonFoto();
       toonHuidigeBlokKleur();
       bewaar();
@@ -906,7 +986,7 @@ function ongedaanMaken(){
   vel.innerHTML = historie.pop();
   bouwKnoppen();
   herstelBezig = false;
-  toonFoto(); markeerBlok(); bewaar(); toonUndoKnop();
+  bouwBlokLijst(); toonFoto(); markeerBlok(); bewaar(); toonUndoKnop();
 }
 document.getElementById("btnUndo").addEventListener("click", ongedaanMaken);
 /* Ctrl/Cmd+Z buiten een tekstveld: de browser doet niets, wij wel */
@@ -991,6 +1071,7 @@ pasPaletToe();
 pasBlokKleurenToe();
 pasTypoToe();
 bouwKnoppen();
+bouwBlokLijst();
 toonFoto();
 repareerFoto();
 toonHuidigeBlokKleur();
