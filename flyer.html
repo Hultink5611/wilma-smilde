@@ -521,6 +521,43 @@ vel.addEventListener("click", e => {
 });
 
 /* ================= foto ================= */
+/* html2canvas (de motor achter de pdf) negeert object-fit en rekt een
+   niet-vierkante foto uit. Daarom snijden we hem meteen vierkant bij,
+   dan klopt de ronde foto zowel op het scherm als in de pdf. */
+function vierkantBijsnijden(bron, maxMaat = 700){
+  return new Promise((klaar, mis) => {
+    const img = new Image();
+    img.onload = () => {
+      const zij = Math.min(img.naturalWidth, img.naturalHeight);
+      const x = (img.naturalWidth - zij) / 2;
+      const y = (img.naturalHeight - zij) / 2;
+      const maat = Math.min(zij, maxMaat);
+      const c = document.createElement("canvas");
+      c.width = c.height = maat;
+      const ctx = c.getContext("2d");
+      ctx.drawImage(img, x, y, zij, zij, 0, 0, maat, maat);
+      try{ klaar(c.toDataURL("image/jpeg", 0.92)); }catch(err){ mis(err); }
+    };
+    img.onerror = () => mis(new Error("kon de afbeelding niet lezen"));
+    img.src = bron;
+  });
+}
+/* foto's van vóór deze fix stilletjes rechtzetten */
+function repareerFoto(){
+  const el = vel.querySelector("#tFoto");
+  const bron = el && el.getAttribute("src");
+  if(!bron) return;
+  const test = new Image();
+  test.onload = async () => {
+    if(test.naturalWidth === test.naturalHeight) return;
+    try{
+      el.src = await vierkantBijsnijden(bron);
+      bewaar();
+    }catch{ /* laat de foto dan staan zoals hij is */ }
+  };
+  test.src = bron;
+}
+
 function toonFoto(){
   const img = vel.querySelector("#tFoto");
   const leeg = vel.querySelector(".fotoLeeg");
@@ -530,23 +567,17 @@ function toonFoto(){
 }
 document.getElementById("fFoto").addEventListener("change", e => {
   const file = e.target.files[0]; if(!file) return;
-  const img = new Image();
   const url = URL.createObjectURL(file);
-  img.onload = () => {
-    const max = 700, sc = Math.min(1, max / Math.max(img.width, img.height));
-    const c = document.createElement("canvas");
-    c.width = Math.round(img.width * sc); c.height = Math.round(img.height * sc);
-    c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
-    URL.revokeObjectURL(url);
-    try{
-      vel.querySelector("#tFoto").src = c.toDataURL("image/jpeg", 0.9);
+  vierkantBijsnijden(url)
+    .then(vierkant => {
+      URL.revokeObjectURL(url);
+      vel.querySelector("#tFoto").src = vierkant;
       toonFoto(); bewaar();
-    }catch(err){
-      alert("De foto kon niet worden opgeslagen. Probeer een kleiner bestand.");
-    }
-  };
-  img.onerror = () => { URL.revokeObjectURL(url); alert("Dit bestand kon niet als afbeelding worden gelezen."); };
-  img.src = url;
+    })
+    .catch(() => {
+      URL.revokeObjectURL(url);
+      alert("Dit bestand kon niet als afbeelding worden gelezen, of was te groot om op te slaan.");
+    });
   e.target.value = "";
 });
 /* ---- eigen logo ---- */
@@ -744,6 +775,7 @@ pasPaletToe();
 pasBlokKleurenToe();
 bouwKnoppen();
 toonFoto();
+repareerFoto();
 toonHuidigeBlokKleur();
 toonUndoKnop();
 checkOverloop();
