@@ -276,6 +276,11 @@ body.exportModus .vel{box-shadow:none !important}
   <button class="btn" id="btnTypoTerug" type="button" style="width:100%;justify-content:center;margin-top:10px">Letters terug naar standaard</button>
   <p class="hint" id="typoHint" style="margin-top:8px">Geldt voor het blok dat je hierboven hebt gekozen.</p>
 
+  <h2>Foto</h2>
+  <div class="schuifRij"><span>Inzoomen</span><b id="valZoom">100%</b></div>
+  <input type="range" id="fZoom" min="100" max="250" step="5" value="100" aria-label="Foto inzoomen">
+  <p class="hint" id="fotoHint" style="margin-top:8px">Voeg eerst een foto toe met de knop Foto.</p>
+
   <h2>Logo</h2>
   <div class="schuifRij"><span>Grootte</span><b id="valLogo">100%</b></div>
   <input type="range" id="fLogoMaat" min="50" max="160" step="5" value="100" aria-label="Logogrootte">
@@ -284,7 +289,6 @@ body.exportModus .vel{box-shadow:none !important}
 
   <h2>Tekst</h2>
   <p class="hint" style="margin-top:0">Klik in de flyer op een tekst om die aan te passen (en om dat blok te kiezen voor een kleur). Met <strong>+ punt toevoegen</strong> en het kruisje achter een punt bepaal je zelf hoeveel punten er staan.</p>
-  <p class="hint">Staat het gezicht niet goed in de ronde foto? <strong>Sleep de foto</strong> met de muis om hem te verschuiven.</p>
   <p class="hint">Alles wordt automatisch op dit apparaat bewaard. Gebruik <strong>Opslaan als bestand</strong> voor een reservekopie of om de flyer op een andere computer te openen.</p>
   <p class="hint">Gebruik <strong>Download PDF</strong> voor een bestand met alle kleuren erin — dat is de veiligste weg. Print je liever rechtstreeks, zet dan in het printvenster de marges op “Geen”.</p>
 </div>
@@ -625,19 +629,20 @@ vel.addEventListener("click", e => {
 });
 
 /* ================= foto ================= */
-/* html2canvas (de motor achter de pdf) negeert object-fit en zou een niet-
-   vierkante foto uitrekken. Daarom bewaren we de originele foto apart en
-   "bakken" we er een vierkante uitsnede van; die uitsnede staat in de flyer
-   en gaat dus goed mee in de pdf. Slepen verschuift alleen de uitsnede. */
+/* html2canvas (de motor achter de pdf) negeert object-fit, dus we "bakken"
+   zelf een vierkante uitsnede. Die uitsnede staat in de flyer en gaat dus
+   precies zo mee in de pdf. Slepen en zoomen verschuiven de uitsnede. */
 const K_FOTO = "wf_flyer_foto";
-let fotoBron = null, fotoX = 0.5, fotoY = 0.5;
+let fotoBron = null, fotoX = 0.5, fotoY = 0.5, fotoZoom = 1;
 try{
   const d = JSON.parse(localStorage.getItem(K_FOTO) || "null");
-  if(d && d.bron){ fotoBron = d.bron; fotoX = d.x ?? 0.5; fotoY = d.y ?? 0.5; }
+  if(d && d.bron){
+    fotoBron = d.bron; fotoX = d.x ?? 0.5; fotoY = d.y ?? 0.5; fotoZoom = d.zoom ?? 1;
+  }
 }catch{}
 function bewaarFoto(){
   try{
-    if(fotoBron) localStorage.setItem(K_FOTO, JSON.stringify({ bron:fotoBron, x:fotoX, y:fotoY }));
+    if(fotoBron) localStorage.setItem(K_FOTO, JSON.stringify({ bron:fotoBron, x:fotoX, y:fotoY, zoom:fotoZoom }));
     else localStorage.removeItem(K_FOTO);
   }catch{ /* opslag vol: de gebakken foto in de flyer blijft gewoon werken */ }
 }
@@ -649,8 +654,7 @@ function laadAfbeelding(bron){
     i.src = bron;
   });
 }
-/* verkleinen met behoud van verhouding */
-async function schaalAfbeelding(bron, max = 900){
+async function schaalAfbeelding(bron, max = 1000){
   const i = await laadAfbeelding(bron);
   const sc = Math.min(1, max / Math.max(i.naturalWidth, i.naturalHeight));
   const c = document.createElement("canvas");
@@ -659,17 +663,25 @@ async function schaalAfbeelding(bron, max = 900){
   c.getContext("2d").drawImage(i, 0, 0, c.width, c.height);
   return c.toDataURL("image/jpeg", 0.92);
 }
-/* vierkante uitsnede maken op de gekozen positie (0 = boven/links, 1 = onder/rechts) */
+/* de bron één keer decoderen en vasthouden, zodat slepen soepel blijft */
+let fotoImg = null;
+async function bronAfbeelding(){
+  if(fotoImg && fotoImg.getAttribute("src") === fotoBron) return fotoImg;
+  fotoImg = await laadAfbeelding(fotoBron);
+  return fotoImg;
+}
+/* hoeveel bronpixels vallen er buiten de uitsnede? bepaalt de sleepruimte */
+function uitsnede(i){
+  const zij = Math.min(i.naturalWidth, i.naturalHeight) / fotoZoom;
+  return { zij, ruimteX: i.naturalWidth - zij, ruimteY: i.naturalHeight - zij };
+}
 async function bakFoto(maat = 700){
   if(!fotoBron) return;
-  const i = await laadAfbeelding(fotoBron);
-  const zij = Math.min(i.naturalWidth, i.naturalHeight);
-  const sx = (i.naturalWidth - zij) * fotoX;
-  const sy = (i.naturalHeight - zij) * fotoY;
-  const m = Math.min(zij, maat);
+  const i = await bronAfbeelding();
+  const { zij, ruimteX, ruimteY } = uitsnede(i);
   const c = document.createElement("canvas");
-  c.width = c.height = m;
-  c.getContext("2d").drawImage(i, sx, sy, zij, zij, 0, 0, m, m);
+  c.width = c.height = Math.max(64, Math.min(Math.round(zij), maat));
+  c.getContext("2d").drawImage(i, ruimteX * fotoX, ruimteY * fotoY, zij, zij, 0, 0, c.width, c.height);
   const el = vel.querySelector("#tFoto");
   if(el) el.src = c.toDataURL("image/jpeg", 0.92);
 }
@@ -677,51 +689,50 @@ async function bakFoto(maat = 700){
 async function repareerFoto(){
   const el = vel.querySelector("#tFoto");
   const bron = el && el.getAttribute("src");
-  if(!bron) return;
-  if(!fotoBron){
-    fotoBron = bron;
-    try{ await bakFoto(); bewaarFoto(); bewaar(); }catch{}
-  }
+  if(!bron || fotoBron) return;
+  fotoBron = bron;
+  try{ await bakFoto(); bewaarFoto(); bewaar(); }catch{}
 }
 
 /* ---- slepen om het gezicht goed in beeld te zetten ---- */
-let sleepActief = null;
-function startSleep(e){
+let sleepInfo = null, sleepWacht = false;
+async function startSleep(e){
   const el = vel.querySelector("#tFoto");
   if(!el || !el.getAttribute("src") || !fotoBron) return;
-  laadAfbeelding(fotoBron).then(bron => {
-    const vak = el.getBoundingClientRect();
-    /* tijdens het slepen tonen we de hele foto met object-position,
-       zodat je ziet wat er buiten de uitsnede valt */
-    const schaal = Math.max(vak.width / bron.naturalWidth, vak.height / bron.naturalHeight);
-    sleepActief = {
-      el, startX: e.clientX, startY: e.clientY, x: fotoX, y: fotoY,
-      ruimteX: Math.max(0, bron.naturalWidth * schaal - vak.width),
-      ruimteY: Math.max(0, bron.naturalHeight * schaal - vak.height)
-    };
-    el.src = fotoBron;
-    el.style.objectPosition = `${fotoX * 100}% ${fotoY * 100}%`;
-    el.classList.add("sleept");
-    el.setPointerCapture(e.pointerId);
-  }).catch(() => {});
+  const i = await bronAfbeelding().catch(() => null);
+  if(!i) return;
+  const vak = el.getBoundingClientRect();
+  const { zij, ruimteX, ruimteY } = uitsnede(i);
+  if(ruimteX < 1 && ruimteY < 1){
+    toonFotoHint("Zoom eerst in met de schuif hiernaast, dan kun je de foto verschuiven.");
+    return;
+  }
+  sleepInfo = {
+    el, startX: e.clientX, startY: e.clientY, x: fotoX, y: fotoY,
+    ruimteX, ruimteY, perPixel: zij / vak.width
+  };
+  el.classList.add("sleept");
+  try{ el.setPointerCapture(e.pointerId); }catch{}
 }
 function tijdensSleep(e){
-  if(!sleepActief) return;
+  if(!sleepInfo) return;
   e.preventDefault();
-  const { el, startX, startY, x, y, ruimteX, ruimteY } = sleepActief;
-  /* de foto met de muis mee laten bewegen: omlaag slepen toont het bovenste deel */
-  const nx = ruimteX ? Math.min(1, Math.max(0, x - (e.clientX - startX) / ruimteX)) : x;
-  const ny = ruimteY ? Math.min(1, Math.max(0, y - (e.clientY - startY) / ruimteY)) : y;
-  fotoX = nx; fotoY = ny;
-  el.style.objectPosition = `${nx * 100}% ${ny * 100}%`;
+  const { startX, startY, x, y, ruimteX, ruimteY, perPixel } = sleepInfo;
+  /* de foto beweegt met de muis mee: omlaag slepen toont het bovenste deel */
+  if(ruimteX >= 1) fotoX = Math.min(1, Math.max(0, x - (e.clientX - startX) * perPixel / ruimteX));
+  if(ruimteY >= 1) fotoY = Math.min(1, Math.max(0, y - (e.clientY - startY) * perPixel / ruimteY));
+  if(sleepWacht) return;
+  sleepWacht = true;
+  requestAnimationFrame(async () => {
+    sleepWacht = false;
+    await bakFoto(280);          /* tijdens het slepen klein en dus snel */
+  });
 }
 async function eindigSleep(){
-  if(!sleepActief) return;
-  const { el } = sleepActief;
-  sleepActief = null;
-  el.classList.remove("sleept");
-  el.style.removeProperty("object-position");
-  await bakFoto();          /* uitsnede vastleggen, zodat de pdf klopt */
+  if(!sleepInfo) return;
+  sleepInfo.el.classList.remove("sleept");
+  sleepInfo = null;
+  await bakFoto();               /* op het eind in volle kwaliteit vastleggen */
   bewaarFoto(); bewaar();
 }
 vel.addEventListener("pointerdown", e => {
@@ -731,12 +742,24 @@ vel.addEventListener("pointermove", tijdensSleep);
 vel.addEventListener("pointerup", eindigSleep);
 vel.addEventListener("pointercancel", eindigSleep);
 
+function toonFotoHint(tekst){
+  const h = document.getElementById("fotoHint");
+  if(h) h.textContent = tekst;
+}
 function toonFoto(){
   const img = vel.querySelector("#tFoto");
   const leeg = vel.querySelector(".fotoLeeg");
   const heeft = !!(img && img.getAttribute("src"));
   if(img){ img.hidden = !heeft; img.title = heeft ? "Sleep om het gezicht goed in beeld te zetten" : ""; }
   if(leeg) leeg.style.display = heeft ? "none" : "";
+  const zoom = document.getElementById("fZoom");
+  if(zoom){
+    zoom.disabled = !heeft;
+    zoom.value = Math.round(fotoZoom * 100);
+    document.getElementById("valZoom").textContent = Math.round(fotoZoom * 100) + "%";
+  }
+  if(heeft) toonFotoHint("Sleep de foto om hem te verschuiven. Zoom in als er niets beweegt.");
+  else toonFotoHint("Voeg eerst een foto toe met de knop Foto.");
 }
 document.getElementById("fFoto").addEventListener("change", e => {
   const file = e.target.files[0]; if(!file) return;
@@ -744,7 +767,7 @@ document.getElementById("fFoto").addEventListener("change", e => {
   schaalAfbeelding(url)
     .then(async geschaald => {
       URL.revokeObjectURL(url);
-      fotoBron = geschaald; fotoX = 0.5; fotoY = 0.5;
+      fotoBron = geschaald; fotoX = 0.5; fotoY = 0.5; fotoZoom = 1; fotoImg = null;
       await bakFoto();
       toonFoto(); bewaarFoto(); bewaar();
     })
@@ -754,6 +777,14 @@ document.getElementById("fFoto").addEventListener("change", e => {
     });
   e.target.value = "";
 });
+document.getElementById("fZoom").addEventListener("input", async e => {
+  if(!fotoBron) return;
+  fotoZoom = Math.max(1, e.target.value / 100);
+  document.getElementById("valZoom").textContent = Math.round(fotoZoom * 100) + "%";
+  await bakFoto();
+  bewaarFoto(); bewaar();
+});
+
 /* ---- eigen logo ---- */
 document.getElementById("fLogo").addEventListener("change", e => {
   const file = e.target.files[0]; if(!file) return;
@@ -785,7 +816,7 @@ document.getElementById("btnFotoWeg").addEventListener("click", () => {
   const img = vel.querySelector("#tFoto");
   if(img && img.getAttribute("src")){
     img.removeAttribute("src");
-    fotoBron = null; fotoX = 0.5; fotoY = 0.5;
+    fotoBron = null; fotoX = 0.5; fotoY = 0.5; fotoZoom = 1; fotoImg = null;
     toonFoto(); bewaarFoto(); bewaar();
   }
 });
@@ -807,7 +838,7 @@ document.getElementById("btnTekstOp").addEventListener("click", () => {
   const data = {
     app:"wilma-flyer", versie:3,
     html: schoonHtml(), palet: huidigPalet, blokKleuren, typo,
-    foto: fotoBron ? { bron: fotoBron, x: fotoX, y: fotoY } : null
+    foto: fotoBron ? { bron: fotoBron, x: fotoX, y: fotoY, zoom: fotoZoom } : null
   };
   const blob = new Blob([JSON.stringify(data, null, 2)], { type:"application/json" });
   const a = document.createElement("a");
@@ -831,8 +862,9 @@ document.getElementById("fTekst").addEventListener("change", e => {
       huidigPalet = PALETTEN[d.palet] ? d.palet : "roze";
       blokKleuren = (d.blokKleuren && typeof d.blokKleuren === "object") ? d.blokKleuren : {};
       typo = (d.typo && typeof d.typo === "object") ? d.typo : {};
-      if(d.foto && d.foto.bron){ fotoBron = d.foto.bron; fotoX = d.foto.x ?? 0.5; fotoY = d.foto.y ?? 0.5; }
-      else { fotoBron = null; fotoX = 0.5; fotoY = 0.5; }
+      if(d.foto && d.foto.bron){ fotoBron = d.foto.bron; fotoX = d.foto.x ?? 0.5; fotoY = d.foto.y ?? 0.5; fotoZoom = d.foto.zoom ?? 1; }
+      else { fotoBron = null; fotoX = 0.5; fotoY = 0.5; fotoZoom = 1; }
+      fotoImg = null;
       bewaarFoto();
       pasPaletToe();
       pasBlokKleurenToe();
