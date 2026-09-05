@@ -89,6 +89,11 @@ body{font-family:var(--body);background:#EAE3D8;color:var(--site-tekst);min-heig
 }
 .eigenRij .btn{flex:1;min-height:38px;font-size:13px;padding:6px 10px;justify-content:center}
 
+.schuifRij{display:flex;align-items:center;justify-content:space-between;font-size:12.5px;color:#6a655c;margin-top:10px}
+.schuifRij b{font-weight:600;color:var(--site-tekst)}
+input[type=range]{width:100%;margin:4px 0 0;accent-color:var(--pal-accentblok);cursor:pointer}
+input[type=range]:disabled{opacity:.4;cursor:default}
+
 /* ---------------- de flyer (A4) ---------------- */
 .vel{
   width:210mm;min-height:297mm;background:var(--c-paper, var(--pal-paper));
@@ -97,25 +102,34 @@ body{font-family:var(--body);background:#EAE3D8;color:var(--site-tekst);min-heig
   padding:14mm 17mm 11mm;display:flex;flex-direction:column;position:relative;overflow:hidden;
 }
 .kop{display:flex;align-items:center;gap:8mm}
-.logo{width:72mm;max-width:100%;height:auto;display:block}
+.logo{width:calc(72mm * var(--f-logo, 1));max-width:100%;height:auto;display:block}
 .logo{cursor:pointer}
-.fotoVak{margin-left:auto;flex:none}
-.fotoVak img{width:34mm;height:34mm;border-radius:50%;object-fit:cover;display:block}
+.fotoVak{margin-left:auto;flex:none;position:relative}
+.fotoVak img{
+  width:34mm;height:34mm;border-radius:50%;object-fit:cover;display:block;
+  cursor:grab;touch-action:none;user-select:none;-webkit-user-drag:none;
+}
+.fotoVak img.sleept{cursor:grabbing;box-shadow:0 0 0 2px var(--pal-accentblok)}
 .fotoVak img[hidden]{display:none}
+body.exportModus .fotoVak img{cursor:default;box-shadow:none}
 .positie{
-  font-size:10.5pt;letter-spacing:.17em;text-transform:uppercase;font-weight:700;
+  font-size:calc(10.5pt * var(--f-kopregel, 1));letter-spacing:.17em;text-transform:uppercase;
+  font-weight:var(--w-kopregel, 700);
   color:var(--c-kopregel, var(--pal-accent));margin-top:6mm;
 }
 .tagline{
-  font-family:var(--display);font-weight:800;font-size:27pt;line-height:1.24;
+  font-family:var(--display);font-weight:var(--w-titel, 800);
+  font-size:calc(27pt * var(--f-titel, 1));line-height:1.24;
   color:var(--c-titel, var(--pal-primair));margin-top:5mm;
 }
 .intro{
-  font-size:12.5pt;line-height:1.6;margin-top:5mm;white-space:pre-line;
+  font-size:calc(12.5pt * var(--f-intro, 1));font-weight:var(--w-intro, 400);
+  line-height:1.6;margin-top:5mm;white-space:pre-line;
   color:var(--c-intro, var(--pal-tekst));
 }
 .sectieLabel{
-  font-size:9.5pt;font-weight:700;letter-spacing:.22em;text-transform:uppercase;
+  font-size:calc(9.5pt * var(--f-sectie, 1));font-weight:var(--w-sectie, 700);
+  letter-spacing:.22em;text-transform:uppercase;
   color:var(--c-sectie, var(--pal-primair));margin:9mm 0 0;
 }
 .aanbod{
@@ -127,23 +141,26 @@ body{font-family:var(--body);background:#EAE3D8;color:var(--site-tekst);min-heig
   width:2.6mm;height:2.6mm;flex:none;transform:translateY(-0.4mm);
   background:var(--c-punttitel, var(--pal-primair));
 }
-.dienst .dTitel{font-family:var(--display);font-weight:700;font-size:12.5pt;color:var(--c-punttitel, var(--pal-primair))}
-.dienst .dTekst{font-size:11.5pt;line-height:1.5;color:var(--c-punttekst, var(--pal-tekst))}
+.dienst .dTitel{font-family:var(--display);font-weight:var(--w-punttitel, 700);font-size:calc(12.5pt * var(--f-punttitel, 1));color:var(--c-punttitel, var(--pal-primair))}
+.dienst .dTekst{font-size:calc(11.5pt * var(--f-punttekst, 1));font-weight:var(--w-punttekst, 400);line-height:1.5;color:var(--c-punttekst, var(--pal-tekst))}
 .quote{
   background:var(--c-quotebg, var(--pal-accentblok));color:var(--c-quotetekst, var(--pal-op));
   margin:7mm -17mm 0;padding:6mm 17mm;text-align:center;
-  font-family:var(--display);font-weight:700;font-size:15.5pt;line-height:1.4;
+  font-family:var(--display);font-weight:var(--w-quotetekst, 700);
+  font-size:calc(15.5pt * var(--f-quotetekst, 1));line-height:1.4;
 }
 .cta{
-  margin-top:7mm;text-align:center;font-family:var(--display);font-weight:700;font-size:14pt;
+  margin-top:7mm;text-align:center;font-family:var(--display);
+  font-weight:var(--w-cta, 700);font-size:calc(14pt * var(--f-cta, 1));
   color:var(--c-cta, var(--pal-primair));
 }
 .voet{margin-top:auto;padding-top:5mm;border-top:1px solid var(--c-lijn, var(--pal-accent))}
 .voet .site{
-  font-family:var(--display);font-weight:800;font-size:17pt;margin-bottom:2mm;
+  font-family:var(--display);font-weight:var(--w-voet, 800);
+  font-size:calc(17pt * var(--f-voet, 1));margin-bottom:2mm;
   color:var(--c-voet, var(--pal-primair));
 }
-.voet .regel{font-size:11pt;line-height:1.65;color:var(--c-voettekst, var(--pal-tekst))}
+.voet .regel{font-size:calc(11pt * var(--f-voettekst, 1));font-weight:var(--w-voettekst, 400);line-height:1.65;color:var(--c-voettekst, var(--pal-tekst))}
 
 /* ---------------- exportmodus (tijdens pdf maken) ---------------- */
 body.exportModus .bewerkKnop,body.exportModus .fotoLeeg{display:none !important}
@@ -251,10 +268,23 @@ body.exportModus .vel{box-shadow:none !important}
   </div>
   <p class="hint" style="margin-top:2px">Klik een kleur om hem toe te passen. Met het vierkantje links kies je desnoods een kleur buiten het palet.</p>
 
+  <h2>Letters van dit blok</h2>
+  <div class="schuifRij"><span>Grootte</span><b id="valGrootte">100%</b></div>
+  <input type="range" id="fGrootte" min="60" max="170" step="5" value="100" aria-label="Tekstgrootte">
+  <div class="schuifRij"><span>Dikte</span><b id="valDikte">vet</b></div>
+  <input type="range" id="fDikte" min="0" max="4" step="1" value="3" aria-label="Letterdikte">
+  <button class="btn" id="btnTypoTerug" type="button" style="width:100%;justify-content:center;margin-top:10px">Letters terug naar standaard</button>
+  <p class="hint" id="typoHint" style="margin-top:8px">Geldt voor het blok dat je hierboven hebt gekozen.</p>
+
+  <h2>Logo</h2>
+  <div class="schuifRij"><span>Grootte</span><b id="valLogo">100%</b></div>
+  <input type="range" id="fLogoMaat" min="50" max="160" step="5" value="100" aria-label="Logogrootte">
+
   <button class="btn" id="btnBlokTekst" type="button" style="width:100%;justify-content:center;margin-top:8px">Standaardtekst van dit blok terug</button>
 
   <h2>Tekst</h2>
   <p class="hint" style="margin-top:0">Klik in de flyer op een tekst om die aan te passen (en om dat blok te kiezen voor een kleur). Met <strong>+ punt toevoegen</strong> en het kruisje achter een punt bepaal je zelf hoeveel punten er staan.</p>
+  <p class="hint">Staat het gezicht niet goed in de ronde foto? <strong>Sleep de foto</strong> met de muis om hem te verschuiven.</p>
   <p class="hint">Alles wordt automatisch op dit apparaat bewaard. Gebruik <strong>Opslaan als bestand</strong> voor een reservekopie of om de flyer op een andere computer te openen.</p>
   <p class="hint">Gebruik <strong>Download PDF</strong> voor een bestand met alle kleuren erin — dat is de veiligste weg. Print je liever rechtstreeks, zet dan in het printvenster de marges op “Geen”.</p>
 </div>
@@ -328,6 +358,23 @@ const TEKST_HERSTEL = {
   "--c-cta":".cta", "--c-lijn":".voet", "--c-voet":".voet .site", "--c-voettekst":".voet .regel"
 };
 
+/* welk blok stuurt welke tekst aan (vlakken en lijnen hebben geen tekst) */
+const TYPO_VAN_BLOK = {
+  "--c-kopregel":"kopregel", "--c-titel":"titel", "--c-intro":"intro",
+  "--c-sectie":"sectie", "--c-punttitel":"punttitel", "--c-punttekst":"punttekst",
+  "--c-quotebg":"quotetekst", "--c-quotetekst":"quotetekst",
+  "--c-cta":"cta", "--c-voet":"voet", "--c-voettekst":"voettekst",
+  "--c-paper":null, "--c-aanbodbg":null, "--c-lijn":null
+};
+/* standaarddikte per blok, zodat de schuif op de juiste stand start */
+const DIKTE_STANDAARD = {
+  kopregel:700, titel:800, intro:400, sectie:700, punttitel:700,
+  punttekst:400, quotetekst:700, cta:700, voet:800, voettekst:400
+};
+const DIKTES = [400, 500, 600, 700, 800];
+const DIKTE_NAAM = ["licht", "normaal", "medium", "vet", "extra vet"];
+const K_TYPO = "wf_flyer_typo";
+
 const K_HTML = "wf_flyer_v2";
 const K_PALET = "wf_flyer_palet";
 const K_BLOKKLEUR = "wf_flyer_blokkleuren";
@@ -365,6 +412,8 @@ if(bewaardeHtml) vel.innerHTML = bewaardeHtml;
 let huidigPalet = localStorage.getItem(K_PALET) || "roze";
 let blokKleuren = {};
 try{ blokKleuren = JSON.parse(localStorage.getItem(K_BLOKKLEUR) || "{}") || {}; }catch{ blokKleuren = {}; }
+let typo = {};
+try{ typo = JSON.parse(localStorage.getItem(K_TYPO) || "{}") || {}; }catch{ typo = {}; }
 
 function paletWaarden(naam){
   const p = PALETTEN[naam] || PALETTEN.roze;
@@ -390,6 +439,16 @@ function pasBlokKleurenToe(){
     /* tekst op het quotevlak automatisch leesbaar houden */
     if(v === "--c-quotebg" && !blokKleuren["--c-quotetekst"]) st.setProperty("--c-quotetekst", opKleur(kleur));
   });
+}
+function pasTypoToe(){
+  const st = document.body.style;
+  ["--f-logo"].concat(Object.values(TYPO_VAN_BLOK).filter(Boolean)
+    .flatMap(k => ["--f-" + k, "--w-" + k])).forEach(v => st.removeProperty(v));
+  Object.entries(typo).forEach(([v, waarde]) => st.setProperty(v, waarde));
+}
+function bewaarTypo(){
+  localStorage.setItem(K_TYPO, JSON.stringify(typo));
+  checkOverloop();
 }
 function bewaarKleuren(){
   localStorage.setItem(K_PALET, huidigPalet);
@@ -449,6 +508,7 @@ function toonHuidigeBlokKleur(){
   const b = huidigBlok();
   document.getElementById("gekozenBlok").textContent = b.naam;
   markeerBlok();
+  if(typeof toonTypo === "function") toonTypo();
   const p = paletWaarden(huidigPalet);
   const actief = (blokKleuren[b.v] || p[b.val] || "#FFFFFF").toUpperCase();
   eigenKleur.value = actief.length === 7 ? actief : "#FFFFFF";
@@ -456,6 +516,50 @@ function toonHuidigeBlokKleur(){
     s.classList.toggle("actief", s.dataset.kleur.toUpperCase() === actief));
 }
 blokKeuze.addEventListener("change", toonHuidigeBlokKleur);
+
+/* ---- grootte en dikte van de letters, per blok ---- */
+const fGrootte = document.getElementById("fGrootte");
+const fDikte = document.getElementById("fDikte");
+const fLogoMaat = document.getElementById("fLogoMaat");
+function typoSleutel(){ return TYPO_VAN_BLOK[blokKeuze.value] || null; }
+function toonTypo(){
+  const k = typoSleutel();
+  const uit = !k;
+  fGrootte.disabled = uit; fDikte.disabled = uit;
+  document.getElementById("btnTypoTerug").disabled = uit;
+  document.getElementById("typoHint").textContent = uit
+    ? "Dit onderdeel heeft geen tekst. Kies bijvoorbeeld de titel of de introtekst."
+    : `Geldt voor: ${huidigBlok().naam}.`;
+  const factor = uit ? 1 : (parseFloat(typo["--f-" + k]) || 1);
+  const dikte = uit ? 700 : (parseInt(typo["--w-" + k], 10) || DIKTE_STANDAARD[k]);
+  fGrootte.value = Math.round(factor * 100);
+  document.getElementById("valGrootte").textContent = Math.round(factor * 100) + "%";
+  const i = DIKTES.indexOf(dikte);
+  fDikte.value = i < 0 ? 3 : i;
+  document.getElementById("valDikte").textContent = DIKTE_NAAM[i < 0 ? 3 : i];
+  const logo = parseFloat(typo["--f-logo"]) || 1;
+  fLogoMaat.value = Math.round(logo * 100);
+  document.getElementById("valLogo").textContent = Math.round(logo * 100) + "%";
+}
+fGrootte.addEventListener("input", () => {
+  const k = typoSleutel(); if(!k) return;
+  typo["--f-" + k] = (fGrootte.value / 100).toFixed(2);
+  pasTypoToe(); bewaarTypo(); toonTypo();
+});
+fDikte.addEventListener("input", () => {
+  const k = typoSleutel(); if(!k) return;
+  typo["--w-" + k] = String(DIKTES[fDikte.value]);
+  pasTypoToe(); bewaarTypo(); toonTypo();
+});
+fLogoMaat.addEventListener("input", () => {
+  typo["--f-logo"] = (fLogoMaat.value / 100).toFixed(2);
+  pasTypoToe(); bewaarTypo(); toonTypo();
+});
+document.getElementById("btnTypoTerug").addEventListener("click", () => {
+  const k = typoSleutel(); if(!k) return;
+  delete typo["--f-" + k]; delete typo["--w-" + k];
+  pasTypoToe(); bewaarTypo(); toonTypo();
+});
 
 /* ================= punten toevoegen / verwijderen + fotoknop ================= */
 function bouwKnoppen(){
@@ -521,58 +625,128 @@ vel.addEventListener("click", e => {
 });
 
 /* ================= foto ================= */
-/* html2canvas (de motor achter de pdf) negeert object-fit en rekt een
-   niet-vierkante foto uit. Daarom snijden we hem meteen vierkant bij,
-   dan klopt de ronde foto zowel op het scherm als in de pdf. */
-function vierkantBijsnijden(bron, maxMaat = 700){
+/* html2canvas (de motor achter de pdf) negeert object-fit en zou een niet-
+   vierkante foto uitrekken. Daarom bewaren we de originele foto apart en
+   "bakken" we er een vierkante uitsnede van; die uitsnede staat in de flyer
+   en gaat dus goed mee in de pdf. Slepen verschuift alleen de uitsnede. */
+const K_FOTO = "wf_flyer_foto";
+let fotoBron = null, fotoX = 0.5, fotoY = 0.5;
+try{
+  const d = JSON.parse(localStorage.getItem(K_FOTO) || "null");
+  if(d && d.bron){ fotoBron = d.bron; fotoX = d.x ?? 0.5; fotoY = d.y ?? 0.5; }
+}catch{}
+function bewaarFoto(){
+  try{
+    if(fotoBron) localStorage.setItem(K_FOTO, JSON.stringify({ bron:fotoBron, x:fotoX, y:fotoY }));
+    else localStorage.removeItem(K_FOTO);
+  }catch{ /* opslag vol: de gebakken foto in de flyer blijft gewoon werken */ }
+}
+function laadAfbeelding(bron){
   return new Promise((klaar, mis) => {
-    const img = new Image();
-    img.onload = () => {
-      const zij = Math.min(img.naturalWidth, img.naturalHeight);
-      const x = (img.naturalWidth - zij) / 2;
-      const y = (img.naturalHeight - zij) / 2;
-      const maat = Math.min(zij, maxMaat);
-      const c = document.createElement("canvas");
-      c.width = c.height = maat;
-      const ctx = c.getContext("2d");
-      ctx.drawImage(img, x, y, zij, zij, 0, 0, maat, maat);
-      try{ klaar(c.toDataURL("image/jpeg", 0.92)); }catch(err){ mis(err); }
-    };
-    img.onerror = () => mis(new Error("kon de afbeelding niet lezen"));
-    img.src = bron;
+    const i = new Image();
+    i.onload = () => klaar(i);
+    i.onerror = () => mis(new Error("kon de afbeelding niet lezen"));
+    i.src = bron;
   });
 }
-/* foto's van vóór deze fix stilletjes rechtzetten */
-function repareerFoto(){
+/* verkleinen met behoud van verhouding */
+async function schaalAfbeelding(bron, max = 900){
+  const i = await laadAfbeelding(bron);
+  const sc = Math.min(1, max / Math.max(i.naturalWidth, i.naturalHeight));
+  const c = document.createElement("canvas");
+  c.width = Math.round(i.naturalWidth * sc);
+  c.height = Math.round(i.naturalHeight * sc);
+  c.getContext("2d").drawImage(i, 0, 0, c.width, c.height);
+  return c.toDataURL("image/jpeg", 0.92);
+}
+/* vierkante uitsnede maken op de gekozen positie (0 = boven/links, 1 = onder/rechts) */
+async function bakFoto(maat = 700){
+  if(!fotoBron) return;
+  const i = await laadAfbeelding(fotoBron);
+  const zij = Math.min(i.naturalWidth, i.naturalHeight);
+  const sx = (i.naturalWidth - zij) * fotoX;
+  const sy = (i.naturalHeight - zij) * fotoY;
+  const m = Math.min(zij, maat);
+  const c = document.createElement("canvas");
+  c.width = c.height = m;
+  c.getContext("2d").drawImage(i, sx, sy, zij, zij, 0, 0, m, m);
+  const el = vel.querySelector("#tFoto");
+  if(el) el.src = c.toDataURL("image/jpeg", 0.92);
+}
+/* foto's van vóór deze versie: gebruik wat er staat als bron */
+async function repareerFoto(){
   const el = vel.querySelector("#tFoto");
   const bron = el && el.getAttribute("src");
   if(!bron) return;
-  const test = new Image();
-  test.onload = async () => {
-    if(test.naturalWidth === test.naturalHeight) return;
-    try{
-      el.src = await vierkantBijsnijden(bron);
-      bewaar();
-    }catch{ /* laat de foto dan staan zoals hij is */ }
-  };
-  test.src = bron;
+  if(!fotoBron){
+    fotoBron = bron;
+    try{ await bakFoto(); bewaarFoto(); bewaar(); }catch{}
+  }
 }
+
+/* ---- slepen om het gezicht goed in beeld te zetten ---- */
+let sleepActief = null;
+function startSleep(e){
+  const el = vel.querySelector("#tFoto");
+  if(!el || !el.getAttribute("src") || !fotoBron) return;
+  laadAfbeelding(fotoBron).then(bron => {
+    const vak = el.getBoundingClientRect();
+    /* tijdens het slepen tonen we de hele foto met object-position,
+       zodat je ziet wat er buiten de uitsnede valt */
+    const schaal = Math.max(vak.width / bron.naturalWidth, vak.height / bron.naturalHeight);
+    sleepActief = {
+      el, startX: e.clientX, startY: e.clientY, x: fotoX, y: fotoY,
+      ruimteX: Math.max(0, bron.naturalWidth * schaal - vak.width),
+      ruimteY: Math.max(0, bron.naturalHeight * schaal - vak.height)
+    };
+    el.src = fotoBron;
+    el.style.objectPosition = `${fotoX * 100}% ${fotoY * 100}%`;
+    el.classList.add("sleept");
+    el.setPointerCapture(e.pointerId);
+  }).catch(() => {});
+}
+function tijdensSleep(e){
+  if(!sleepActief) return;
+  e.preventDefault();
+  const { el, startX, startY, x, y, ruimteX, ruimteY } = sleepActief;
+  /* de foto met de muis mee laten bewegen: omlaag slepen toont het bovenste deel */
+  const nx = ruimteX ? Math.min(1, Math.max(0, x - (e.clientX - startX) / ruimteX)) : x;
+  const ny = ruimteY ? Math.min(1, Math.max(0, y - (e.clientY - startY) / ruimteY)) : y;
+  fotoX = nx; fotoY = ny;
+  el.style.objectPosition = `${nx * 100}% ${ny * 100}%`;
+}
+async function eindigSleep(){
+  if(!sleepActief) return;
+  const { el } = sleepActief;
+  sleepActief = null;
+  el.classList.remove("sleept");
+  el.style.removeProperty("object-position");
+  await bakFoto();          /* uitsnede vastleggen, zodat de pdf klopt */
+  bewaarFoto(); bewaar();
+}
+vel.addEventListener("pointerdown", e => {
+  if(e.target.id === "tFoto"){ e.preventDefault(); startSleep(e); }
+});
+vel.addEventListener("pointermove", tijdensSleep);
+vel.addEventListener("pointerup", eindigSleep);
+vel.addEventListener("pointercancel", eindigSleep);
 
 function toonFoto(){
   const img = vel.querySelector("#tFoto");
   const leeg = vel.querySelector(".fotoLeeg");
   const heeft = !!(img && img.getAttribute("src"));
-  if(img) img.hidden = !heeft;
+  if(img){ img.hidden = !heeft; img.title = heeft ? "Sleep om het gezicht goed in beeld te zetten" : ""; }
   if(leeg) leeg.style.display = heeft ? "none" : "";
 }
 document.getElementById("fFoto").addEventListener("change", e => {
   const file = e.target.files[0]; if(!file) return;
   const url = URL.createObjectURL(file);
-  vierkantBijsnijden(url)
-    .then(vierkant => {
+  schaalAfbeelding(url)
+    .then(async geschaald => {
       URL.revokeObjectURL(url);
-      vel.querySelector("#tFoto").src = vierkant;
-      toonFoto(); bewaar();
+      fotoBron = geschaald; fotoX = 0.5; fotoY = 0.5;
+      await bakFoto();
+      toonFoto(); bewaarFoto(); bewaar();
     })
     .catch(() => {
       URL.revokeObjectURL(url);
@@ -583,24 +757,23 @@ document.getElementById("fFoto").addEventListener("change", e => {
 /* ---- eigen logo ---- */
 document.getElementById("fLogo").addEventListener("change", e => {
   const file = e.target.files[0]; if(!file) return;
-  const img = new Image();
   const url = URL.createObjectURL(file);
-  img.onload = () => {
-    const max = 900, sc = Math.min(1, max / Math.max(img.width, img.height));
-    const c = document.createElement("canvas");
-    c.width = Math.round(img.width * sc); c.height = Math.round(img.height * sc);
-    c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
-    URL.revokeObjectURL(url);
-    try{
+  laadAfbeelding(url)
+    .then(img => {
+      const max = 900, sc = Math.min(1, max / Math.max(img.naturalWidth, img.naturalHeight));
+      const c = document.createElement("canvas");
+      c.width = Math.round(img.naturalWidth * sc);
+      c.height = Math.round(img.naturalHeight * sc);
+      c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+      URL.revokeObjectURL(url);
       /* png, zodat een doorzichtige achtergrond doorzichtig blijft */
       vel.querySelector(".logo").src = c.toDataURL("image/png");
       bewaar();
-    }catch(err){
-      alert("Het logo kon niet worden opgeslagen. Probeer een kleiner bestand.");
-    }
-  };
-  img.onerror = () => { URL.revokeObjectURL(url); alert("Dit bestand kon niet als afbeelding worden gelezen."); };
-  img.src = url;
+    })
+    .catch(() => {
+      URL.revokeObjectURL(url);
+      alert("Dit bestand kon niet als afbeelding worden gelezen, of was te groot om op te slaan.");
+    });
   e.target.value = "";
 });
 document.getElementById("btnLogoTerug").addEventListener("click", () => {
@@ -610,7 +783,11 @@ document.getElementById("btnLogoTerug").addEventListener("click", () => {
 
 document.getElementById("btnFotoWeg").addEventListener("click", () => {
   const img = vel.querySelector("#tFoto");
-  if(img && img.getAttribute("src")){ img.removeAttribute("src"); toonFoto(); bewaar(); }
+  if(img && img.getAttribute("src")){
+    img.removeAttribute("src");
+    fotoBron = null; fotoX = 0.5; fotoY = 0.5;
+    toonFoto(); bewaarFoto(); bewaar();
+  }
 });
 
 /* ================= past het nog op één A4? ================= */
@@ -628,8 +805,9 @@ function checkOverloop(){
 /* ================= opslaan / laden als bestand ================= */
 document.getElementById("btnTekstOp").addEventListener("click", () => {
   const data = {
-    app:"wilma-flyer", versie:2,
-    html: schoonHtml(), palet: huidigPalet, blokKleuren
+    app:"wilma-flyer", versie:3,
+    html: schoonHtml(), palet: huidigPalet, blokKleuren, typo,
+    foto: fotoBron ? { bron: fotoBron, x: fotoX, y: fotoY } : null
   };
   const blob = new Blob([JSON.stringify(data, null, 2)], { type:"application/json" });
   const a = document.createElement("a");
@@ -652,8 +830,14 @@ document.getElementById("fTekst").addEventListener("change", e => {
       vel.innerHTML = d.html;
       huidigPalet = PALETTEN[d.palet] ? d.palet : "roze";
       blokKleuren = (d.blokKleuren && typeof d.blokKleuren === "object") ? d.blokKleuren : {};
+      typo = (d.typo && typeof d.typo === "object") ? d.typo : {};
+      if(d.foto && d.foto.bron){ fotoBron = d.foto.bron; fotoX = d.foto.x ?? 0.5; fotoY = d.foto.y ?? 0.5; }
+      else { fotoBron = null; fotoX = 0.5; fotoY = 0.5; }
+      bewaarFoto();
       pasPaletToe();
       pasBlokKleurenToe();
+      pasTypoToe();
+      bewaarTypo();
       bouwKnoppen();
       toonFoto();
       toonHuidigeBlokKleur();
@@ -765,7 +949,7 @@ document.getElementById("btnPdf").addEventListener("click", maakPdf);
 document.getElementById("btnPrint").addEventListener("click", () => window.print());
 document.getElementById("btnReset").addEventListener("click", () => {
   if(confirm("Alle teksten en kleuren terugzetten naar de standaardversie?")){
-    [K_HTML, K_PALET, K_BLOKKLEUR].forEach(k => localStorage.removeItem(k));
+    [K_HTML, K_PALET, K_BLOKKLEUR, K_TYPO, K_FOTO].forEach(k => localStorage.removeItem(k));
     location.reload();
   }
 });
@@ -773,6 +957,7 @@ document.getElementById("btnReset").addEventListener("click", () => {
 /* ================= start ================= */
 pasPaletToe();
 pasBlokKleurenToe();
+pasTypoToe();
 bouwKnoppen();
 toonFoto();
 repareerFoto();
